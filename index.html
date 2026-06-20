@@ -289,8 +289,13 @@
             animation: logoGlow 2.5s infinite;
         }
         @keyframes logoGlow {
-            0%, 100% { filter: drop-shadow(0 0 8px rgba(245, 166, 35, 0.5)); }
-            50% { filter: drop-shadow(0 0 25px rgba(245, 166, 35, 1)); }
+            0%,
+            100% {
+                filter: drop-shadow(0 0 8px rgba(245, 166, 35, 0.5));
+            }
+            50% {
+                filter: drop-shadow(0 0 25px rgba(245, 166, 35, 1));
+            }
         }
         .d3-flip-wrapper {
             display: inline-block;
@@ -313,8 +318,12 @@
             z-index: 2;
         }
         @keyframes shimmerText {
-            0% { background-position: 0% 50%; }
-            100% { background-position: 300% 50%; }
+            0% {
+                background-position: 0% 50%;
+            }
+            100% {
+                background-position: 300% 50%;
+            }
         }
         .header-right {
             text-align: right;
@@ -337,12 +346,20 @@
             text-shadow: 0 0 12px rgba(255, 185, 35, 0.7);
         }
         @keyframes neonPulse {
-            0% { text-shadow: 0 0 2px #ffb347, 0 0 4px #ffb347; }
-            100% { text-shadow: 0 0 18px #ffd966, 0 0 25px #f5a623; }
+            0% {
+                text-shadow: 0 0 2px #ffb347, 0 0 4px #ffb347;
+            }
+            100% {
+                text-shadow: 0 0 18px #ffd966, 0 0 25px #f5a623;
+            }
         }
         @keyframes shimmerLight {
-            0% { background-position: 0% center; }
-            100% { background-position: 300% center; }
+            0% {
+                background-position: 0% center;
+            }
+            100% {
+                background-position: 300% center;
+            }
         }
         .isp-name small {
             display: block;
@@ -367,8 +384,12 @@
             animation: shimmer 2s infinite;
         }
         @keyframes shimmer {
-            0% { background-position: 0% center; }
-            100% { background-position: 200% center; }
+            0% {
+                background-position: 0% center;
+            }
+            100% {
+                background-position: 200% center;
+            }
         }
         .logo-text {
             display: flex;
@@ -386,7 +407,94 @@
             text-shadow: 0 0 10px rgba(245, 166, 35, 0.3);
         }
 
-        /* ---- rest of CSS unchanged except client card amount ---- */
+        /* Firebase Space Indicator */
+        .fb-space-indicator {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.55rem;
+            color: var(--text2);
+            margin-top: 2px;
+            background: var(--card2);
+            padding: 2px 10px 2px 8px;
+            border-radius: 30px;
+            border: 1px solid var(--border);
+            cursor: default;
+            transition: all 0.2s;
+        }
+        .fb-space-indicator .fb-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            display: inline-block;
+            flex-shrink: 0;
+            animation: fbPulse 2s infinite;
+        }
+        .fb-space-indicator .fb-dot.online {
+            background: #2ecc71;
+            box-shadow: 0 0 8px rgba(46, 204, 113, 0.6);
+        }
+        .fb-space-indicator .fb-dot.offline {
+            background: #e74c3c;
+            box-shadow: 0 0 8px rgba(231, 76, 60, 0.4);
+        }
+        @keyframes fbPulse {
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.5;
+                transform: scale(1.2);
+            }
+        }
+        .fb-space-indicator .fb-bar-wrap {
+            width: 60px;
+            height: 4px;
+            background: var(--border);
+            border-radius: 4px;
+            overflow: hidden;
+            display: inline-block;
+            flex-shrink: 0;
+        }
+        .fb-space-indicator .fb-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: var(--gold);
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+        .fb-space-indicator .fb-count {
+            font-weight: 700;
+            color: var(--gold);
+            font-size: 0.6rem;
+            min-width: 40px;
+            text-align: right;
+        }
+        .fb-space-indicator .fb-max-label {
+            font-size: 0.5rem;
+            font-weight: 700;
+            color: var(--gold);
+            letter-spacing: 0.3px;
+            opacity: 0.85;
+            white-space: nowrap;
+        }
+        .light-theme .fb-space-indicator {
+            background: #f0f2f5;
+            border-color: #ddd;
+        }
+        .light-theme .fb-space-indicator .fb-count {
+            color: #d4891a;
+        }
+        .light-theme .fb-space-indicator .fb-bar-fill {
+            background: #d4891a;
+        }
+        .light-theme .fb-space-indicator .fb-max-label {
+            color: #d4891a;
+        }
+
+        /* ---- rest of CSS unchanged ---- */
         .stats-scroll {
             display: flex;
             gap: 8px;
@@ -465,8 +573,15 @@
             animation: pulseRed 1.2s infinite;
         }
         @keyframes pulseRed {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(1.3); }
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.5;
+                transform: scale(1.3);
+            }
         }
         .search-box {
             padding: 0 10px 10px;
@@ -582,9 +697,17 @@
             display: inline-block;
             margin-right: 5px;
         }
-        .dot-active { background: var(--green); box-shadow: 0 0 6px var(--green); }
-        .dot-overdue { background: var(--red); box-shadow: 0 0 6px var(--red); }
-        .dot-inactive { background: #666; }
+        .dot-active {
+            background: var(--green);
+            box-shadow: 0 0 6px var(--green);
+        }
+        .dot-overdue {
+            background: var(--red);
+            box-shadow: 0 0 6px var(--red);
+        }
+        .dot-inactive {
+            background: #666;
+        }
         .payment-label {
             font-size: 0.6rem;
             font-weight: 600;
@@ -593,9 +716,18 @@
             margin-left: 6px;
             display: inline-block;
         }
-        .label-paid { background: #1e3d2f; color: #2ecc71; }
-        .label-pending { background: #3d2e1e; color: #f5a623; }
-        .label-expired { background: #3d1e1e; color: #e74c3c; }
+        .label-paid {
+            background: #1e3d2f;
+            color: #2ecc71;
+        }
+        .label-pending {
+            background: #3d2e1e;
+            color: #f5a623;
+        }
+        .label-expired {
+            background: #3d1e1e;
+            color: #e74c3c;
+        }
         .expiry-badge {
             font-size: 0.6rem;
             color: #ff8c42;
@@ -620,15 +752,45 @@
             gap: 4px;
             white-space: nowrap;
         }
-        .btn:active { transform: scale(0.94); }
-        .btn-gold { background: linear-gradient(135deg, #f5a623, #d4891a); color: #000; }
-        .btn-blue { background: var(--blue-dark); color: #fff; }
-        .btn-green { background: var(--green); color: #fff; }
-        .btn-red { background: var(--red); color: #fff; }
-        .btn-outline { background: transparent; border: 1.5px solid var(--gold); color: var(--gold); }
-        .btn-wa { background: #25D366; color: #fff; }
-        .btn-purple { background: #8e44ad; color: #fff; }
-        .btn-full { width: 100%; justify-content: center; padding: 12px; font-size: 0.75rem; border-radius: 24px; }
+        .btn:active {
+            transform: scale(0.94);
+        }
+        .btn-gold {
+            background: linear-gradient(135deg, #f5a623, #d4891a);
+            color: #000;
+        }
+        .btn-blue {
+            background: var(--blue-dark);
+            color: #fff;
+        }
+        .btn-green {
+            background: var(--green);
+            color: #fff;
+        }
+        .btn-red {
+            background: var(--red);
+            color: #fff;
+        }
+        .btn-outline {
+            background: transparent;
+            border: 1.5px solid var(--gold);
+            color: var(--gold);
+        }
+        .btn-wa {
+            background: #25D366;
+            color: #fff;
+        }
+        .btn-purple {
+            background: #8e44ad;
+            color: #fff;
+        }
+        .btn-full {
+            width: 100%;
+            justify-content: center;
+            padding: 12px;
+            font-size: 0.75rem;
+            border-radius: 24px;
+        }
         .fab {
             position: fixed;
             bottom: 22px;
@@ -645,7 +807,10 @@
         }
         .modal-overlay {
             position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
             background: rgba(0, 0, 0, 0.82);
             z-index: 200;
             display: none;
@@ -654,7 +819,9 @@
             padding: 14px;
             overflow-y: auto;
         }
-        .modal-overlay.show { display: flex !important; }
+        .modal-overlay.show {
+            display: flex !important;
+        }
         .modal {
             background: var(--card);
             border-radius: var(--radius);
@@ -720,9 +887,18 @@
             border-radius: 20px;
             font-weight: 600;
         }
-        .status-badge.paid { background: #1e3d2f; color: #2ecc71; }
-        .status-badge.partial { background: #3d2e1e; color: #f5a623; }
-        .status-badge.unpaid { background: #3d1e1e; color: #e74c3c; }
+        .status-badge.paid {
+            background: #1e3d2f;
+            color: #2ecc71;
+        }
+        .status-badge.partial {
+            background: #3d2e1e;
+            color: #f5a623;
+        }
+        .status-badge.unpaid {
+            background: #3d1e1e;
+            color: #e74c3c;
+        }
         .ledger-table-wrapper {
             overflow-x: auto;
             margin-top: 10px;
@@ -748,9 +924,17 @@
             vertical-align: middle;
             text-align: center;
         }
-        .ledger-table tr:last-child td { border-bottom: none; }
-        .credit-text { color: var(--green); font-weight: 700; }
-        .debit-text { color: var(--red); font-weight: 700; }
+        .ledger-table tr:last-child td {
+            border-bottom: none;
+        }
+        .credit-text {
+            color: var(--green);
+            font-weight: 700;
+        }
+        .debit-text {
+            color: var(--red);
+            font-weight: 700;
+        }
         .filter-bar {
             display: flex;
             gap: 8px;
@@ -773,7 +957,8 @@
             font-size: 0.7rem;
         }
         .modal-close-btn {
-            width: 34px; height: 34px;
+            width: 34px;
+            height: 34px;
             border-radius: 50%;
             background: var(--card2);
             border: none;
@@ -792,7 +977,9 @@
             padding-bottom: 10px;
             border-bottom: 1px solid var(--border);
         }
-        .form-group { margin-bottom: 12px; }
+        .form-group {
+            margin-bottom: 12px;
+        }
         .form-group label {
             display: block;
             font-size: 0.65rem;
@@ -810,8 +997,13 @@
             color: #fff;
             font-size: 0.85rem;
         }
-        .form-row { display: flex; gap: 10px; }
-        .form-row .form-group { flex: 1; }
+        .form-row {
+            display: flex;
+            gap: 10px;
+        }
+        .form-row .form-group {
+            flex: 1;
+        }
         /* --- RECEIPT STYLES --- */
         .receipt-base {
             border-radius: 20px;
@@ -1032,8 +1224,13 @@
             animation: blinkWarning 1s infinite;
         }
         @keyframes blinkWarning {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
+            0%,
+            100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.3;
+            }
         }
         .caution-receipt .rec-header .caution-title {
             font-size: 1.1rem;
@@ -1061,11 +1258,21 @@
             transition: 0.2s;
             color: #fff;
         }
-        .reminder-options button:active { transform: scale(0.95); }
-        .btn-easypaisa { background: linear-gradient(135deg, #1a7a3a, #2ecc71); }
-        .btn-easypaisa:hover { background: linear-gradient(135deg, #1f8f45, #3ddc84); }
-        .btn-jazzcash { background: linear-gradient(135deg, #c0392b, #e74c3c); }
-        .btn-jazzcash:hover { background: linear-gradient(135deg, #d44637, #f05a4a); }
+        .reminder-options button:active {
+            transform: scale(0.95);
+        }
+        .btn-easypaisa {
+            background: linear-gradient(135deg, #1a7a3a, #2ecc71);
+        }
+        .btn-easypaisa:hover {
+            background: linear-gradient(135deg, #1f8f45, #3ddc84);
+        }
+        .btn-jazzcash {
+            background: linear-gradient(135deg, #c0392b, #e74c3c);
+        }
+        .btn-jazzcash:hover {
+            background: linear-gradient(135deg, #d44637, #f05a4a);
+        }
         .toast {
             position: fixed;
             top: 16px;
@@ -1081,12 +1288,25 @@
             animation: toastPop 2.6s forwards;
             pointer-events: none;
         }
-        .toast.err { background: var(--red); }
+        .toast.err {
+            background: var(--red);
+        }
         @keyframes toastPop {
-            0% { opacity: 0; transform: translateX(-50%) translateY(-20px); }
-            15% { opacity: 1; transform: translateX(-50%) translateY(0); }
-            80% { opacity: 1; }
-            100% { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+            0% {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-20px);
+            }
+            15% {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+            80% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-20px);
+            }
         }
         .ai-insight {
             background: #1e2a3a;
@@ -1120,11 +1340,19 @@
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
             transition: all 0.3s;
         }
-        .theme-toggle:hover { transform: scale(1.1); border-color: #ffd700; }
-        .theme-toggle:active { transform: scale(0.9); }
+        .theme-toggle:hover {
+            transform: scale(1.1);
+            border-color: #ffd700;
+        }
+        .theme-toggle:active {
+            transform: scale(0.9);
+        }
         .login-overlay {
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             background: rgba(0, 0, 0, 0.92);
             backdrop-filter: blur(12px);
             z-index: 1000;
@@ -1146,8 +1374,14 @@
             animation: fadeInUp 0.6s ease;
         }
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         .glowing-company {
             font-size: 1.1rem;
@@ -1161,8 +1395,14 @@
             margin-bottom: 20px;
         }
         @keyframes glowMove {
-            0% { background-position: 0% center; text-shadow: 0 0 2px gold; }
-            100% { background-position: 200% center; text-shadow: 0 0 12px gold; }
+            0% {
+                background-position: 0% center;
+                text-shadow: 0 0 2px gold;
+            }
+            100% {
+                background-position: 200% center;
+                text-shadow: 0 0 12px gold;
+            }
         }
         .friendship-slogan {
             font-size: 0.8rem;
@@ -1172,49 +1412,229 @@
             border-top: 1px dashed #f5a62340;
             padding-top: 12px;
         }
-        .input-group { margin-bottom: 20px; text-align: left; }
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
         .input-group label {
-            display: block; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; color: #b9c5e0; margin-bottom: 6px;
+            display: block;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: #b9c5e0;
+            margin-bottom: 6px;
         }
         .input-group input {
-            width: 100%; background: #101623; border: 1px solid #2a3a55; border-radius: 60px; padding: 12px 18px; font-size: 1rem; color: #fff;
+            width: 100%;
+            background: #101623;
+            border: 1px solid #2a3a55;
+            border-radius: 60px;
+            padding: 12px 18px;
+            font-size: 1rem;
+            color: #fff;
         }
-        .input-group input:focus { outline: none; border-color: #f5a623; box-shadow: 0 0 12px rgba(245, 166, 35, 0.3); }
+        .input-group input:focus {
+            outline: none;
+            border-color: #f5a623;
+            box-shadow: 0 0 12px rgba(245, 166, 35, 0.3);
+        }
         .login-btn {
-            width: 100%; background: linear-gradient(95deg, #f5a623, #d4891a); border: none; border-radius: 60px; padding: 12px; font-weight: 800; font-size: 1rem; color: #0a0c12; cursor: pointer; transition: 0.2s; margin-top: 8px;
+            width: 100%;
+            background: linear-gradient(95deg, #f5a623, #d4891a);
+            border: none;
+            border-radius: 60px;
+            padding: 12px;
+            font-weight: 800;
+            font-size: 1rem;
+            color: #0a0c12;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-top: 8px;
         }
-        .login-btn:active { transform: scale(0.97); }
-        #mainAppContainer { display: none; }
+        .login-btn:active {
+            transform: scale(0.97);
+        }
+        #mainAppContainer {
+            display: none;
+        }
         .logout-btn {
-            position: fixed; bottom: 20px; left: 20px; z-index: 999; background: #2c2f3e; border-radius: 40px; padding: 8px 16px; font-size: 0.7rem; font-weight: bold; color: #ffcd7e; border: 1px solid #f5a623; cursor: pointer; backdrop-filter: blur(4px);
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 999;
+            background: #2c2f3e;
+            border-radius: 40px;
+            padding: 8px 16px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            color: #ffcd7e;
+            border: 1px solid #f5a623;
+            cursor: pointer;
+            backdrop-filter: blur(4px);
         }
-        .vlan-badge { background: #2c3e50; color: #f1c40f; font-size: 0.6rem; padding: 2px 6px; border-radius: 20px; margin-left: 8px; display: inline-block; }
-        .package-manager-table-wrapper { overflow-x: auto; }
-        .package-manager-table { width: 100%; border-collapse: collapse; margin-top: 8px; min-width: 300px; }
-        .package-manager-table th, .package-manager-table td { padding: 6px 4px; border-bottom: 1px solid var(--border); text-align: left; font-size: 0.7rem; vertical-align: middle; }
-        .package-manager-table input { width: 70px; padding: 4px; border-radius: 12px; background: var(--card2); border: 1px solid var(--border); color: var(--text); }
-        .package-manager-table input.pkg-name-input { width: 110px; }
-        .expiry-countdown { font-size: 0.6rem; font-weight: 700; color: #e74c3c !important; margin-left: 6px; background: rgba(231, 76, 60, 0.15); padding: 1px 8px; border-radius: 10px; display: inline-block; animation: pulseRed 1.5s infinite; }
+        .vlan-badge {
+            background: #2c3e50;
+            color: #f1c40f;
+            font-size: 0.6rem;
+            padding: 2px 6px;
+            border-radius: 20px;
+            margin-left: 8px;
+            display: inline-block;
+        }
+        .package-manager-table-wrapper {
+            overflow-x: auto;
+        }
+        .package-manager-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 8px;
+            min-width: 300px;
+        }
+        .package-manager-table th,
+        .package-manager-table td {
+            padding: 6px 4px;
+            border-bottom: 1px solid var(--border);
+            text-align: left;
+            font-size: 0.7rem;
+            vertical-align: middle;
+        }
+        .package-manager-table input {
+            width: 70px;
+            padding: 4px;
+            border-radius: 12px;
+            background: var(--card2);
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+        .package-manager-table input.pkg-name-input {
+            width: 110px;
+        }
+        .expiry-countdown {
+            font-size: 0.6rem;
+            font-weight: 700;
+            color: #e74c3c !important;
+            margin-left: 6px;
+            background: rgba(231, 76, 60, 0.15);
+            padding: 1px 8px;
+            border-radius: 10px;
+            display: inline-block;
+            animation: pulseRed 1.5s infinite;
+        }
         .accent-account-box {
-            margin-top: 12px; padding: 14px; border-radius: 16px; font-size: 1.4rem; text-align: center; font-weight: 800; letter-spacing: 1px; border: 3px solid #fff; box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+            margin-top: 12px;
+            padding: 14px;
+            border-radius: 16px;
+            font-size: 1.4rem;
+            text-align: center;
+            font-weight: 800;
+            letter-spacing: 1px;
+            border: 3px solid #fff;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
         }
-        .accent-account-box .logo { font-size: 2.5rem; display: block; margin-bottom: 4px; }
-        .accent-account-box .number { font-size: 1.8rem; background: rgba(255, 255, 255, 0.2); padding: 4px 12px; border-radius: 40px; display: inline-block; margin: 6px 0; }
-        .accent-account-box .name { font-size: 1.2rem; font-weight: 600; }
-        .pkg-del-btn { background: #e74c3c; color: #fff; border: none; border-radius: 20px; padding: 2px 10px; font-size: 0.6rem; font-weight: 700; cursor: pointer; transition: 0.2s; }
-        .pkg-del-btn:hover { background: #c0392b; }
-        .pkg-del-btn:active { transform: scale(0.9); }
-        .sync-spinner { display: inline-block; width: 12px; height: 12px; border: 2px solid var(--gold); border-radius: 50%; border-top-color: transparent; animation: spin 0.8s linear infinite; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .pkg-save-badge { font-size: 0.55rem; color: var(--green); margin-left: 6px; }
-        .status-pill { display: inline-block; padding: 6px 18px; border-radius: 30px; font-size: 0.75rem; font-weight: 700; margin-right: 4px; min-width: 70px; text-align: center; }
-        .status-paid { background: #1e3d2f; color: #2ecc71; }
-        .status-unpaid { background: #3d1e1e; color: #e74c3c; }
-        .btn-sm { padding: 8px 18px; font-size: 0.7rem; border-radius: 30px !important; min-width: 90px; justify-content: center; }
-        .payment-status-toggle { display: inline-flex; gap: 8px; align-items: center; margin-top: 6px; flex-wrap: wrap; }
-        .payment-status-toggle .btn { padding: 8px 18px; font-size: 0.7rem; border-radius: 30px !important; min-width: 100px; justify-content: center; }
-        .client-count-badge { font-size: 0.7rem; color: var(--text2); margin-left: 4px; font-weight: 400; }
-        .time-badge { font-size: 0.55rem; color: var(--text2); margin-left: 4px; font-weight: 400; }
+        .accent-account-box .logo {
+            font-size: 2.5rem;
+            display: block;
+            margin-bottom: 4px;
+        }
+        .accent-account-box .number {
+            font-size: 1.8rem;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 4px 12px;
+            border-radius: 40px;
+            display: inline-block;
+            margin: 6px 0;
+        }
+        .accent-account-box .name {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        .pkg-del-btn {
+            background: #e74c3c;
+            color: #fff;
+            border: none;
+            border-radius: 20px;
+            padding: 2px 10px;
+            font-size: 0.6rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .pkg-del-btn:hover {
+            background: #c0392b;
+        }
+        .pkg-del-btn:active {
+            transform: scale(0.9);
+        }
+        .sync-spinner {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border: 2px solid var(--gold);
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        .pkg-save-badge {
+            font-size: 0.55rem;
+            color: var(--green);
+            margin-left: 6px;
+        }
+        .status-pill {
+            display: inline-block;
+            padding: 6px 18px;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-right: 4px;
+            min-width: 70px;
+            text-align: center;
+        }
+        .status-paid {
+            background: #1e3d2f;
+            color: #2ecc71;
+        }
+        .status-unpaid {
+            background: #3d1e1e;
+            color: #e74c3c;
+        }
+        .btn-sm {
+            padding: 8px 18px;
+            font-size: 0.7rem;
+            border-radius: 30px !important;
+            min-width: 90px;
+            justify-content: center;
+        }
+        .payment-status-toggle {
+            display: inline-flex;
+            gap: 8px;
+            align-items: center;
+            margin-top: 6px;
+            flex-wrap: wrap;
+        }
+        .payment-status-toggle .btn {
+            padding: 8px 18px;
+            font-size: 0.7rem;
+            border-radius: 30px !important;
+            min-width: 100px;
+            justify-content: center;
+        }
+        .client-count-badge {
+            font-size: 0.7rem;
+            color: var(--text2);
+            margin-left: 4px;
+            font-weight: 400;
+        }
+        .time-badge {
+            font-size: 0.55rem;
+            color: var(--text2);
+            margin-left: 4px;
+            font-weight: 400;
+        }
         /* COMPLAINT STYLES */
         .complaint-item {
             background: var(--card2);
@@ -1278,7 +1698,10 @@
             cursor: pointer;
             transition: 0.2s;
         }
-        .resolve-btn:hover { background: #27ae60; transform: scale(0.95); }
+        .resolve-btn:hover {
+            background: #27ae60;
+            transform: scale(0.95);
+        }
         .complaint-stats {
             display: flex;
             gap: 12px;
@@ -1289,16 +1712,26 @@
             border-radius: 12px;
             border: 1px solid var(--border);
         }
-        .complaint-stats span { font-size: 0.7rem; font-weight: 600; }
-        .complaint-stats .pending-count { color: #f5a623; }
-        .complaint-stats .resolved-count { color: #2ecc71; }
+        .complaint-stats span {
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+        .complaint-stats .pending-count {
+            color: #f5a623;
+        }
+        .complaint-stats .resolved-count {
+            color: #2ecc71;
+        }
         .btn-renew-active {
             background: #555;
             color: #aaa;
             cursor: not-allowed;
             opacity: 0.6;
         }
-        .btn-renew-active:hover { background: #555; color: #aaa; }
+        .btn-renew-active:hover {
+            background: #555;
+            color: #aaa;
+        }
         .receipt-paid-stamp {
             position: absolute;
             top: 50%;
@@ -1452,9 +1885,15 @@
             font-weight: 800;
             margin-top: 2px;
         }
-        .ledger-modern .summary-item .value.green { color: var(--green); }
-        .ledger-modern .summary-item .value.red { color: var(--red); }
-        .ledger-modern .summary-item .value.gold { color: var(--gold); }
+        .ledger-modern .summary-item .value.green {
+            color: var(--green);
+        }
+        .ledger-modern .summary-item .value.red {
+            color: var(--red);
+        }
+        .ledger-modern .summary-item .value.gold {
+            color: var(--gold);
+        }
 
         .ledger-modern .month-card {
             background: var(--card);
@@ -1480,10 +1919,22 @@
             border-radius: 20px;
             font-weight: 600;
         }
-        .month-status.paid { background: #1e3d2f; color: #2ecc71; }
-        .month-status.partial { background: #3d2e1e; color: #f5a623; }
-        .month-status.unpaid { background: #3d1e1e; color: #e74c3c; }
-        .month-status.cleared { background: #1e3d2f; color: #2ecc71; }
+        .month-status.paid {
+            background: #1e3d2f;
+            color: #2ecc71;
+        }
+        .month-status.partial {
+            background: #3d2e1e;
+            color: #f5a623;
+        }
+        .month-status.unpaid {
+            background: #3d1e1e;
+            color: #e74c3c;
+        }
+        .month-status.cleared {
+            background: #1e3d2f;
+            color: #2ecc71;
+        }
 
         .ledger-modern .month-card .amount-row {
             display: flex;
@@ -1509,8 +1960,12 @@
             background: var(--green);
             transition: width 0.3s;
         }
-        .ledger-modern .month-card .progress-bar .fill.partial { background: var(--gold); }
-        .ledger-modern .month-card .progress-bar .fill.unpaid { background: var(--red); }
+        .ledger-modern .month-card .progress-bar .fill.partial {
+            background: var(--gold);
+        }
+        .ledger-modern .month-card .progress-bar .fill.unpaid {
+            background: var(--red);
+        }
 
         .ledger-modern .month-card .actions {
             display: flex;
@@ -1606,8 +2061,12 @@
             min-width: 60px;
             text-align: right;
         }
-        .ledger-modern .transaction-list .txn-row .txn-amount.credit { color: var(--green); }
-        .ledger-modern .transaction-list .txn-row .txn-amount.debit { color: var(--red); }
+        .ledger-modern .transaction-list .txn-row .txn-amount.credit {
+            color: var(--green);
+        }
+        .ledger-modern .transaction-list .txn-row .txn-amount.debit {
+            color: var(--red);
+        }
         .ledger-modern .transaction-list .txn-row .txn-time {
             font-size: 0.5rem;
             color: var(--text2);
@@ -1668,6 +2127,13 @@
                 <div class="header-right">
                     <div class="isp-name">SHAHID ALI ABRO<small>Internet Service Provider</small></div>
                     <div class="owner-glow">⚡ Khalid Ali Pechuho ⚡</div>
+                    <!-- Firebase Space Indicator -->
+                    <div class="fb-space-indicator" id="fbSpaceIndicator" title="Firebase storage usage">
+                        <span class="fb-max-label">Total 1GB</span>
+                        <span class="fb-dot online" id="fbDot"></span>
+                        <span class="fb-count" id="fbClientCount">0 B</span>
+                        <div class="fb-bar-wrap"><div class="fb-bar-fill" id="fbUsageBar"></div></div>
+                    </div>
                 </div>
             </header>
 
@@ -1781,7 +2247,7 @@
                         <input type="file" id="csvFile" accept=".csv" onchange="importCSV(event)" style="display:none;">
                         <input type="file" id="excelFile" accept=".xlsx, .xls" onchange="importExcel(event)" style="display:none;">
                         <button class="btn btn-full" style="background:#2a7f3f; color:#fff;" onclick="document.getElementById('csvFile').click()">📂 Choose CSV File</button>
-                        <button class="btn btn-full" style="background:#1e6f3f; color:#fff; margin-top:8px;" onclick="document.getElementById('excelFile').click()">📊 Choose Excel File (XLSX/XLS)</button>
+                        <button class="btn btn-full" style="background:#1e6f3f; color:#fff; margin-top:8px;" onclick="document.getElementById('excelFile').click()">📊 Choose Excel File (XLSX/XLS) — RedTone Format</button>
                     </div>
                 </div>
             </div>
@@ -1936,8 +2402,8 @@
             c.vlanId = c.vlanId || '';
             if (!c.paymentHistory) c.paymentHistory = [];
             if (c.paymentHistory) {
-                c.paymentHistory = c.paymentHistory.filter(e => !(e.description && e.description.includes('Registration') &&
-                    e.debit === 0 && e.credit === 0));
+                c.paymentHistory = c.paymentHistory.filter(e => !(e.description && e.description.includes(
+                    'Registration') && e.debit === 0 && e.credit === 0));
             }
             if (typeof c.packageAmount !== 'number') c.packageAmount = Number(c.packageAmount) || 800;
             if (typeof c.packageCost !== 'number') c.packageCost = Number(c.packageCost) || 500;
@@ -2000,7 +2466,7 @@
                     let filtered = data.clients.filter(c => !isDemoClient(c)).map(sanitizeClient);
                     if (filtered.length !== data.clients.length) {
                         await db.ref(`${CLIENTS_PATH}/${currentUser.uid}`).set({ clients: filtered,
-                        lastUpdated: Date.now() });
+                            lastUpdated: Date.now() });
                     }
                     return filtered;
                 }
@@ -2027,6 +2493,7 @@
                 await ref.set(arr);
                 await db.ref(`${CLIENTS_PATH}/${currentUser.uid}/lastUpdated`).set(Date.now());
                 updateLastSyncDisplay(Date.now());
+                updateFirebaseIndicator();
             } catch (e) {
                 console.error('pushClientToFirebase error:', e);
                 throw e;
@@ -2043,6 +2510,7 @@
                 await ref.set(filtered);
                 await db.ref(`${CLIENTS_PATH}/${currentUser.uid}/lastUpdated`).set(Date.now());
                 updateLastSyncDisplay(Date.now());
+                updateFirebaseIndicator();
             } catch (e) {
                 console.error('deleteClientFromFirebase error:', e);
                 throw e;
@@ -2055,6 +2523,7 @@
                 let clients = getClients().filter(c => !isDemoClient(c));
                 await db.ref(`${CLIENTS_PATH}/${currentUser.uid}`).set({ clients, lastUpdated: Date.now() });
                 updateLastSyncDisplay(Date.now());
+                updateFirebaseIndicator();
                 toast('✅ All clients synced to Firebase');
             } catch (e) {
                 console.error('syncAllToFirebase error:', e);
@@ -2068,6 +2537,7 @@
             const lastSync = localStorage.getItem('lastFirebaseSync');
             updateLastSyncDisplay(lastSync ? parseInt(lastSync) : null);
             renderCurrentTab();
+            updateFirebaseIndicator();
         }
 
         function toast(msg, err) {
@@ -2078,6 +2548,56 @@
             if (container) {
                 container.appendChild(t);
                 setTimeout(() => t.remove(), 2700);
+            }
+        }
+
+        // ====== FIREBASE SPACE INDICATOR ======
+        function updateFirebaseIndicator() {
+            const clients = getClients();
+            const packages = getMasterPackages();
+            const data = { clients, packages };
+            const json = JSON.stringify(data);
+            const sizeBytes = new Blob([json]).size;
+
+            const dot = document.getElementById('fbDot');
+            const countEl = document.getElementById('fbClientCount');
+            const bar = document.getElementById('fbUsageBar');
+
+            // Format size
+            let sizeStr = '';
+            if (sizeBytes < 1024) {
+                sizeStr = sizeBytes + ' B';
+            } else if (sizeBytes < 1024 * 1024) {
+                sizeStr = (sizeBytes / 1024).toFixed(1) + ' KB';
+            } else if (sizeBytes < 1024 * 1024 * 1024) {
+                sizeStr = (sizeBytes / (1024 * 1024)).toFixed(1) + ' MB';
+            } else {
+                sizeStr = (sizeBytes / (1024 * 1024 * 1024)).toFixed(1) + ' GB';
+            }
+
+            if (countEl) countEl.textContent = sizeStr;
+
+            // Max limit for bar: 1 GB
+            const maxBytes = 1024 * 1024 * 1024; // 1 GB
+            const pct = Math.min(100, Math.round((sizeBytes / maxBytes) * 100));
+            if (bar) bar.style.width = pct + '%';
+
+            // Color the bar based on usage
+            if (bar) {
+                if (pct < 50) bar.style.background = '#2ecc71';
+                else if (pct < 80) bar.style.background = '#f5a623';
+                else bar.style.background = '#e74c3c';
+            }
+
+            // Dot status
+            if (dot) {
+                if (currentUser) {
+                    dot.className = 'fb-dot online';
+                    dot.title = 'Firebase connected';
+                } else {
+                    dot.className = 'fb-dot offline';
+                    dot.title = 'Firebase disconnected';
+                }
             }
         }
 
@@ -2205,6 +2725,7 @@
                     if (indicator) indicator.textContent = '✅ Changes saved automatically';
                 }, 3000);
             }
+            updateFirebaseIndicator(); // update space indicator after packages change
         }
 
         function refreshPackageDropdown() {
@@ -2457,7 +2978,6 @@
             if (!c) { toast('Client not found', true); return; }
 
             const days = daysUntilExpiry(c);
-            // Only allow renew if expired (days <= 0) - strictly expired
             if (days > 0) {
                 toast(`❌ Package is still active (${days} days remaining). Renew only when expired.`, true);
                 return;
@@ -2528,7 +3048,7 @@
             }
 
             const expiryText = days <= 0 ? `⚠️ Expired ${Math.abs(days)}d ago` : (days <= 3 ? `⚠️ Expires in ${days}d` :
-            '');
+                '');
             const speed = extractSpeed(c.package);
             const pkgProfit = (c.packageAmount || 0) - (c.packageCost || 0);
             const vlanHtml = c.vlanId ? `<span class="vlan-badge">🔌 VLAN: ${c.vlanId}</span>` : '';
@@ -2547,10 +3067,8 @@
                 `<button class="btn btn-green" onclick="renewPackage('${c.id}')">🔄 Renew</button>` :
                 `<button class="btn btn-renew-active" disabled style="background:#555;color:#aaa;cursor:not-allowed;opacity:0.6;">✅ Active</button>`;
 
-            // Package name with price
             const pkgDisplay = `${c.package} <span style="color:var(--gold);font-weight:700;">— Rs. ${packageAmount.toLocaleString()}</span>`;
 
-            // Pending status line
             const pendingLine = pending === 0 ?
                 `<div class="pending-sub"><span class="paid-text">✅ Fully Paid</span></div>` :
                 `<div class="pending-sub"><span class="pending-text">Pending: Rs. ${pending.toLocaleString()}</span></div>`;
@@ -2621,7 +3139,7 @@
                 html += sorted.map(c => {
                     const totalDebit = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.debit) || 0), 0);
                     const totalCredit = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.credit) || 0),
-                    0);
+                        0);
                     const pending = Math.max(0, totalDebit - totalCredit);
 
                     const isPaid = pending === 0 && c.status === 'active';
@@ -2787,7 +3305,7 @@
             return groups.map(g => {
                 const totalDue = g.clients.reduce((s, c) => {
                     const totalDebit = (c.paymentHistory || []).reduce((ss, e) => ss + (Number(e.debit) || 0),
-                    0);
+                        0);
                     const totalCredit = (c.paymentHistory || []).reduce((ss, e) => ss + (Number(e.credit) ||
                         0), 0);
                     return s + Math.max(0, totalDebit - totalCredit);
@@ -2999,7 +3517,7 @@
                 return s + Math.max(0, totalDebit - totalCredit);
             }, 0);
             const coll = clients.reduce((s, c) => s + c.paymentHistory.reduce((ss, e) => ss + (Number(e.credit) || 0), 0),
-            0);
+                0);
             const totalProfit = clients.reduce((s, c) => s + ((Number(c.packageAmount) || 0) - (Number(c.packageCost) ||
                 0)), 0);
             document.getElementById('statsRow').innerHTML =
@@ -3079,7 +3597,6 @@
             let existingClient = id ? clients.find(c => c.id === id) : null;
             if (existingClient) paymentHistory = existingClient.paymentHistory || [];
 
-            // Get old bill value (manual input)
             const oldBill = parseFloat(document.getElementById('cOldBill').value) || 0;
 
             const data = {
@@ -3110,7 +3627,6 @@
 
             const isNewClient = !id;
 
-            // If new client and old bill > 0, add it as initial debit
             if (isNewClient && oldBill > 0) {
                 const entryId = uid();
                 const dateTimeStr = getDateTimeWithTime();
@@ -3126,11 +3642,9 @@
                     monthKey: monthKey,
                     fullDateTime: dateTimeStr
                 });
-                // Set status to overdue if old bill > 0
                 if (data.status === 'active') data.status = 'overdue';
             }
 
-            // Auto add current month's bill for new client
             if (isNewClient) {
                 const now = new Date();
                 const monthKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
@@ -3203,7 +3717,7 @@
             const history = client.paymentHistory || [];
             const sorted = [...history]
                 .filter(e => !(e.description && e.description.includes('Registration') && e.debit === 0 && e.credit ===
-                0))
+                    0))
                 .sort((a, b) => new Date(a.date) - new Date(b.date));
             let bal = 0;
             const result = sorted.map(entry => {
@@ -3225,7 +3739,6 @@
             const totalCredit = client.paymentHistory.reduce((s, e) => s + (Number(e.credit) || 0), 0);
             const pendingTotal = Math.max(0, totalDebit - totalCredit);
 
-            // Summary Grid
             const summaryHtml = `
                 <div class="summary-grid">
                     <div class="summary-item">
@@ -3243,14 +3756,12 @@
                 </div>
             `;
 
-            // Client Info
             const clientInfo = `
                 <div class="client-info">
                     📱 ${escapeHtml(client.phone)} &nbsp;| 📦 ${escapeHtml(client.package)} &nbsp;| 💰 Monthly: Rs.${client.packageAmount.toLocaleString()} &nbsp;| 🔌 VLAN: ${escapeHtml(client.vlanId || '—')} &nbsp;| 👤 ${escapeHtml(client.username || '—')}
                 </div>
             `;
 
-            // Pending Months Cards
             const pendingMonths = getPendingMonths(client);
             let pendingHtml = '';
             if (pendingMonths.length > 0) {
@@ -3282,7 +3793,6 @@
                 `;
             }
 
-            // Entry Form
             const entryForm = `
                 <div class="entry-form">
                     <div style="font-size:0.7rem;font-weight:bold;margin-bottom:6px;">Add New Entry</div>
@@ -3308,7 +3818,6 @@
                 </div>
             `;
 
-            // Transaction History
             let transactions = getSortedTransactions(client);
             if (ledgerMonthFilter !== 'all') {
                 transactions = transactions.filter(t => {
@@ -3342,12 +3851,10 @@
             }
             txnHtml += `</div>`;
 
-            // Combine all
             document.getElementById('ledgerContent').innerHTML =
                 clientInfo + summaryHtml + pendingHtml + entryForm + txnHtml;
         }
 
-        // Toggle custom description input
         window.toggleCustomDesc = function() {
             const sel = document.getElementById('ledgerDescSelect');
             const customContainer = document.getElementById('customDescContainer');
@@ -3358,7 +3865,6 @@
             }
         };
 
-        // Add custom entry using dropdown + amount
         window.addCustomEntry = function() {
             if (!currentLedgerId) { toast('No client selected', true); return; }
             const sel = document.getElementById('ledgerDescSelect');
@@ -3379,7 +3885,6 @@
             const now = new Date();
             const monthKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
             const dateTimeStr = getDateTimeWithTime();
-            // Add as credit (payment)
             c.paymentHistory.push({
                 entryId,
                 date: dateTimeStr,
@@ -3398,7 +3903,6 @@
             toast(`✅ "${desc}" Rs.${amt.toLocaleString()} added`);
         };
 
-        // Add half payment (credit = packageAmount/2)
         window.addHalfPayment = function() {
             if (!currentLedgerId) { toast('No client selected', true); return; }
             const clients = getClients();
@@ -3430,7 +3934,6 @@
             toast(`Half payment Rs.${half.toLocaleString()} recorded`);
         };
 
-        // Pay full for a specific month
         window.payMonthFull = function(monthKey, dueAmount) {
             if (!currentLedgerId) { toast('No client selected', true); return; }
             const clients = getClients();
@@ -3457,7 +3960,6 @@
             toast(`Rs.${dueAmount.toLocaleString()} paid in full for ${monthKey}`);
         };
 
-        // Pay half for a specific month
         window.payMonthHalf = function(monthKey, halfAmount) {
             if (!currentLedgerId) { toast('No client selected', true); return; }
             const clients = getClients();
@@ -3484,7 +3986,6 @@
             toast(`Rs.${halfAmount.toLocaleString()} half payment for ${monthKey}`);
         };
 
-        // Discount (credit)
         window.applyDiscount = function() {
             if (!currentLedgerId) return;
             const clients = getClients();
@@ -3523,7 +4024,6 @@
             toast(`Discount Rs.${discount.toLocaleString()} applied`);
         };
 
-        // Clear all pending (credit remaining balance)
         window.markCleared = function() {
             if (!currentLedgerId) return;
             const clients = getClients();
@@ -3571,7 +4071,6 @@
             openModal('ledgerModal');
         };
 
-        // Delete entry
         window.deleteLedgerEntry = function(clientId, entryId) {
             if (!confirm('Delete this transaction?')) return;
             const clients = getClients();
@@ -3589,7 +4088,6 @@
             toast('Transaction deleted', true);
         };
 
-        // ====== FULL LEDGER RECEIPT ======
         window.generateFullLedgerReceipt = function() {
             if (!currentLedgerId) { toast('No client selected', true); return; }
             const c = getClients().find(x => x.id === currentLedgerId);
@@ -3680,7 +4178,7 @@
             }).catch(() => toast('Download failed', true));
         };
 
-        // ====== RECEIPT FUNCTIONS (unchanged) ======
+        // ====== RECEIPT FUNCTIONS ======
         window.generateReceipt = function(id) {
             const c = getClients().find(x => x.id === id);
             if (!c) { toast('Client not found', true); return; }
@@ -3930,7 +4428,7 @@
             openModal('billingModal');
         };
 
-        // ====== FIXED: BILLING RECEIPT ======
+        // ====== BILLING RECEIPT ======
         window.generateBillingReceipt = function() {
             const nameEl = document.getElementById('billingClientName');
             if (!nameEl) return;
@@ -4262,7 +4760,7 @@
                     const data = JSON.parse(ev.target.result);
                     if (data.clients) saveClients(data.clients);
                     if (data.masterPackages) localStorage.setItem(MASTER_PACKAGES_KEY, JSON.stringify(data
-                    .masterPackages));
+                        .masterPackages));
                     refreshPackageDropdown();
                     renderCurrentTab();
                     toast('Data restored');
@@ -4337,7 +4835,6 @@
                         username: '',
                         updatedAt: new Date().toISOString()
                     };
-                    // Auto add current month bill for new imported client
                     const now = new Date();
                     const monthKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
                     const monthName = now.toLocaleDateString('en-PK', { month: 'long', year: 'numeric' });
@@ -4351,6 +4848,301 @@
             return { created, updated, skipped, incomplete };
         }
 
+        // ====== NEW: REDTONE EXCEL IMPORT (replaces old importExcel) ======
+        // This uses the exact conversion logic from Excel To JSON.html
+        function convertExcelToD3(workbook) {
+            const ws = workbook.Sheets[workbook.SheetNames[0]];
+            const data = XLSX.utils.sheet_to_json(ws, { header: 1, defval: '' });
+            if (!data || data.length < 2) throw new Error('Excel خالی ہے یا اس میں کافی قطاریں نہیں ہیں۔');
+
+            let headerRowIdx = 0;
+            let headers = data[0];
+            const firstRow = data[0];
+            const isHeader = firstRow.some(cell => typeof cell === 'string' && !cell.startsWith('Column_'));
+            if (!isHeader && data.length > 1) {
+                headerRowIdx = 1;
+                headers = data[1];
+            }
+            const rows = data.slice(headerRowIdx + 1);
+
+            const expectedCols = [
+                "RedTone Billing System", "Renew Date", "TranID", "Subscriber",
+                "FullName", "Address", "Mobile", "Last Exp.", "New Exp.",
+                "Type", "Service", "Duration", "Price"
+            ];
+            const colMap = {};
+            headers.forEach((h, idx) => {
+                const hStr = String(h).trim();
+                for (const e of expectedCols) {
+                    if (hStr.includes(e) || e.includes(hStr)) {
+                        colMap[e] = idx;
+                        break;
+                    }
+                }
+            });
+            if (Object.keys(colMap).length < expectedCols.length) {
+                for (let i = 0; i < expectedCols.length && i < headers.length; i++) {
+                    if (!(expectedCols[i] in colMap)) {
+                        colMap[expectedCols[i]] = i;
+                    }
+                }
+            }
+
+            function getVal(row, colName) {
+                const idx = colMap[colName];
+                if (idx === undefined || idx >= row.length) return '';
+                return row[idx];
+            }
+
+            function parseDateExcel(value) {
+                if (!value) return null;
+                if (typeof value === 'number') {
+                    const d = new Date((value - 25569) * 86400 * 1000);
+                    return d;
+                }
+                if (typeof value === 'string') {
+                    let cleaned = value.trim();
+                    let match = cleaned.match(/^(\d{2})-(\d{2})-(\d{4}) (\d{2}):(\d{2}):(\d{2})$/);
+                    if (match) {
+                        return new Date(parseInt(match[3]), parseInt(match[2]) - 1, parseInt(match[1]), parseInt(match[4]),
+                            parseInt(match[5]), parseInt(match[6]));
+                    }
+                    match = cleaned.match(/^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})$/);
+                    if (match) {
+                        return new Date(parseInt(match[1]), parseInt(match[2]) - 1, parseInt(match[3]), parseInt(match[4]),
+                            parseInt(match[5]), parseInt(match[6]));
+                    }
+                    match = cleaned.match(/^(\d{2}) (\w{3}) (\d{4}) (\d{2}):(\d{2})$/);
+                    if (match) {
+                        const months = { Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Jun: 5, Jul: 6, Aug: 7, Sep: 8, Oct: 9,
+                            Nov: 10, Dec: 11 };
+                        const month = months[match[2]];
+                        if (month !== undefined) {
+                            return new Date(parseInt(match[3]), month, parseInt(match[1]), parseInt(match[4]), parseInt(
+                                match[5]));
+                        }
+                    }
+                    const d = new Date(cleaned);
+                    if (!isNaN(d)) return d;
+                }
+                if (value instanceof Date) return value;
+                return null;
+            }
+
+            function formatDateDisplay(d) {
+                if (!d || isNaN(d)) return '';
+                const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September',
+                    'October', 'November', 'December'
+                ];
+                return d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
+            }
+
+            function formatDateTimeDisplay2(d) {
+                if (!d || isNaN(d)) return '';
+                let hours = d.getHours();
+                const ampm = hours >= 12 ? 'PM' : 'AM';
+                hours = hours % 12 || 12;
+                const mins = String(d.getMinutes()).padStart(2, '0');
+                return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate())
+                    .padStart(2, '0') + ' ' + hours + ':' + mins + ' ' + ampm;
+            }
+
+            function formatMonthKey2(d) {
+                if (!d || isNaN(d)) return '';
+                return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
+            }
+
+            const groups = new Map();
+            for (const row of rows) {
+                if (!row || row.every(cell => cell === '' || cell === null || cell === undefined)) continue;
+                const subscriber = String(getVal(row, 'Subscriber')).trim();
+                if (!subscriber) continue;
+                if (!groups.has(subscriber)) groups.set(subscriber, []);
+                groups.get(subscriber).push(row);
+            }
+
+            const clients = [];
+            const packageSet = new Set();
+
+            for (const [subscriber, rowsList] of groups.entries()) {
+                const rowsWithDate = rowsList.map(row => {
+                    const dateVal = getVal(row, 'Renew Date');
+                    const dateObj = parseDateExcel(dateVal);
+                    return { row, dateObj };
+                }).filter(item => item.dateObj !== null);
+
+                if (rowsWithDate.length === 0) continue;
+
+                rowsWithDate.sort((a, b) => a.dateObj - b.dateObj);
+
+                const firstRowData = rowsWithDate[0].row;
+                const id = subscriber;
+                const name = String(getVal(firstRowData, 'FullName')).trim();
+                const phone = String(getVal(firstRowData, 'Mobile')).trim();
+                const address = String(getVal(firstRowData, 'Address')).trim();
+
+                const joinDateObj = rowsWithDate[0].dateObj;
+                const joinDate = formatDateDisplay(joinDateObj);
+                const packageStartDate = joinDate;
+
+                const latest = rowsWithDate[rowsWithDate.length - 1];
+                const latestRow = latest.row;
+                const packageName = String(getVal(latestRow, 'Service')).trim();
+                const priceVal = getVal(latestRow, 'Price');
+                let packageAmount = 0;
+                if (typeof priceVal === 'number') packageAmount = priceVal;
+                else if (typeof priceVal === 'string') packageAmount = parseFloat(priceVal) || 0;
+                const packageCost = packageAmount;
+                const oldBill = 0;
+                const status = "active";
+                const updatedAt = new Date().toISOString();
+                const username = name.replace(/\s/g, '').toLowerCase() || id;
+                const vlanId = "";
+
+                const paymentHistory = [];
+                for (const item of rowsWithDate) {
+                    const d = item.dateObj;
+                    const row = item.row;
+                    const amount = parseFloat(getVal(row, 'Price')) || 0;
+                    const description = "Account Recharged";
+                    const entryId = uid();
+                    const monthKey = formatMonthKey2(d);
+                    const fullDateTime = formatDateTimeDisplay2(d);
+                    const dateDisplay = fullDateTime;
+
+                    paymentHistory.push({
+                        credit: amount,
+                        debit: 0,
+                        description: description,
+                        date: dateDisplay,
+                        fullDateTime: fullDateTime,
+                        monthKey: monthKey,
+                        entryId: entryId
+                    });
+                }
+
+                const lastDateObj = rowsWithDate[rowsWithDate.length - 1].dateObj;
+                const lastAmount = parseFloat(getVal(rowsWithDate[rowsWithDate.length - 1].row, 'Price')) || 0;
+                const receipt = {
+                    clientId: id,
+                    date: formatDateDisplay(lastDateObj),
+                    generatedAt: new Date().toISOString(),
+                    isPaid: true,
+                    monthKey: formatMonthKey2(lastDateObj),
+                    monthName: lastDateObj.toLocaleDateString('en-PK', { month: 'long', year: 'numeric' }),
+                    paidAt: formatDateTimeDisplay2(lastDateObj),
+                    paymentAmount: lastAmount,
+                    rno: 'RCP-' + Date.now().toString().slice(-8),
+                    total: lastAmount,
+                    totalAmount: lastAmount
+                };
+
+                clients.push({
+                    _lastReceipt: receipt,
+                    address: address,
+                    id: id,
+                    joinDate: joinDate,
+                    name: name,
+                    oldBill: oldBill,
+                    package: packageName,
+                    packageAmount: packageAmount,
+                    packageCost: packageCost,
+                    packageStartDate: packageStartDate,
+                    paymentHistory: paymentHistory,
+                    phone: phone,
+                    status: status,
+                    updatedAt: updatedAt,
+                    username: username,
+                    vlanId: vlanId
+                });
+
+                for (const item of rowsWithDate) {
+                    const pkg = String(getVal(item.row, 'Service')).trim();
+                    if (pkg) packageSet.add(pkg);
+                }
+            }
+
+            const masterPackages = Array.from(packageSet).sort().map(name => ({ name, amount: 0, cost: 0 }));
+
+            return { clients: clients, masterPackages: masterPackages };
+        }
+
+        // ====== REPLACED importExcel with RedTone conversion ======
+        window.importExcel = function(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    const result = convertExcelToD3(workbook);
+
+                    // Merge with existing clients
+                    const existingClients = getClients();
+                    let created = 0,
+                        updated = 0;
+
+                    for (const newClient of result.clients) {
+                        const existing = existingClients.find(c => c.id === newClient.id || normalizePhone(c.phone) ===
+                            normalizePhone(newClient.phone));
+                        if (existing) {
+                            // Update existing
+                            existing.name = newClient.name;
+                            existing.phone = newClient.phone;
+                            existing.address = newClient.address || existing.address;
+                            existing.package = newClient.package;
+                            existing.packageAmount = newClient.packageAmount;
+                            existing.packageCost = newClient.packageCost || existing.packageCost;
+                            existing.packageStartDate = newClient.packageStartDate;
+                            existing.joinDate = newClient.joinDate;
+                            existing.vlanId = newClient.vlanId || existing.vlanId;
+                            existing.username = newClient.username || existing.username;
+                            existing.status = newClient.status || existing.status;
+                            // Merge payment history
+                            if (newClient.paymentHistory && newClient.paymentHistory.length > 0) {
+                                if (!existing.paymentHistory) existing.paymentHistory = [];
+                                for (const entry of newClient.paymentHistory) {
+                                    const exists = existing.paymentHistory.some(e => e.entryId === entry.entryId);
+                                    if (!exists) existing.paymentHistory.push(entry);
+                                }
+                            }
+                            if (newClient._lastReceipt) existing._lastReceipt = newClient._lastReceipt;
+                            existing.updatedAt = new Date().toISOString();
+                            updated++;
+                        } else {
+                            // Add new client
+                            existingClients.push(newClient);
+                            created++;
+                        }
+                    }
+
+                    // Merge master packages
+                    const existingPackages = getMasterPackages();
+                    for (const pkg of result.masterPackages) {
+                        if (pkg.name && !existingPackages.some(p => p.name === pkg.name)) {
+                            existingPackages.push({ name: pkg.name, amount: 0, cost: 0 });
+                        }
+                    }
+                    saveMasterPackages(existingPackages);
+
+                    saveClients(existingClients);
+                    if (currentUser) {
+                        syncAllToFirebase().catch(e => console.warn('Firebase sync after import failed:', e));
+                    }
+                    renderCurrentTab();
+                    toast(`✅ Excel Import: ${created} new, ${updated} updated clients`);
+                    closeModal('backupModal');
+                } catch (err) {
+                    toast('Excel import error: ' + err.message, true);
+                    console.error(err);
+                }
+            };
+            reader.readAsArrayBuffer(file);
+            document.getElementById('excelFile').value = '';
+        };
+
+        // ====== CSV IMPORT (unchanged) ======
         window.importCSV = function(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -4387,30 +5179,6 @@
             };
             reader.readAsText(file, 'UTF-8');
             document.getElementById('csvFile').value = '';
-        };
-
-        window.importExcel = function(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const data = new Uint8Array(e.target.result);
-                    const workbook = XLSX.read(data, { type: 'array' });
-                    const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
-                    const rows = XLSX.utils.sheet_to_json(firstSheet, { header: 1, defval: "" });
-                    if (!rows || rows.length < 2) throw new Error('Empty sheet');
-                    const headers = rows[0].map(cell => String(cell || "").trim());
-                    const dataRows = rows.slice(1).filter(row => row.length > 0);
-                    const { created, updated, incomplete } = processImportedRows(dataRows, headers, file.name);
-                    toast('Excel: ' + created + ' new, ' + updated + ' updated' + (incomplete ? ', ' + incomplete +
-                        ' incomplete rows' : ''));
-                    renderCurrentTab();
-                    closeModal('backupModal');
-                } catch (err) { toast('Excel error: ' + err.message, true); }
-            };
-            reader.readAsArrayBuffer(file);
-            document.getElementById('excelFile').value = '';
         };
 
         // ====== FIREBASE SYNC ======
@@ -4524,6 +5292,7 @@
                 setupFirebaseListener();
                 updateLastSyncDisplay();
                 refreshPackageDropdown();
+                updateFirebaseIndicator();
 
                 if (autoSyncInterval) clearInterval(autoSyncInterval);
                 autoSyncInterval = setInterval(async () => {
@@ -4551,6 +5320,7 @@
                 document.getElementById('mainAppContainer').style.display = 'none';
                 document.getElementById('logoutBtn').style.display = 'none';
                 if (fbListener) fbListener.off();
+                updateFirebaseIndicator();
             }
         });
 
@@ -4566,6 +5336,9 @@
         window.cleanupDemoClients = cleanupDemoClients;
         window.isDemoClient = isDemoClient;
         window.renderComplaintsTab = renderComplaintsTab;
+
+        // Initialize indicator on load
+        setTimeout(updateFirebaseIndicator, 500);
     </script>
 </body>
 </html>
