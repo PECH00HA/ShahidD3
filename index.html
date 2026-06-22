@@ -244,7 +244,7 @@
         .royal-theme .stat-box {
             background: linear-gradient(145deg, #0f1829, #141f35);
             border-color: #1e3a6e;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,215,0,0.06);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 215, 0, 0.06);
         }
         .royal-theme .stat-box .stat-label {
             color: #8fa8d0;
@@ -263,16 +263,16 @@
         }
         .royal-theme .search-box input:focus {
             border-color: #ffd700;
-            box-shadow: 0 0 0 3px rgba(255,215,0,0.12);
+            box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.12);
         }
         .royal-theme .client-card {
             background: linear-gradient(145deg, #0f1829, #121c30);
             border-color: #1e3a6e;
-            box-shadow: 0 3px 16px rgba(0,0,0,0.4);
+            box-shadow: 0 3px 16px rgba(0, 0, 0, 0.4);
         }
         .royal-theme .client-card:hover {
             border-color: #ffd700;
-            box-shadow: 0 6px 28px rgba(255,215,0,0.14);
+            box-shadow: 0 6px 28px rgba(255, 215, 0, 0.14);
         }
         .royal-theme .client-name {
             color: #f0f4ff;
@@ -284,11 +284,11 @@
         .royal-theme .modal {
             background: linear-gradient(160deg, #0f1829, #141f35);
             border-color: #1e3a6e;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.7), 0 0 40px rgba(255,215,0,0.08);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7), 0 0 40px rgba(255, 215, 0, 0.08);
         }
         .royal-theme .modal-head {
             border-bottom-color: #1e3a6e;
-            background: linear-gradient(90deg, rgba(255,215,0,0.06), transparent);
+            background: linear-gradient(90deg, rgba(255, 215, 0, 0.06), transparent);
         }
         .royal-theme .modal-head h3 {
             color: #ffd700;
@@ -309,7 +309,7 @@
         .royal-theme .form-group input:focus,
         .royal-theme .form-group select:focus {
             border-color: #ffd700;
-            box-shadow: 0 0 0 3px rgba(255,215,0,0.1);
+            box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.1);
         }
         .royal-theme .ledger-table th {
             background: #0c1628;
@@ -354,7 +354,7 @@
         .royal-theme .login-card {
             background: linear-gradient(160deg, #0f1829, #141f35);
             border-color: #ffd700;
-            box-shadow: 0 0 60px rgba(255,215,0,0.15), 0 20px 60px rgba(0,0,0,0.6);
+            box-shadow: 0 0 60px rgba(255, 215, 0, 0.15), 0 20px 60px rgba(0, 0, 0, 0.6);
         }
         .royal-theme .login-card .input-group input {
             background: #0c1628;
@@ -374,7 +374,7 @@
         }
         .royal-theme .fab {
             background: linear-gradient(135deg, #ffd700, #e6b800);
-            box-shadow: 0 6px 24px rgba(255,215,0,0.4);
+            box-shadow: 0 6px 24px rgba(255, 215, 0, 0.4);
         }
         .royal-theme .fb-space-indicator {
             background: #0c1628;
@@ -452,6 +452,62 @@
             min-height: 100vh;
             padding-bottom: 90px;
             line-height: 1.6;
+            transition: max-width 0.4s ease, padding 0.4s ease;
+        }
+        /* ─── PC MODE ─── */
+        body.pc-mode {
+            max-width: 1400px !important;
+            padding: 20px 30px 90px 30px !important;
+        }
+        body.pc-mode .client-list {
+            display: grid !important;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)) !important;
+            gap: 14px !important;
+            padding: 0 4px !important;
+        }
+        body.pc-mode .client-list .package-section {
+            grid-column: 1 / -1 !important;
+        }
+        body.pc-mode .client-list .package-section .client-card {
+            margin-bottom: 0 !important;
+        }
+        body.pc-mode .header {
+            flex-wrap: nowrap !important;
+        }
+        body.pc-mode .stats-scroll {
+            flex-wrap: wrap !important;
+            justify-content: flex-start !important;
+        }
+        body.pc-mode .stat-box {
+            min-width: 100px !important;
+            flex: 0 1 auto !important;
+        }
+        body.pc-mode .action-bar {
+            flex-wrap: wrap !important;
+        }
+        body.pc-mode .tab-bar .tab-btn {
+            padding: 12px 24px !important;
+            font-size: 0.85rem !important;
+        }
+        body.pc-mode .search-box input {
+            font-size: 1rem !important;
+            padding: 14px 20px !important;
+        }
+        body.pc-mode .modal {
+            max-width: 640px !important;
+        }
+        body.pc-mode .fab {
+            width: 64px !important;
+            height: 64px !important;
+            font-size: 2.2rem !important;
+            bottom: 30px !important;
+            right: 30px !important;
+        }
+        body.pc-mode .logout-btn {
+            bottom: 30px !important;
+            left: 30px !important;
+            padding: 10px 22px !important;
+            font-size: 0.85rem !important;
         }
         /* ===== COOL HEADER ===== */
         .header {
@@ -2287,6 +2343,69 @@
             color: var(--text2);
             font-size: 0.7rem;
         }
+
+        /* ─── DELETE ALL CAUTION BUTTON ─── */
+        .btn-danger-caution {
+            background: linear-gradient(135deg, #c0392b, #e74c3c);
+            color: #fff;
+            font-weight: 800;
+            border: 2px solid #ff6b6b;
+            box-shadow: 0 0 20px rgba(231, 76, 60, 0.3);
+            transition: all 0.3s;
+            padding: 14px 20px;
+            font-size: 0.85rem;
+            border-radius: 30px;
+        }
+        .btn-danger-caution:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 40px rgba(231, 76, 60, 0.5);
+        }
+        .btn-danger-caution:active {
+            transform: scale(0.95);
+        }
+
+        /* ─── PC TOGGLE BUTTON ─── */
+        .btn-pc-toggle {
+            background: transparent;
+            border: 1.5px solid var(--gold);
+            color: var(--gold);
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+        }
+        .btn-pc-toggle:hover {
+            background: var(--gold);
+            color: #000;
+        }
+        .btn-pc-toggle.active {
+            background: var(--gold);
+            color: #000;
+        }
+        .light-theme .btn-pc-toggle {
+            border-color: #d4891a;
+            color: #d4891a;
+        }
+        .light-theme .btn-pc-toggle:hover,
+        .light-theme .btn-pc-toggle.active {
+            background: #d4891a;
+            color: #fff;
+        }
+        .royal-theme .btn-pc-toggle {
+            border-color: #ffd700;
+            color: #ffd700;
+        }
+        .royal-theme .btn-pc-toggle:hover,
+        .royal-theme .btn-pc-toggle.active {
+            background: #ffd700;
+            color: #000;
+        }
     </style>
 </head>
 <body>
@@ -2334,6 +2453,8 @@
                 <button class="btn btn-outline" onclick="openBackup()">⚙️ Backup & Restore</button>
                 <button class="btn btn-blue" onclick="syncToFirebaseNow()">🔥 Sync to Firebase Cloud</button>
                 <button class="btn btn-gold" onclick="openPackageManager()">📦 Package Manager</button>
+                <!-- ─── PC MODE TOGGLE BUTTON ─── -->
+                <button class="btn-pc-toggle" id="pcToggleBtn" onclick="togglePCMode()">🖥️ PC View</button>
                 <div class="sync-info"><span>🕒 Last Sync:</span><span id="lastSyncTime">Never</span><span id="syncRefreshIcon" style="display:none;">🔄</span></div>
             </div>
             <div class="tab-bar">
@@ -2440,6 +2561,11 @@
                         <input type="file" id="excelFile" accept=".xlsx, .xls" onchange="importExcel(event)" style="display:none;">
                         <button class="btn btn-full" style="background:#2a7f3f; color:#fff;" onclick="document.getElementById('csvFile').click()">📂 Choose CSV File</button>
                         <button class="btn btn-full" style="background:#1e6f3f; color:#fff; margin-top:8px;" onclick="document.getElementById('excelFile').click()">📊 Choose Excel File (XLSX/XLS) — RedTone Format</button>
+                    </div>
+                    <!-- ─── DELETE ALL CLIENTS (CAUTION) ─── -->
+                    <div style="margin-top:20px; border-top:2px solid var(--red); padding-top:16px;">
+                        <button class="btn btn-danger-caution btn-full" onclick="deleteAllClientsWithCaution()">⚠️ Delete All Clients (Caution)</button>
+                        <div style="font-size:0.55rem;color:var(--red);text-align:center;margin-top:6px;">⚠️ This will permanently remove ALL clients from localStorage and Firebase. This action cannot be undone!</div>
                     </div>
                 </div>
             </div>
@@ -2755,7 +2881,6 @@
             const countEl = document.getElementById('fbClientCount');
             const bar = document.getElementById('fbUsageBar');
 
-            // Format size
             let sizeStr = '';
             if (sizeBytes < 1024) {
                 sizeStr = sizeBytes + ' B';
@@ -2769,19 +2894,16 @@
 
             if (countEl) countEl.textContent = sizeStr;
 
-            // Max limit for bar: 1 GB
-            const maxBytes = 1024 * 1024 * 1024; // 1 GB
+            const maxBytes = 1024 * 1024 * 1024;
             const pct = Math.min(100, Math.round((sizeBytes / maxBytes) * 100));
             if (bar) bar.style.width = pct + '%';
 
-            // Color the bar based on usage
             if (bar) {
                 if (pct < 50) bar.style.background = '#2ecc71';
                 else if (pct < 80) bar.style.background = '#f5a623';
                 else bar.style.background = '#e74c3c';
             }
 
-            // Dot status
             if (dot) {
                 if (currentUser) {
                     dot.className = 'fb-dot online';
@@ -2917,7 +3039,7 @@
                     if (indicator) indicator.textContent = '✅ Changes saved automatically';
                 }, 3000);
             }
-            updateFirebaseIndicator(); // update space indicator after packages change
+            updateFirebaseIndicator();
         }
 
         function refreshPackageDropdown() {
@@ -3108,7 +3230,7 @@
         function applyAllPackagePricesToClients() {
             if (!confirm(
                     "⚠️ This will update EVERY client's Monthly Fee and ISP Cost based on current Master Package list.\nClients with 'Custom' package will NOT be changed.\nContinue?"
-                    )) { return; }
+                )) { return; }
             let updated = applyAllPackagePricesToClientsSilent();
             if (updated > 0) toast(`${updated} clients updated with new package prices`);
             else toast('No changes needed');
@@ -3163,7 +3285,7 @@
             if (changed) saveClients(clients);
         }
 
-        // ====== RENEW PACKAGE (ONLY FOR EXPIRED) ======
+        // ====== RENEW PACKAGE ======
         window.renewPackage = function(id) {
             const clients = getClients();
             const c = clients.find(x => x.id === id);
@@ -3177,7 +3299,7 @@
 
             if (!confirm(
                     `Renew package for ${c.name}?\n\nThis will set expiry date to 30 days from now and add current month's bill if not already added.`
-                    )) { return; }
+                )) { return; }
 
             const now = new Date();
             const monthKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
@@ -3881,7 +4003,7 @@
             renderCurrentTab();
         };
 
-        // ====== LEDGER FUNCTIONS - UDHARBOOK STYLE (ENGLISH) ======
+        // ====== LEDGER FUNCTIONS ======
         function getPendingMonths(client) {
             const history = client.paymentHistory || [];
             const monthMap = new Map();
@@ -4670,9 +4792,9 @@
 
             const receiptHtml = `
                 <div class="premium-receipt receipt-base ${receiptClass}" style="position:relative;background:#fff;">
-                    <div class="stamp-overlay ${stampClass}" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-18deg);font-size:3.6rem;font-weight:900;opacity:0.18;pointer-events:none;z-index:10;text-align:center;line-height:1.2;letter-spacing:4px;white-space:nowrap;border:8px solid rgba(0,0,0,0.10);padding:8px 22px;border-radius:16px;background:rgba(255,255,255,0.06);backdrop-filter:blur(2px);color:${isPaid?'#1a7a3a':'#b37315'};border-color:${isPaid?'rgba(26,122,58,0.20)':'rgba(179,115,21,0.20)'};">
-                        ${stampText}
-                        <span class="stamp-sub-text" style="font-size:1.2rem;font-weight:700;display:block;letter-spacing:2px;">${stampSub}</span>
+                    <div class="stamp-overlay ${stampClass}" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-18deg);font-size:3.6rem;font-weight:900;opacity:0.18;pointer-events:none;z-index:10;text-align:center;line-height:1.2;letter-spacing:4px;white-space:nowrap;border:8px solid rgba(0,0,0,0.10);padding:8px 22px;border-radius:16px;background:rgba(255,255,255,0.06);backdrop-filter:blur(2px);color:${isPaid?'#1a7a3a':'#b37315'};border-color:${isPaid?'rgba(26,122,58,0.20)':'rgba(179,115,21,0.20)'};">'
+                ${stampText}
+                <span class="stamp-sub-text" style="font-size:1.2rem;font-weight:700;display:block;letter-spacing:2px;">${stampSub}</span>
                     </div>
                     <div class="rec-header" style="background:${isPaid?'linear-gradient(135deg,#1a7a3a,#2ecc71)':'linear-gradient(135deg,#b37315,#f5a623)'};color:${isPaid?'#fff':'#000'};">
                         <div class="d3-text"><span class="crown-icon">👑</span> D3</div>
@@ -5042,8 +5164,7 @@
             return { created, updated, skipped, incomplete };
         }
 
-        // ====== NEW: REDTONE EXCEL IMPORT (replaces old importExcel) ======
-        // This uses the exact conversion logic from Excel To JSON.html
+        // ====== REDTONE EXCEL IMPORT ======
         function convertExcelToD3(workbook) {
             const ws = workbook.Sheets[workbook.SheetNames[0]];
             const data = XLSX.utils.sheet_to_json(ws, { header: 1, defval: '' });
@@ -5261,7 +5382,6 @@
             return { clients: clients, masterPackages: masterPackages };
         }
 
-        // ====== REPLACED importExcel with RedTone conversion ======
         window.importExcel = function(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -5272,7 +5392,6 @@
                     const workbook = XLSX.read(data, { type: 'array' });
                     const result = convertExcelToD3(workbook);
 
-                    // Merge with existing clients
                     const existingClients = getClients();
                     let created = 0,
                         updated = 0;
@@ -5281,7 +5400,6 @@
                         const existing = existingClients.find(c => c.id === newClient.id || normalizePhone(c.phone) ===
                             normalizePhone(newClient.phone));
                         if (existing) {
-                            // Update existing
                             existing.name = newClient.name;
                             existing.phone = newClient.phone;
                             existing.address = newClient.address || existing.address;
@@ -5293,7 +5411,6 @@
                             existing.vlanId = newClient.vlanId || existing.vlanId;
                             existing.username = newClient.username || existing.username;
                             existing.status = newClient.status || existing.status;
-                            // Merge payment history
                             if (newClient.paymentHistory && newClient.paymentHistory.length > 0) {
                                 if (!existing.paymentHistory) existing.paymentHistory = [];
                                 for (const entry of newClient.paymentHistory) {
@@ -5305,13 +5422,11 @@
                             existing.updatedAt = new Date().toISOString();
                             updated++;
                         } else {
-                            // Add new client
                             existingClients.push(newClient);
                             created++;
                         }
                     }
 
-                    // Merge master packages
                     const existingPackages = getMasterPackages();
                     for (const pkg of result.masterPackages) {
                         if (pkg.name && !existingPackages.some(p => p.name === pkg.name)) {
@@ -5336,7 +5451,6 @@
             document.getElementById('excelFile').value = '';
         };
 
-        // ====== CSV IMPORT (unchanged) ======
         window.importCSV = function(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -5454,12 +5568,106 @@
                 document.getElementById('themeToggle').textContent = '🌙';
             }
         }
+
         function toggleTheme() {
             const cur = localStorage.getItem('d3_theme') || 'royal';
             const next = cur === 'royal' ? 'dark' : cur === 'dark' ? 'light' : 'royal';
             localStorage.setItem('d3_theme', next);
             applyTheme(next);
         }
+
+        // ═══════════════════════════════════════════
+        // ─── NEW: PC MODE TOGGLE ───
+        // ═══════════════════════════════════════════
+        function togglePCMode() {
+            document.body.classList.toggle('pc-mode');
+            const btn = document.getElementById('pcToggleBtn');
+            if (document.body.classList.contains('pc-mode')) {
+                btn.textContent = '📱 Mobile View';
+                btn.classList.add('active');
+                localStorage.setItem('d3_pc_mode', 'true');
+                toast('🖥️ Switched to PC/Desktop view');
+            } else {
+                btn.textContent = '🖥️ PC View';
+                btn.classList.remove('active');
+                localStorage.setItem('d3_pc_mode', 'false');
+                toast('📱 Switched to Mobile view');
+            }
+            // Re-render to adjust layout
+            renderCurrentTab();
+        }
+
+        // Restore PC mode preference
+        function restorePCMode() {
+            const saved = localStorage.getItem('d3_pc_mode');
+            if (saved === 'true') {
+                document.body.classList.add('pc-mode');
+                const btn = document.getElementById('pcToggleBtn');
+                if (btn) {
+                    btn.textContent = '📱 Mobile View';
+                    btn.classList.add('active');
+                }
+            }
+        }
+
+        // ═══════════════════════════════════════════
+        // ─── NEW: DELETE ALL CLIENTS WITH CAUTION ───
+        // ═══════════════════════════════════════════
+        window.deleteAllClientsWithCaution = function() {
+            const clients = getClients();
+            if (clients.length === 0) {
+                toast('📭 No clients to delete.', true);
+                return;
+            }
+
+            // Step 1: First warning
+            if (!confirm(
+                    `⚠️⚠️⚠️ CAUTION: You are about to DELETE ALL ${clients.length} CLIENTS permanently!\n\nThis action will:\n• Remove all clients from localStorage\n• Remove all clients from Firebase (if logged in)\n• Delete all payment history, ledgers, and data\n\nThis CANNOT be undone!\n\nClick OK to proceed to the next confirmation step.`
+                )) {
+                return;
+            }
+
+            // Step 2: Type "DELETE" to confirm
+            const typed = prompt(
+                `⚠️ FINAL CONFIRMATION ⚠️\n\nType the word "DELETE" (all caps) in the box below to permanently delete ALL ${clients.length} clients.\n\nThis is your last chance to cancel.`
+            );
+            if (typed !== 'DELETE') {
+                toast('❌ Deletion cancelled. You did not type DELETE correctly.', true);
+                return;
+            }
+
+            // Step 3: Final confirmation
+            if (!confirm(
+                    `🔥 FINAL WARNING: Are you absolutely sure you want to delete ALL ${clients.length} clients FOREVER?\n\nThis will also wipe the Firebase database for your account.\n\nPress OK to permanently delete everything.`
+                )) {
+                toast('❌ Deletion cancelled at final step.', true);
+                return;
+            }
+
+            // ---- EXECUTE DELETION ----
+            try {
+                // Clear localStorage
+                localStorage.setItem(STORAGE_KEY, JSON.stringify([]));
+                // Clear Firebase if logged in
+                if (currentUser) {
+                    db.ref(`${CLIENTS_PATH}/${currentUser.uid}`).set({ clients: [], lastUpdated: Date.now() })
+                        .then(() => {
+                            toast('✅ Firebase data cleared.');
+                        })
+                        .catch((err) => {
+                            toast('⚠️ Firebase clear failed: ' + err.message, true);
+                        });
+                }
+                // Re-render
+                renderCurrentTab();
+                updateFirebaseIndicator();
+                toast(`💥 All ${clients.length} clients have been permanently deleted!`);
+                closeModal('backupModal');
+            } catch (e) {
+                toast('❌ Deletion error: ' + e.message, true);
+                console.error(e);
+            }
+        };
 
         // ====== AUTH ======
         document.getElementById('loginBtn').onclick = async () => {
@@ -5538,6 +5746,10 @@
                         }
                     } catch (e) { /* silent */ }
                 }, 120000);
+
+                // Restore PC mode after login
+                restorePCMode();
+
             } else {
                 if (autoSyncInterval) clearInterval(autoSyncInterval);
                 currentUser = null;
@@ -5553,6 +5765,8 @@
 
         const savedTheme = localStorage.getItem('d3_theme') || 'royal';
         applyTheme(savedTheme);
+        // Restore PC mode on initial load (before login)
+        restorePCMode();
 
         window.renderCurrentTab = renderCurrentTab;
         window.getClients = getClients;
