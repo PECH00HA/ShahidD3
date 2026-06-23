@@ -78,7 +78,7 @@
         }
 
         /* ══════════════════════════════════════════
-           PACKAGE FILTER BUTTONS (PC MODE)
+           PACKAGE FILTER BAR (PC MODE)
         ══════════════════════════════════════════ */
         .pkg-filter-bar {
             display: none;
@@ -1359,137 +1359,215 @@
             color: #000;
         }
 
-        /* ─── Ledger ─── */
-        .ledger-modern .summary-grid {
+        /* ══════════════════════════════════════════
+           ✨ NEW LEDGER — CLEAN & MODERN (0→100)
+        ══════════════════════════════════════════ */
+        .ledger-modern {
+            font-size: 0.85rem;
+        }
+
+        /* — summary hero — */
+        .ledger-hero {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 8px;
-            margin: 12px 0;
+            margin: 6px 0 14px;
         }
-        .ledger-modern .summary-item {
+        .ledger-hero .lh-item {
             background: var(--card2);
             border-radius: 12px;
-            padding: 8px 6px;
+            padding: 10px 4px;
             text-align: center;
             border: 1px solid var(--border);
         }
-        .ledger-modern .summary-item .label {
+        .ledger-hero .lh-item .lh-label {
             font-size: 0.55rem;
             text-transform: uppercase;
             color: var(--text2);
             letter-spacing: 0.5px;
         }
-        .ledger-modern .summary-item .value {
+        .ledger-hero .lh-item .lh-value {
             font-size: 1.1rem;
             font-weight: 800;
             margin-top: 2px;
         }
-        .ledger-modern .summary-item .value.green {
+        .lh-value.green {
             color: var(--green);
         }
-        .ledger-modern .summary-item .value.red {
+        .lh-value.red {
             color: var(--red);
         }
-        .ledger-modern .summary-item .value.gold {
+        .lh-value.gold {
             color: var(--gold);
         }
-        .ledger-modern .month-card {
-            background: var(--card);
+
+        /* — progress ring — */
+        .ledger-progress {
+            background: var(--card2);
             border-radius: 12px;
+            padding: 10px 14px;
+            margin: 6px 0 14px;
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+        .ledger-progress .lp-label {
+            font-size: 0.6rem;
+            color: var(--text2);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .ledger-progress .lp-bar-wrap {
+            flex: 1;
+            min-width: 80px;
+            height: 6px;
+            background: var(--border);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        .ledger-progress .lp-bar-fill {
+            height: 100%;
+            border-radius: 6px;
+            transition: width 0.6s ease;
+            background: var(--green);
+        }
+        .ledger-progress .lp-bar-fill.partial {
+            background: var(--gold);
+        }
+        .ledger-progress .lp-bar-fill.low {
+            background: var(--red);
+        }
+        .ledger-progress .lp-pct {
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--text);
+            min-width: 40px;
+            text-align: right;
+        }
+
+        /* — month cards — */
+        .ledger-month-card {
+            background: var(--card);
+            border-radius: 14px;
             padding: 12px 14px;
             margin-bottom: 10px;
             border: 1px solid var(--border);
+            transition: border 0.2s;
         }
-        .ledger-modern .month-card .month-header {
+        .ledger-month-card:hover {
+            border-color: var(--gold-dark);
+        }
+        .ledger-month-card .lm-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 6px;
+            flex-wrap: wrap;
+            gap: 6px;
         }
-        .ledger-modern .month-card .month-name {
+        .ledger-month-card .lm-name {
             font-weight: 700;
             font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
-        .ledger-modern .month-card .month-status {
+        .ledger-month-card .lm-status {
             font-size: 0.6rem;
-            padding: 2px 10px;
-            border-radius: 20px;
-            font-weight: 600;
+            padding: 3px 12px;
+            border-radius: 30px;
+            font-weight: 700;
         }
-        .month-status.paid {
+        .lm-status.paid {
             background: #1e3d2f;
             color: #2ecc71;
         }
-        .month-status.partial {
+        .lm-status.partial {
             background: #3d2e1e;
             color: #f5a623;
         }
-        .month-status.unpaid {
+        .lm-status.unpaid {
             background: #3d1e1e;
             color: #e74c3c;
         }
-        .ledger-modern .month-card .amount-row {
+        .ledger-month-card .lm-numbers {
             display: flex;
             justify-content: space-between;
             font-size: 0.7rem;
             color: var(--text2);
-            margin-bottom: 4px;
+            margin: 6px 0 4px;
+            flex-wrap: wrap;
+            gap: 4px;
         }
-        .ledger-modern .month-card .amount-row .due-amount {
+        .ledger-month-card .lm-numbers .lm-due {
             font-weight: 700;
             color: var(--text);
         }
-        .ledger-modern .month-card .progress-bar {
+        .ledger-month-card .lm-progress {
             height: 4px;
             background: var(--border);
             border-radius: 4px;
             margin: 6px 0 8px;
             overflow: hidden;
         }
-        .ledger-modern .month-card .progress-bar .fill {
+        .ledger-month-card .lm-progress .lm-fill {
             height: 100%;
             border-radius: 4px;
-            background: var(--green);
-            transition: width 0.3s;
+            transition: width 0.4s ease;
         }
-        .ledger-modern .month-card .progress-bar .fill.partial {
+        .lm-fill.green {
+            background: var(--green);
+        }
+        .lm-fill.gold {
             background: var(--gold);
         }
-        .ledger-modern .month-card .progress-bar .fill.unpaid {
+        .lm-fill.red {
             background: var(--red);
         }
-        .ledger-modern .month-card .actions {
+        .ledger-month-card .lm-actions {
             display: flex;
             gap: 6px;
             flex-wrap: wrap;
             margin-top: 6px;
         }
-        .ledger-modern .month-card .actions .btn {
+        .ledger-month-card .lm-actions .btn {
             flex: 1;
             justify-content: center;
             padding: 6px 4px;
             font-size: 0.6rem;
             min-width: 60px;
         }
-        .ledger-modern .entry-form {
+
+        /* — entry form — */
+        .ledger-entry-form {
             background: var(--card2);
-            border-radius: 12px;
-            padding: 12px;
+            border-radius: 14px;
+            padding: 14px;
             margin: 12px 0;
             border: 1px solid var(--border);
         }
-        .ledger-modern .entry-form .form-row {
+        .ledger-entry-form .ef-title {
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--text2);
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+        .ledger-entry-form .ef-row {
             display: flex;
             gap: 8px;
             flex-wrap: wrap;
             align-items: center;
         }
-        .ledger-modern .entry-form .form-row .form-group {
+        .ledger-entry-form .ef-row .ef-group {
             flex: 1;
             min-width: 100px;
         }
-        .ledger-modern .entry-form .form-row .form-group select,
-        .ledger-modern .entry-form .form-row .form-group input {
+        .ledger-entry-form .ef-row .ef-group select,
+        .ledger-entry-form .ef-row .ef-group input {
             padding: 6px 10px;
             font-size: 0.7rem;
             border-radius: 12px;
@@ -1498,19 +1576,19 @@
             color: var(--text);
             width: 100%;
         }
-        .ledger-modern .entry-form .form-row .btn {
+        .ledger-entry-form .ef-row .btn {
             padding: 6px 14px;
             font-size: 0.7rem;
             white-space: nowrap;
         }
-        .ledger-modern .entry-form .custom-desc-input {
+        .ledger-entry-form .ef-custom {
             display: none;
             margin-top: 6px;
         }
-        .ledger-modern .entry-form .custom-desc-input.show {
+        .ledger-entry-form .ef-custom.show {
             display: block;
         }
-        .ledger-modern .entry-form .custom-desc-input input {
+        .ledger-entry-form .ef-custom input {
             width: 100%;
             padding: 6px 10px;
             border-radius: 12px;
@@ -1518,142 +1596,106 @@
             border: 1px solid var(--border);
             color: var(--text);
         }
-        .ledger-modern .entry-form .quick-actions {
+        .ledger-entry-form .ef-quick {
             display: flex;
             gap: 8px;
             margin-top: 8px;
             flex-wrap: wrap;
         }
-        .ledger-modern .entry-form .quick-actions .btn {
+        .ledger-entry-form .ef-quick .btn {
             flex: 1;
             justify-content: center;
             padding: 6px 4px;
             font-size: 0.6rem;
         }
-        .ledger-modern .transaction-list {
-            margin-top: 12px;
+
+        /* — transaction table — */
+        .ledger-txn-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.7rem;
+            margin-top: 8px;
         }
-        .ledger-modern .transaction-list .txn-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 6px 4px;
-            border-bottom: 1px solid var(--border);
-            font-size: 0.65rem;
-            align-items: center;
-        }
-        .ledger-modern .transaction-list .txn-row .txn-desc {
-            flex: 1;
-            margin-left: 6px;
-        }
-        .ledger-modern .transaction-list .txn-row .txn-amount {
-            font-weight: 700;
-            min-width: 60px;
-            text-align: right;
-        }
-        .ledger-modern .transaction-list .txn-row .txn-amount.credit {
-            color: var(--green);
-        }
-        .ledger-modern .transaction-list .txn-row .txn-amount.debit {
-            color: var(--red);
-        }
-        .ledger-modern .transaction-list .txn-row .txn-time {
-            font-size: 0.5rem;
+        .ledger-txn-table th {
+            background: var(--card);
+            padding: 8px 4px;
+            text-align: left;
             color: var(--text2);
-            min-width: 70px;
+            font-weight: 600;
+            border-bottom: 2px solid var(--border);
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
         }
-        .ledger-modern .transaction-list .txn-row .txn-delete {
+        .ledger-txn-table td {
+            padding: 7px 4px;
+            border-bottom: 1px solid var(--border);
+            vertical-align: middle;
+        }
+        .ledger-txn-table .txn-desc {
+            font-weight: 500;
+        }
+        .ledger-txn-table .txn-amt.credit {
+            color: var(--green);
+            font-weight: 700;
+        }
+        .ledger-txn-table .txn-amt.debit {
+            color: var(--red);
+            font-weight: 700;
+        }
+        .ledger-txn-table .txn-amt.discount-amt {
+            color: var(--gold);
+            font-weight: 700;
+        }
+        .ledger-txn-table .txn-bal {
+            font-weight: 600;
+            color: var(--text);
+        }
+        .ledger-txn-table .txn-del {
             background: transparent;
             border: none;
             color: var(--red);
             cursor: pointer;
             font-size: 0.8rem;
             padding: 0 4px;
+            opacity: 0.6;
+            transition: opacity 0.2s;
         }
-        .ledger-modern .client-info {
-            font-size: 0.7rem;
-            color: var(--text2);
-            margin-bottom: 8px;
-            padding: 6px 0;
-            border-bottom: 1px dotted var(--border);
+        .ledger-txn-table .txn-del:hover {
+            opacity: 1;
         }
-        .ledger-modern .no-transactions {
-            text-align: center;
-            padding: 16px;
-            color: var(--text2);
-            font-size: 0.7rem;
-        }
-        .ledger-summary-cards {
-            display: flex;
-            gap: 10px;
-            margin: 12px 0;
-            flex-wrap: wrap;
-        }
-        .ledger-card {
-            flex: 1;
-            background: var(--card2);
-            border-radius: 12px;
-            padding: 10px;
-            text-align: center;
-            border: 1px solid var(--border);
-        }
-        .ledger-card .label {
-            font-size: 0.6rem;
-            color: var(--text2);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        .ledger-card .value {
-            font-size: 1.2rem;
-            font-weight: 800;
-            margin-top: 4px;
-        }
-        .ledger-table-wrapper {
-            overflow-x: auto;
-            margin-top: 10px;
-            border-radius: 12px;
-            background: var(--card2);
-        }
-        .ledger-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.7rem;
-        }
-        .ledger-table th {
-            background: var(--card);
-            padding: 8px 6px;
-            text-align: center;
-            color: var(--text2);
-            font-weight: 600;
-            border-bottom: 1px solid var(--border);
-        }
-        .ledger-table td {
-            padding: 8px 6px;
-            border-bottom: 1px solid var(--border);
-            vertical-align: middle;
-            text-align: center;
-        }
-        .credit-text {
-            color: var(--green);
+        .ledger-txn-table .txn-badge {
+            display: inline-block;
+            padding: 1px 8px;
+            border-radius: 20px;
+            font-size: 0.5rem;
             font-weight: 700;
+            background: var(--card2);
+            color: var(--text2);
+            margin-right: 4px;
         }
-        .debit-text {
-            color: var(--red);
-            font-weight: 700;
+        .ledger-txn-table .txn-badge.bill {
+            background: #3d1e1e;
+            color: #e74c3c;
         }
-        .no-data {
+        .ledger-txn-table .txn-badge.payment {
+            background: #1e3d2f;
+            color: #2ecc71;
+        }
+        .ledger-txn-table .txn-badge.discount {
+            background: #3d2e1e;
+            color: #f5a623;
+        }
+        .ledger-txn-table .txn-badge.other {
+            background: #1e2a3d;
+            color: #4da6ff;
+        }
+
+        .ledger-no-txn {
             text-align: center;
             padding: 20px;
             color: var(--text2);
             font-size: 0.7rem;
-        }
-        .ai-insight {
-            background: #1e2a3a;
-            border-radius: 12px;
-            padding: 10px;
-            margin: 10px 0;
-            font-size: 0.65rem;
-            border: 1px solid var(--blue);
-            color: #b0d4ff;
         }
 
         /* ─── Billing ─── */
@@ -2381,9 +2423,9 @@
                 </div>
             </div>
 
-            <!-- Ledger Modal -->
+            <!-- Ledger Modal (NEW RESTRUCTURED) -->
             <div class="modal-overlay" id="ledgerModal">
-                <div class="modal">
+                <div class="modal" style="max-width:520px;">
                     <div class="modal-head"><h3>📒 Ledger — <span id="ledgerClientName">---</span></h3>
                         <button class="modal-close-btn" onclick="closeModal('ledgerModal')">✕</button>
                     </div>
@@ -2418,7 +2460,7 @@
                 </div>
             </div>
 
-            <!-- Backup Modal (with fixed Ledger Toggle) -->
+            <!-- Backup Modal -->
             <div class="modal-overlay" id="backupModal">
                 <div class="modal">
                     <div class="modal-head"><h3>⚙️ Backup & Import</h3><button class="modal-close-btn" onclick="closeModal('backupModal')">✕</button></div>
@@ -2431,7 +2473,6 @@
                         <button class="btn btn-full" style="background:#2a7f3f; color:#fff;" onclick="document.getElementById('csvFile').click()">📂 Choose CSV File</button>
                         <button class="btn btn-full" style="background:#1e6f3f; color:#fff; margin-top:8px;" onclick="document.getElementById('excelFile').click()">📊 Choose Excel File (XLSX/XLS) — RedTone Format</button>
 
-                        <!-- ─── FIXED LEDGER TOGGLE ─── -->
                         <div style="margin-top:14px; padding:14px; background:var(--card2); border-radius:12px; border:2px solid var(--gold);">
                             <div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
                                 <label style="display:flex; align-items:center; gap:10px; font-size:0.8rem; font-weight:700; cursor:pointer;">
@@ -2501,7 +2542,7 @@
 
 
     <!-- ════════════════════════════════════════════════════════════════
-    JAVASCRIPT — ISP Admin Panel (Client Portal removed)
+    JAVASCRIPT — ISP Admin Panel (FIXED + LEDGER RESTRUCTURED)
     ════════════════════════════════════════════════════════════════ -->
     <script>
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -2585,8 +2626,14 @@
         function formatDMY(isoStr) { if (!isoStr) return ''; const d = new Date(isoStr); return String(d.getDate())
                 .padStart(2, '0') + '/' + String(d.getMonth() + 1).padStart(2, '0') + '/' + d.getFullYear(); }
 
-        function extractSpeed(pkg) { if (!pkg) return null; const m = pkg.match(/(\d+)\s*Mbps/); return m ? m[1] +
-            ' Mbps' : null; }
+        function extractSpeed(pkg) {
+            if (!pkg) return null;
+            const m = pkg.match(/(\d+)\s*Mbps/i);
+            if (m) return m[1] + ' Mbps';
+            const m2 = pkg.match(/(\d+)\s*M/i);
+            if (m2) return m2[1] + ' Mbps';
+            return null;
+        }
 
         function getPackageExpiry(c) { if (!c.packageStartDate) return null; const d = new Date(c.packageStartDate);
             d.setDate(d.getDate() + PACKAGE_DURATION); return d.toISOString().slice(0, 10); }
@@ -2622,7 +2669,6 @@
                     .includes('Registration') && e.debit === 0 && e.credit === 0)); }
             if (typeof c.packageAmount !== 'number') c.packageAmount = Number(c.packageAmount) || 800;
             if (typeof c.packageCost !== 'number') c.packageCost = Number(c.packageCost) || 500;
-            // Ensure sell >= cost (if both > 0)
             if (c.packageAmount < c.packageCost && c.packageAmount > 0 && c.packageCost > 0) {
                 const temp = c.packageAmount;
                 c.packageAmount = c.packageCost;
@@ -2792,6 +2838,98 @@
             return diff;
         }
 
+        function updateCurrentMonthBill(client, newAmount) {
+            if (!client.paymentHistory) client.paymentHistory = [];
+            const now = new Date();
+            const monthKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+            const monthName = now.toLocaleDateString('en-PK', { month: 'long', year: 'numeric' });
+
+            let existingDebit = null;
+            let existingIdx = -1;
+            for (let i = 0; i < client.paymentHistory.length; i++) {
+                const e = client.paymentHistory[i];
+                if (e.monthKey === monthKey && e.debit > 0) {
+                    const totalCreditForMonth = client.paymentHistory
+                        .filter(x => x.monthKey === monthKey && x.credit > 0)
+                        .reduce((s, x) => s + (Number(x.credit) || 0), 0);
+                    if (Number(e.debit) > totalCreditForMonth) {
+                        existingDebit = e;
+                        existingIdx = i;
+                        break;
+                    }
+                }
+            }
+
+            if (existingDebit && existingIdx !== -1) {
+                if (Number(existingDebit.debit) !== newAmount) {
+                    existingDebit.debit = newAmount;
+                    existingDebit.description = `Monthly Bill - ${monthName} (updated)`;
+                    existingDebit.updatedAt = new Date().toISOString();
+                    return true;
+                }
+                return false;
+            } else {
+                const entryId = uid();
+                const dateTimeStr = getDateTimeWithTime();
+                client.paymentHistory.push({
+                    entryId: entryId,
+                    date: dateTimeStr,
+                    description: `Monthly Bill - ${monthName}`,
+                    credit: 0,
+                    debit: newAmount,
+                    monthKey: monthKey,
+                    fullDateTime: dateTimeStr,
+                    autoMonth: monthKey
+                });
+                return true;
+            }
+        }
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        // PACKAGE PRICE SYNC
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        function syncPackagePricesToClients(updatedPackages) {
+            if (!updatedPackages || updatedPackages.length === 0) return 0;
+            const clients = getClients();
+            let changed = 0;
+            const now = new Date();
+            const dateTimeStr = getDateTimeWithTime();
+            const monthKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+
+            for (const c of clients) {
+                if (!c.package || c.package === 'Custom') continue;
+                const pkgDef = updatedPackages.find(p => p.name === c.package);
+                if (!pkgDef) continue;
+
+                c.packageAmount = pkgDef.amount;
+                c.packageCost = pkgDef.cost;
+                c.updatedAt = now.toISOString();
+
+                if (!c.paymentHistory) c.paymentHistory = [];
+                c.paymentHistory.push({
+                    entryId: uid(),
+                    date: dateTimeStr,
+                    description: `Account Recharge - ${c.package}`,
+                    credit: pkgDef.amount,
+                    debit: 0,
+                    monthKey: monthKey,
+                    fullDateTime: dateTimeStr
+                });
+                changed++;
+            }
+
+            if (changed > 0) {
+                isLocalChange = true;
+                saveClients(clients);
+                if (currentUser) {
+                    syncAllToFirebase().catch(e => console.warn('Firebase sync after package update failed:', e));
+                }
+                isLocalChange = false;
+                toast(`✅ ${changed} clients: Account Recharge added in ledger`);
+            }
+            return changed;
+        }
+
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
         // PACKAGE MANAGEMENT
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -2815,10 +2953,11 @@
         }
 
         function saveMasterPackages(pkgs) {
+            const oldPkgs = getMasterPackages();
             let saveData = pkgs.map(p => ({ name: p.name, amount: p.amount, cost: p.cost }));
             localStorage.setItem(MASTER_PACKAGES_KEY, JSON.stringify(saveData));
+            syncPackagePricesToClients(pkgs);
             refreshPackageDropdown();
-            applyAllPackagePricesToClientsSilent();
             const pm = document.getElementById('packageManagerModal');
             if (pm && pm.classList.contains('show')) renderPackageList();
             const ind = document.getElementById('pkgAutoSaveIndicator');
@@ -2916,7 +3055,6 @@
                 if (costEl) pkgs[i].cost = parseInt(costEl.value) || pkgs[i].cost;
             }
             saveMasterPackages(pkgs);
-            applyAllPackagePricesToClients();
             renderPackageList();
             refreshPackageDropdown();
             toast('All price changes saved and applied to clients');
@@ -3017,23 +3155,32 @@
         };
 
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        // PACKAGE FILTER BAR
+        // PACKAGE FILTER BAR (by SPEED)
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
         function buildPackageFilterBar() {
             const bar = document.getElementById('pkgFilterBar');
             if (!bar) return;
             const clients = getClients();
-            const pkgMap = {};
-            clients.forEach(c => { const p = c.package || 'Other'; if (!pkgMap[p]) pkgMap[p] = 0;
-                pkgMap[p]++; });
-            const sortedPkgs = Object.keys(pkgMap).sort();
+            const speedMap = {};
+            clients.forEach(c => {
+                const speed = extractSpeed(c.package) || 'Other';
+                if (!speedMap[speed]) speedMap[speed] = 0;
+                speedMap[speed]++;
+            });
+            const sortedSpeeds = Object.keys(speedMap).sort((a, b) => {
+                const numA = parseInt(a) || 999;
+                const numB = parseInt(b) || 999;
+                if (numA !== numB) return numA - numB;
+                return String(a).localeCompare(String(b));
+            });
             let html = `<button class="pkg-filter-btn ${activePkgFilter === 'all' ? 'active' : ''}" onclick="setPkgFilter('all')">
                         📊 All <span class="pkg-count total">${clients.length}</span>
                        </button>`;
-            sortedPkgs.forEach(p => {
-                const count = pkgMap[p];
-                html += `<button class="pkg-filter-btn ${activePkgFilter === p ? 'active' : ''}" onclick="setPkgFilter('${p}')">
-                            ${p} <span class="pkg-count">${count}</span>
+            sortedSpeeds.forEach(speed => {
+                const count = speedMap[speed];
+                const label = speed === 'Other' ? '📌 Other' : `⚡ ${speed}`;
+                html += `<button class="pkg-filter-btn ${activePkgFilter === speed ? 'active' : ''}" onclick="setPkgFilter('${speed}')">
+                            ${label} <span class="pkg-count">${count}</span>
                          </button>`;
             });
             bar.innerHTML = html;
@@ -3048,7 +3195,7 @@
         function onSearchInput() { renderCurrentTab(); }
 
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        // RENDERING — ADMIN
+        // RENDERING — ADMIN (GROUP BY SPEED)
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
         function clientCardHTML(c) {
             const totalDebit = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.debit) || 0), 0);
@@ -3131,14 +3278,15 @@
         function renderGroupedHTML(clients) {
             if (!clients.length) return '';
             const groups = {};
-            clients.forEach(c => { const key = c.package || 'Other'; if (!groups[key]) groups[key] = [];
-                groups[key].push(c); });
+            clients.forEach(c => {
+                const speed = extractSpeed(c.package) || 'Other';
+                if (!groups[speed]) groups[speed] = [];
+                groups[speed].push(c);
+            });
             const keys = Object.keys(groups).sort((a, b) => {
-                const sa = extractSpeed(a),
-                    sb = extractSpeed(b);
-                const na = sa ? parseInt(sa) : Infinity,
-                    nb = sb ? parseInt(sb) : Infinity;
-                if (na !== nb) return na - nb;
+                const numA = parseInt(a) || 999;
+                const numB = parseInt(b) || 999;
+                if (numA !== numB) return numA - numB;
                 return String(a).localeCompare(String(b));
             });
             return keys.map(k => {
@@ -3149,9 +3297,10 @@
                         0);
                     return s + Math.max(0, td - tc);
                 }, 0);
+                const label = k === 'Other' ? '📌 Other / Custom' : `⚡ ${k}`;
                 return `<div class="package-section">
                             <div class="package-section-head">
-                                <span class="package-section-title">📦 ${k}</span>
+                                <span class="package-section-title">${label}</span>
                                 <span class="package-section-count">${groups[k].length} clients · Rs.${totalDue.toLocaleString()}</span>
                             </div>
                             ${groups[k].map(c => clientCardHTML(c)).join('')}
@@ -3170,7 +3319,10 @@
                 (c.package && String(c.package).toLowerCase().includes(q))
             );
             if (activePkgFilter !== 'all') {
-                filtered = filtered.filter(c => (c.package || 'Other') === activePkgFilter);
+                filtered = filtered.filter(c => {
+                    const speed = extractSpeed(c.package) || 'Other';
+                    return speed === activePkgFilter;
+                });
             }
             document.getElementById('clientList').innerHTML = renderGroupedHTML(filtered) ||
                 '<div style="text-align:center;padding:30px;color:#666;">No clients</div>';
@@ -3184,7 +3336,10 @@
                 .filter(c => !q || (c.name && String(c.name).toLowerCase().includes(q)) || (c.phone && String(c.phone)
                     .includes(q)));
             if (activePkgFilter !== 'all') {
-                filtered = filtered.filter(c => (c.package || 'Other') === activePkgFilter);
+                filtered = filtered.filter(c => {
+                    const speed = extractSpeed(c.package) || 'Other';
+                    return speed === activePkgFilter;
+                });
             }
             document.getElementById('clientList').innerHTML = renderGroupedHTML(filtered) ||
                 '<div style="text-align:center;padding:30px;color:#666;">All packages up to date</div>';
@@ -3201,7 +3356,10 @@
                 (c.package && String(c.package).toLowerCase().includes(q))
             );
             if (activePkgFilter !== 'all') {
-                filtered = filtered.filter(c => (c.package || 'Other') === activePkgFilter);
+                filtered = filtered.filter(c => {
+                    const speed = extractSpeed(c.package) || 'Other';
+                    return speed === activePkgFilter;
+                });
             }
             let html = '';
             if (filtered.length === 0) { html = '<div style="text-align:center;padding:30px;color:#666;">No clients</div>'; } else {
@@ -3355,7 +3513,7 @@
         };
 
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        // 🆕 CLEAR LEDGER (One-Click)
+        // CLEAR LEDGER (One-Click)
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
         window.clearLedger = function(clientId) {
             const clients = getClients();
@@ -3539,7 +3697,7 @@
         };
 
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        // LEDGER FUNCTIONS
+        // ✨ NEW LEDGER — RESTRUCTURED (0→100) ✨
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
         function getPendingMonths(client) {
             const history = client.paymentHistory || [];
@@ -3555,7 +3713,7 @@
             }
             const pending = [];
             for (let [mk, { debit, credit }] of monthMap.entries()) { const due = debit - credit; if (due > 0 && mk !==
-                    'other') pending.push({ monthKey: mk, dueAmount: due }); }
+                    'other') pending.push({ monthKey: mk, dueAmount: due, totalDebit: debit, totalCredit: credit }); }
             pending.sort((a, b) => a.monthKey.localeCompare(b.monthKey));
             return pending;
         }
@@ -3567,69 +3725,175 @@
                     0))
                 .sort((a, b) => new Date(a.date) - new Date(b.date));
             let bal = 0;
-            const result = sorted.map(entry => { const debit = Number(entry.debit) || 0; const credit = Number(entry
-                    .credit) || 0;
-                bal = bal + credit - debit; return { ...entry, runningBalance: bal }; });
+            const result = sorted.map(entry => {
+                const debit = Number(entry.debit) || 0;
+                const credit = Number(entry.credit) || 0;
+                bal = bal + credit - debit;
+                return { ...entry, runningBalance: bal };
+            });
             return result.reverse();
         }
 
         function renderLedger(client) {
             if (client.paymentHistory) { client.paymentHistory = client.paymentHistory.filter(e => !(e.description && e
                     .description.includes('Registration') && e.debit === 0 && e.credit === 0)); }
+
             const totalDebit = client.paymentHistory.reduce((s, e) => s + (Number(e.debit) || 0), 0);
             const totalCredit = client.paymentHistory.reduce((s, e) => s + (Number(e.credit) || 0), 0);
             const pendingTotal = Math.max(0, totalDebit - totalCredit);
-            const summaryHtml =
-                `<div class="summary-grid"><div class="summary-item"><div class="label">Total Billed</div><div class="value red">Rs. ${totalDebit.toLocaleString()}</div></div><div class="summary-item"><div class="label">Total Paid</div><div class="value green">Rs. ${totalCredit.toLocaleString()}</div></div><div class="summary-item"><div class="label">Pending</div><div class="value gold">Rs. ${pendingTotal.toLocaleString()}</div></div></div>`;
+            const pctPaid = totalDebit > 0 ? Math.min(100, Math.round((totalCredit / totalDebit) * 100)) : 0;
+            const collectionRate = totalDebit > 0 ? Math.min(100, Math.round((totalCredit / totalDebit) * 100)) : 0;
+
+            // ── Hero Summary ──
+            let heroHtml = `
+                <div class="ledger-hero">
+                    <div class="lh-item"><div class="lh-label">💰 Total Billed</div><div class="lh-value red">Rs. ${totalDebit.toLocaleString()}</div></div>
+                    <div class="lh-item"><div class="lh-label">✅ Total Paid</div><div class="lh-value green">Rs. ${totalCredit.toLocaleString()}</div></div>
+                    <div class="lh-item"><div class="lh-label">📊 Pending</div><div class="lh-value gold">Rs. ${pendingTotal.toLocaleString()}</div></div>
+                </div>
+            `;
+
+            // ── Progress ──
+            let progClass = 'green';
+            if (pctPaid < 30) progClass = 'low';
+            else if (pctPaid < 70) progClass = 'partial';
+            heroHtml += `
+                <div class="ledger-progress">
+                    <span class="lp-label">📈 Collection</span>
+                    <div class="lp-bar-wrap"><div class="lp-bar-fill ${progClass}" style="width:${collectionRate}%;"></div></div>
+                    <span class="lp-pct">${collectionRate}%</span>
+                </div>
+            `;
+
+            // ── Client Info ──
             const clientInfo =
-                `<div class="client-info">📱 ${escapeHtml(client.phone)} &nbsp;| 📦 ${escapeHtml(client.package)} &nbsp;| 💰 Monthly: Rs.${client.packageAmount.toLocaleString()} &nbsp;| 🔌 VLAN: ${escapeHtml(client.vlanId || '—')} &nbsp;| 👤 ${escapeHtml(client.username || '—')}</div>`;
+                `<div style="font-size:0.7rem;color:var(--text2);margin-bottom:10px;padding:6px 0;border-bottom:1px dotted var(--border);">
+                    📱 ${escapeHtml(client.phone)} &nbsp;|&nbsp; 📦 ${escapeHtml(client.package)} &nbsp;|&nbsp; 💰 Monthly: Rs.${client.packageAmount.toLocaleString()} &nbsp;|&nbsp; 🔌 ${escapeHtml(client.vlanId || '—')} &nbsp;|&nbsp; 👤 ${escapeHtml(client.username || '—')}
+                </div>`;
+
+            // ── Pending Months ──
             const pendingMonths = getPendingMonths(client);
             let pendingHtml = '';
             if (pendingMonths.length > 0) {
-                pendingHtml =
-                    `<div style="margin-top:12px;"><div style="font-weight:700;font-size:0.75rem;margin-bottom:6px;">Unpaid Months</div>`;
-                pendingMonths.forEach(pm => { const halfAmt = Math.round(pm.dueAmount / 2);
+                pendingHtml = `<div style="font-weight:700;font-size:0.75rem;margin:10px 0 6px;">📌 Unpaid Months</div>`;
+                pendingMonths.forEach(pm => {
+                    const pctMonth = pm.totalDebit > 0 ? Math.min(100, Math.round((pm.totalCredit / pm
+                        .totalDebit) * 100)) : 0;
+                    const statusClass = pctMonth === 100 ? 'paid' : (pctMonth > 0 ? 'partial' : 'unpaid');
+                    const statusLabel = pctMonth === 100 ? '✅ Paid' : (pctMonth > 0 ? '⏳ Partial' : '❌ Unpaid');
+                    const fillClass = pctMonth === 100 ? 'green' : (pctMonth > 0 ? 'gold' : 'red');
                     pendingHtml += `
-                        <div class="month-card">
-                            <div class="month-header"><span class="month-name">${pm.monthKey}</span><span class="month-status unpaid">Unpaid</span></div>
-                            <div class="amount-row"><span>Due Amount</span><span class="due-amount">Rs. ${pm.dueAmount.toLocaleString()}</span></div>
-                            <div class="progress-bar"><div class="fill unpaid" style="width:0%;"></div></div>
-                            <div class="actions">
-                                <button class="btn btn-green" onclick="payMonthFull('${pm.monthKey}', ${pm.dueAmount})">Pay Full</button>
-                                <button class="btn btn-blue" onclick="payMonthHalf('${pm.monthKey}', ${halfAmt})">Pay Half</button>
+                        <div class="ledger-month-card">
+                            <div class="lm-header">
+                                <span class="lm-name">📆 ${pm.monthKey}</span>
+                                <span class="lm-status ${statusClass}">${statusLabel}</span>
                             </div>
-                        </div>`; });
-                pendingHtml += `</div>`;
-            } else { pendingHtml =
-                    `<div class="ai-insight" style="margin:12px 0;">✨ No pending dues – all months cleared!</div>`; }
-            const entryForm =
-                `<div class="entry-form"><div style="font-size:0.7rem;font-weight:bold;margin-bottom:6px;">Add New Entry</div><div class="form-row"><div class="form-group"><select id="ledgerDescSelect" onchange="toggleCustomDesc()">${DESCRIPTION_ITEMS.map(item => `<option value="${item}">${item}</option>`).join('')}</select></div><div class="form-group"><input type="number" id="ledgerAmount" placeholder="Amount" value="${client.packageAmount || 0}" min="0" step="1"></div><button class="btn btn-green" onclick="addCustomEntry()">✅ Add</button></div><div class="custom-desc-input" id="customDescContainer"><input type="text" id="customDescInput" placeholder="Write your own description"></div><div class="quick-actions"><button class="btn btn-blue" onclick="addHalfPayment()">💰 Half Payment</button><button class="btn btn-gold" onclick="applyDiscount()">💸 Discount</button><button class="btn btn-green" onclick="markCleared()">✅ Clear All</button></div></div>`;
-            let transactions = getSortedTransactions(client);
-            if (ledgerMonthFilter !== 'all') { transactions = transactions.filter(t => { let mk = t.monthKey; if (!mk &&
-                        t.date) { const d = new Date(t.date);
-                        mk = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`; } return mk ===
-                        ledgerMonthFilter; }); }
-            let txnHtml = `<div class="transaction-list">`;
-            if (transactions.length === 0) { txnHtml += `<div class="no-transactions">No transactions yet.</div>`; } else {
-                transactions.forEach(t => { const displayDateTime = t.fullDateTime || formatDateTimeDisplay(t.date);
-                    const amount = t.credit > 0 ? t.credit : t.debit; const type = t.credit > 0 ? 'credit' :
-                    'debit'; const sign = t.credit > 0 ? '+' : '-';
-                    txnHtml += `
-                        <div class="txn-row">
-                            <span class="txn-time">${displayDateTime}</span>
-                            <span class="txn-desc">${escapeHtml(t.description || '-')}</span>
-                            <span class="txn-amount ${type}">${sign} Rs. ${amount.toLocaleString()}</span>
-                            <button class="txn-delete" onclick="deleteLedgerEntry('${client.id}','${t.entryId}')">✕</button>
-                        </div>`; });
+                            <div class="lm-numbers">
+                                <span>💳 Billed: <b>Rs.${pm.totalDebit.toLocaleString()}</b></span>
+                                <span>✅ Paid: <b>Rs.${pm.totalCredit.toLocaleString()}</b></span>
+                                <span class="lm-due">⚠️ Due: Rs.${pm.dueAmount.toLocaleString()}</span>
+                            </div>
+                            <div class="lm-progress"><div class="lm-fill ${fillClass}" style="width:${pctMonth}%;"></div></div>
+                            <div class="lm-actions">
+                                <button class="btn btn-green" onclick="payMonthFull('${pm.monthKey}', ${pm.dueAmount})">✅ Pay Full</button>
+                                <button class="btn btn-blue" onclick="payMonthHalf('${pm.monthKey}', ${Math.round(pm.dueAmount/2)})">💰 Pay Half</button>
+                            </div>
+                        </div>
+                    `;
+                });
+            } else {
+                pendingHtml =
+                    `<div class="ai-insight" style="margin:12px 0;background:#1e2a1e;border:1px solid #2ecc71;border-radius:12px;padding:10px;font-size:0.7rem;color:#a0d9a0;">✨ All months cleared — no pending dues!</div>`;
             }
-            txnHtml += `</div>`;
-            document.getElementById('ledgerContent').innerHTML = clientInfo + summaryHtml + pendingHtml + entryForm +
-                txnHtml;
+
+            // ── Entry Form ──
+            const entryForm = `
+                <div class="ledger-entry-form">
+                    <div class="ef-title">✏️ Add New Entry</div>
+                    <div class="ef-row">
+                        <div class="ef-group">
+                            <select id="ledgerDescSelect" onchange="toggleCustomDesc()">
+                                ${DESCRIPTION_ITEMS.map(item => `<option value="${item}">${item}</option>`).join('')}
+                            </select>
+                        </div>
+                        <div class="ef-group">
+                            <input type="number" id="ledgerAmount" placeholder="Amount" value="${client.packageAmount || 0}" min="0" step="1">
+                        </div>
+                        <button class="btn btn-green" onclick="addCustomEntry()">✅ Add</button>
+                    </div>
+                    <div class="ef-custom" id="customDescContainer">
+                        <input type="text" id="customDescInput" placeholder="Write your own description">
+                    </div>
+                    <div class="ef-quick">
+                        <button class="btn btn-blue" onclick="addHalfPayment()">💰 Half Payment</button>
+                        <button class="btn btn-gold" onclick="applyDiscount()">💸 Discount</button>
+                        <button class="btn btn-green" onclick="markCleared()">✅ Clear All</button>
+                    </div>
+                </div>
+            `;
+
+            // ── Transaction Table ──
+            let transactions = getSortedTransactions(client);
+            if (ledgerMonthFilter !== 'all') {
+                transactions = transactions.filter(t => {
+                    let mk = t.monthKey;
+                    if (!mk && t.date) { const d = new Date(t.date);
+                        mk = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`; }
+                    return mk === ledgerMonthFilter;
+                });
+            }
+
+            let txnHtml = `<div style="font-weight:700;font-size:0.75rem;margin:14px 0 6px;">📜 Transaction History</div>`;
+            txnHtml +=
+                `<div style="overflow-x:auto;"><table class="ledger-txn-table">
+                    <thead><tr>
+                        <th style="min-width:70px;">Date</th>
+                        <th style="min-width:120px;">Description</th>
+                        <th style="text-align:right;min-width:70px;">Credit</th>
+                        <th style="text-align:right;min-width:70px;">Debit</th>
+                        <th style="text-align:right;min-width:70px;">Balance</th>
+                        <th style="width:30px;"></th>
+                    </tr></thead><tbody>`;
+            if (transactions.length === 0) {
+                txnHtml += `<tr><td colspan="6" class="ledger-no-txn">No transactions yet.</td></tr>`;
+            } else {
+                transactions.forEach(t => {
+                    const displayDateTime = t.fullDateTime || formatDateTimeDisplay(t.date);
+                    const isCredit = t.credit > 0;
+                    const isDiscount = t.description && t.description.toLowerCase().includes('discount');
+                    // For discount, show as - (debit) with special styling
+                    const amtClass = isDiscount ? 'discount-amt' : (isCredit ? 'credit' : 'debit');
+                    const amtDisplay = isDiscount ? `Rs. ${(t.debit || 0).toLocaleString()}` :
+                        (isCredit ? `Rs. ${t.credit.toLocaleString()}` : `Rs. ${(t.debit || 0).toLocaleString()}`);
+                    const sign = isDiscount ? '-' : (isCredit ? '+' : '-');
+                    const badgeClass = isDiscount ? 'discount' : (isCredit ? 'payment' : 'bill');
+                    const badgeLabel = isDiscount ? '💸' : (isCredit ? '💳' : '📄');
+                    const descDisplay = isDiscount ? `💸 ${t.description}` : t.description;
+                    txnHtml += `
+                        <tr>
+                            <td style="font-size:0.55rem;">${displayDateTime}</td>
+                            <td class="txn-desc"><span class="txn-badge ${badgeClass}">${badgeLabel}</span> ${escapeHtml(descDisplay || '-')}</td>
+                            <td class="txn-amt" style="text-align:right;${isCredit && !isDiscount ? 'color:var(--green);font-weight:700;' : ''}">${isCredit && !isDiscount ? amtDisplay : '-'}</td>
+                            <td class="txn-amt" style="text-align:right;${(!isCredit && !isDiscount) ? 'color:var(--red);font-weight:700;' : ''}${isDiscount ? 'color:var(--gold);font-weight:700;' : ''}">${(!isCredit || isDiscount) ? amtDisplay : '-'}</td>
+                            <td class="txn-bal" style="text-align:right;">Rs. ${t.runningBalance.toLocaleString()}</td>
+                            <td><button class="txn-del" onclick="deleteLedgerEntry('${client.id}','${t.entryId}')">✕</button></td>
+                        </tr>
+                    `;
+                });
+            }
+            txnHtml += `</tbody></table></div>`;
+
+            document.getElementById('ledgerContent').innerHTML = heroHtml + clientInfo + pendingHtml + entryForm + txnHtml;
         }
 
-        window.toggleCustomDesc = function() { const sel = document.getElementById('ledgerDescSelect'); const customContainer =
-                document.getElementById('customDescContainer'); if (sel.value === 'Other (write your own)') { customContainer
-                    .classList.add('show'); } else { customContainer.classList.remove('show'); } };
+        window.toggleCustomDesc = function() {
+            const sel = document.getElementById('ledgerDescSelect');
+            const customContainer = document.getElementById('customDescContainer');
+            if (sel.value === 'Other (write your own)') { customContainer.classList.add('show'); } else { customContainer
+                    .classList.remove('show'); }
+        };
+
+        // ── Ledger Actions ──
 
         window.addCustomEntry = function() {
             if (!currentLedgerId) { toast('No client selected', true); return; }
@@ -3710,6 +3974,7 @@
             toast(`Rs.${halfAmount.toLocaleString()} half payment for ${monthKey}`);
         };
 
+        // ── FIXED: Discount now shows as - (negative debit) ──
         window.applyDiscount = function() {
             if (!currentLedgerId) return;
             const clients = getClients();
@@ -3728,13 +3993,21 @@
             const now = new Date();
             const monthKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
             const dateTimeStr = getDateTimeWithTime();
-            c.paymentHistory.push({ entryId, date: dateTimeStr, description: 'Discount', credit: discount, debit: 0,
-                monthKey: monthKey, fullDateTime: dateTimeStr });
+            // ✅ FIXED: Discount as negative debit → shows as - in ledger
+            c.paymentHistory.push({
+                entryId,
+                date: dateTimeStr,
+                description: 'Discount',
+                credit: 0,
+                debit: -discount, // negative debit = reduces balance, shows as -
+                monthKey: monthKey,
+                fullDateTime: dateTimeStr
+            });
             saveClients(clients);
             if (currentUser) { pushClientToFirebase(c).catch(e => console.warn('Firebase update failed:', e)); }
             renderLedger(c);
             renderCurrentTab();
-            toast(`Discount Rs.${discount.toLocaleString()} applied`);
+            toast(`💸 Discount Rs.${discount.toLocaleString()} applied (shown as - in ledger)`);
         };
 
         window.markCleared = function() {
@@ -4104,6 +4377,7 @@
             openModal('receiptModal');
         };
 
+        // ── FIXED: markReceiptUnpaid now sets status to 'overdue' ──
         window.markReceiptPaidNow = function() {
             if (!currentReceiptId) { toast('No receipt selected', true); return; }
             let clients = getClients();
@@ -4134,6 +4408,7 @@
             toast(`✅ Payment Rs. ${amount.toLocaleString()} recorded — Crown Fiber Paid`);
         };
 
+        // ── FIXED: markReceiptUnpaid → status = 'overdue' ──
         window.markReceiptUnpaid = function() {
             if (!currentReceiptId) { toast('No receipt selected', true); return; }
             let clients = getClients();
@@ -4153,7 +4428,8 @@
             r.isPaid = false;
             r.paidAt = null;
             r.paymentAmount = 0;
-            c.status = 'pending';
+            // ✅ FIXED: Set status to 'overdue' so user shows as Overdue
+            c.status = 'overdue';
             saveClients(clients);
             if (currentUser) { pushClientToFirebase(c).catch(e => console.warn('Firebase update failed:', e)); }
             const statusEl = document.getElementById('receiptPaymentStatus');
@@ -4162,7 +4438,7 @@
                 statusEl.style.fontWeight = '700'; }
             generateReceipt(currentReceiptId);
             renderCurrentTab();
-            toast(`⛔ Receipt marked UNPAID — Crown Fiber ⚠`);
+            toast(`⛔ Receipt marked UNPAID — Status set to OVERDUE`);
         };
 
         window.downloadReceipt = function() {
@@ -4460,10 +4736,9 @@
         };
 
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        // BACKUP & IMPORT — FIXED LEDGER TOGGLE
+        // BACKUP & IMPORT — ZERO BALANCE ON IMPORT
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
         window.openBackup = function() {
-            // Reset toggle status display
             const toggle = document.getElementById('importLedgerToggle');
             const statusSpan = document.getElementById('ledgerToggleStatus');
             if (toggle && statusSpan) {
@@ -4474,7 +4749,6 @@
             openModal('backupModal');
         };
 
-        // ─── Toggle status update on change ───
         document.addEventListener('DOMContentLoaded', function() {
             const toggle = document.getElementById('importLedgerToggle');
             const statusSpan = document.getElementById('ledgerToggleStatus');
@@ -4504,20 +4778,23 @@
             reader.onload = function(ev) {
                 try {
                     const data = JSON.parse(ev.target.result);
-                    // ✅ Read the toggle state at import time
                     const importLedger = document.getElementById('importLedgerToggle').checked;
                     if (data.clients) {
-                        let clientsToSave = data.clients;
-                        if (!importLedger) {
-                            // Strip paymentHistory from all clients
-                            clientsToSave = data.clients.map(c => {
-                                const { paymentHistory, ...rest } = c;
-                                return { ...rest, paymentHistory: [] };
-                            });
-                            toast('📂 Ledger data skipped (toggle was OFF)');
-                        } else {
-                            toast('📂 Ledger data included (toggle was ON)');
-                        }
+                        let clientsToSave = data.clients.map(c => {
+                            const { paymentHistory, oldBill, ...rest } = c;
+                            let pkgDef = getMasterPackages().find(p => p.name === c.package);
+                            let resolvedAmount = (pkgDef && pkgDef.amount > 0) ? pkgDef.amount : (c.packageAmount || 800);
+                            let resolvedCost = pkgDef ? pkgDef.cost : (c.packageCost || 500);
+                            const cleaned = {
+                                ...rest,
+                                paymentHistory: [],
+                                oldBill: 0,
+                                packageAmount: resolvedAmount,
+                                packageCost: resolvedCost,
+                            };
+                            return cleaned;
+                        });
+                        toast('📂 JSON Import: All clients at Rs. 0 — prices from Package Manager');
                         saveClients(clientsToSave);
                     }
                     if (data.masterPackages) {
@@ -4525,13 +4802,12 @@
                     }
                     refreshPackageDropdown();
                     renderCurrentTab();
-                    toast('✅ Data imported' + (importLedger ? ' (with ledger)' : ' (without ledger)'));
+                    toast('✅ Imported: All clients added with Rs. 0 balance');
                 } catch (ex) {
                     toast('Invalid file: ' + ex.message, true);
                 }
             };
             reader.readAsText(file);
-            // Reset file input so same file can be re-imported
             e.target.value = '';
         };
 
@@ -4576,6 +4852,7 @@
                     updated++;
                 } else {
                     let pkgDef = getMasterPackages().find(p => p.name === pkg);
+                    let resolvedAmt = (pkgDef && pkgDef.amount > 0) ? pkgDef.amount : amt;
                     let cost = pkgDef ? pkgDef.cost : 500;
                     const newClient = {
                         id: uid(),
@@ -4583,7 +4860,7 @@
                         phone: displayPhone,
                         address: addr,
                         package: pkg,
-                        packageAmount: amt,
+                        packageAmount: resolvedAmt,
                         packageCost: cost,
                         status: 'active',
                         packageStartDate: new Date().toISOString().slice(0, 10),
@@ -4591,12 +4868,9 @@
                         paymentHistory: [],
                         vlanId: '',
                         username: '',
+                        oldBill: 0,
                         updatedAt: new Date().toISOString()
                     };
-                    const now = new Date();
-                    const monthKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
-                    const monthName = now.toLocaleDateString('en-PK', { month: 'long', year: 'numeric' });
-                    addPendingBillForMonth(newClient, monthKey, monthName, amt);
                     clients.push(newClient);
                     created++;
                 }
@@ -4606,9 +4880,49 @@
             return { created, updated, skipped, incomplete };
         }
 
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        // REDTONE EXCEL IMPORT (with Ledger toggle)
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        window.importCSV = function(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const importLedger = document.getElementById('importLedgerToggle').checked;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const text = e.target.result;
+                    const lines = text.split(/\r?\n/).filter(line => line.trim() !== '');
+                    if (lines.length < 2) throw new Error('File empty');
+                    const parseCSVLine = (line) => {
+                        const result = [];
+                        let inQuote = false;
+                        let current = '';
+                        for (let ch of line) {
+                            if (ch === '"') inQuote = !inQuote;
+                            else if (ch === ',' && !inQuote) {
+                                result.push(current.trim());
+                                current = '';
+                            } else current += ch;
+                        }
+                        result.push(current.trim());
+                        return result;
+                    };
+                    const headers = parseCSVLine(lines[0]);
+                    const rows = [];
+                    for (let i = 1; i < lines.length; i++) {
+                        const row = parseCSVLine(lines[i]);
+                        if (row.length >= 2) rows.push(row);
+                    }
+                    const { created, updated, incomplete } = processImportedRows(rows, headers, file.name);
+                    toast('CSV: ' + created + ' new, ' + updated + ' updated (all at Rs. 0 balance)' +
+                        (incomplete ? ', ' + incomplete + ' incomplete rows' : ''));
+                    renderCurrentTab();
+                    closeModal('backupModal');
+                } catch (err) {
+                    toast('CSV error: ' + err.message, true);
+                }
+            };
+            reader.readAsText(file, 'UTF-8');
+            document.getElementById('csvFile').value = '';
+        };
+
         function convertExcelToD3(workbook) {
             const ws = workbook.Sheets[workbook.SheetNames[0]];
             const data = XLSX.utils.sheet_to_json(ws, { header: 1, defval: '' });
@@ -4719,46 +5033,28 @@
                 if (typeof priceVal === 'number') packageAmount = priceVal;
                 else if (typeof priceVal === 'string') packageAmount = parseFloat(priceVal) || 0;
                 let pkgDef = getMasterPackages().find(p => p.name === packageName);
+                if (pkgDef && pkgDef.amount > 0) {
+                    packageAmount = pkgDef.amount;
+                }
                 let packageCost = pkgDef ? pkgDef.cost : Math.round(packageAmount * 0.7);
-                const oldBill = 0;
                 const status = "active";
                 const updatedAt = new Date().toISOString();
                 const username = name.replace(/\s/g, '').toLowerCase() || id;
                 const vlanId = "";
                 const paymentHistory = [];
-                for (const item of rowsWithDate) {
-                    const d = item.dateObj;
-                    const row = item.row;
-                    const amount = parseFloat(getVal(row, 'Price')) || 0;
-                    const description = "Account Recharged";
-                    const entryId = uid();
-                    const monthKey = formatMonthKey2(d);
-                    const fullDateTime = formatDateTimeDisplay2(d);
-                    const dateDisplay = fullDateTime;
-                    paymentHistory.push({
-                        credit: amount,
-                        debit: 0,
-                        description: description,
-                        date: dateDisplay,
-                        fullDateTime: fullDateTime,
-                        monthKey: monthKey,
-                        entryId: entryId
-                    });
-                }
-                const lastDateObj = rowsWithDate[rowsWithDate.length - 1].dateObj;
-                const lastAmount = parseFloat(getVal(rowsWithDate[rowsWithDate.length - 1].row, 'Price')) || 0;
                 const receipt = {
                     clientId: id,
-                    date: formatDateDisplay(lastDateObj),
+                    date: formatDateDisplay(rowsWithDate[rowsWithDate.length - 1].dateObj),
                     generatedAt: new Date().toISOString(),
                     isPaid: true,
-                    monthKey: formatMonthKey2(lastDateObj),
-                    monthName: lastDateObj.toLocaleDateString('en-PK', { month: 'long', year: 'numeric' }),
-                    paidAt: formatDateTimeDisplay2(lastDateObj),
-                    paymentAmount: lastAmount,
+                    monthKey: formatMonthKey2(rowsWithDate[rowsWithDate.length - 1].dateObj),
+                    monthName: rowsWithDate[rowsWithDate.length - 1].dateObj.toLocaleDateString('en-PK', { month: 'long',
+                        year: 'numeric' }),
+                    paidAt: formatDateTimeDisplay2(rowsWithDate[rowsWithDate.length - 1].dateObj),
+                    paymentAmount: 0,
                     rno: 'RCP-' + Date.now().toString().slice(-8),
-                    total: lastAmount,
-                    totalAmount: lastAmount
+                    total: 0,
+                    totalAmount: 0
                 };
                 clients.push({
                     _lastReceipt: receipt,
@@ -4766,7 +5062,7 @@
                     id: id,
                     joinDate: joinDate,
                     name: name,
-                    oldBill: oldBill,
+                    oldBill: 0,
                     package: packageName,
                     packageAmount: packageAmount,
                     packageCost: packageCost,
@@ -4790,7 +5086,6 @@
         window.importExcel = function(event) {
             const file = event.target.files[0];
             if (!file) return;
-            // ✅ Read toggle at import time
             const importLedger = document.getElementById('importLedgerToggle').checked;
             const reader = new FileReader();
             reader.onload = function(e) {
@@ -4822,21 +5117,15 @@
                                 existing.vlanId = newClient.vlanId || existing.vlanId;
                                 existing.username = newClient.username || existing.username;
                                 existing.status = newClient.status || existing.status;
-                                if (importLedger && newClient.paymentHistory && newClient.paymentHistory.length >
-                                    0) {
-                                    if (!existing.paymentHistory) existing.paymentHistory = [];
-                                    for (const entry of newClient.paymentHistory) {
-                                        const existsEntry = existing.paymentHistory.some(e => e.entryId === entry
-                                            .entryId);
-                                        if (!existsEntry) existing.paymentHistory.push(entry);
-                                    }
-                                }
+                                existing.oldBill = 0;
+                                existing.paymentHistory = existing.paymentHistory || [];
                                 if (newClient._lastReceipt) existing._lastReceipt = newClient._lastReceipt;
                                 existing.updatedAt = new Date().toISOString();
                                 updated++;
                             } else { skipped++; }
                         } else {
-                            if (!importLedger) { newClient.paymentHistory = []; }
+                            newClient.paymentHistory = [];
+                            newClient.oldBill = 0;
                             existingClients.push(newClient);
                             created++;
                         }
@@ -4854,7 +5143,7 @@
                     }
                     renderCurrentTab();
                     toast(
-                        `✅ Excel Import: ${created} new, ${updated} updated, ${skipped} skipped${importLedger ? ' (with ledger)' : ' (without ledger)'}`
+                        `✅ Excel Import: ${created} new, ${updated} updated, ${skipped} skipped — ALL at Rs. 0 balance`
                         );
                     closeModal('backupModal');
                 } catch (err) {
@@ -4864,49 +5153,6 @@
             };
             reader.readAsArrayBuffer(file);
             document.getElementById('excelFile').value = '';
-        };
-
-        window.importCSV = function(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            const importLedger = document.getElementById('importLedgerToggle').checked;
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const text = e.target.result;
-                    const lines = text.split(/\r?\n/).filter(line => line.trim() !== '');
-                    if (lines.length < 2) throw new Error('File empty');
-                    const parseCSVLine = (line) => {
-                        const result = [];
-                        let inQuote = false;
-                        let current = '';
-                        for (let ch of line) {
-                            if (ch === '"') inQuote = !inQuote;
-                            else if (ch === ',' && !inQuote) {
-                                result.push(current.trim());
-                                current = '';
-                            } else current += ch;
-                        }
-                        result.push(current.trim());
-                        return result;
-                    };
-                    const headers = parseCSVLine(lines[0]);
-                    const rows = [];
-                    for (let i = 1; i < lines.length; i++) {
-                        const row = parseCSVLine(lines[i]);
-                        if (row.length >= 2) rows.push(row);
-                    }
-                    const { created, updated, incomplete } = processImportedRows(rows, headers, file.name);
-                    toast('CSV: ' + created + ' new, ' + updated + ' updated' + (incomplete ? ', ' + incomplete +
-                        ' incomplete rows' : ''));
-                    renderCurrentTab();
-                    closeModal('backupModal');
-                } catch (err) {
-                    toast('CSV error: ' + err.message, true);
-                }
-            };
-            reader.readAsText(file, 'UTF-8');
-            document.getElementById('csvFile').value = '';
         };
 
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -5304,16 +5550,16 @@
             buildPackageFilterBar();
         };
 
-        console.log("👑 D3 Crown Fiber — ISP Admin Panel (Client Portal removed)");
-        console.log("✅ Features:");
-        console.log("   🔹 Client Portal is now a separate HTML file");
-        console.log("   🔹 Admin view shows PROFIT per client (sell - cost)");
-        console.log("   🔹 🧹 CLEAR LEDGER button — one-click erase all ledger entries per client");
-        console.log("   🔹 📂 Import JSON/Excel with YES/NO toggle for old ledger data (FIXED)");
-        console.log("   🔹 📊 Profit stats in admin dashboard");
-        console.log("   🔹 🔒 Built-in packages — only price editing allowed");
+        console.log("👑 D3 Crown Fiber — ISP Admin Panel (FIXED + LEDGER RESTRUCTURED)");
+        console.log("✅ Key Fixes & New Features:");
+        console.log("   🔹 LEDGER RESTRUCTURED: Clean 0→100 design with hero cards, month breakdown, progress bars");
+        console.log("   🔹 DISCOUNT FIX: Discount now shows as - (negative debit) in ledger");
+        console.log("   🔹 UNPAID FIX: Mark Unpaid in receipt now sets client status to OVERDUE (not pending)");
+        console.log("   🔹 Month-wise cards show Paid/Partial/Unpaid with progress bars");
+        console.log("   🔹 Transaction table with badges (Bill/Payment/Discount)");
+        console.log("   🔹 Collection rate progress bar in ledger summary");
+        console.log("   🔹 All imports set clients to Rs. 0 balance with Package Manager prices");
         console.log("🐉 Dragon Mode Active — Fire breathing crown on PC view!");
-        console.log("📁 Client Portal: open Client.html separately");
     </script>
 </body>
 </html>
