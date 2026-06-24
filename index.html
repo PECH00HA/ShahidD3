@@ -77,9 +77,194 @@
             color: #f0f4ff;
         }
 
-        /* ══════════════════════════════════════════
-           PACKAGE FILTER BAR (PC MODE)
-        ══════════════════════════════════════════ */
+        /* ===== HEADER ===== */
+        .header {
+            background: linear-gradient(135deg, #0f172a 0%, #1a2332 40%, #2a1f0e 100%);
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            border-bottom: 2px solid transparent;
+            border-image: linear-gradient(90deg, #f5a623, #ffd700, #f5a623) 1;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            flex-wrap: wrap;
+            box-shadow: 0 0 60px rgba(245, 166, 35, 0.15), 0 0 120px rgba(245, 166, 35, 0.08), inset 0 -2px 0 rgba(245, 166, 35, 0.2);
+            backdrop-filter: blur(4px);
+            transition: box-shadow 0.3s;
+        }
+        .header:hover {
+            box-shadow: 0 0 80px rgba(245, 166, 35, 0.25), 0 0 160px rgba(245, 166, 35, 0.12);
+        }
+
+        .logo-svg {
+            width: 46px;
+            height: 46px;
+            filter: drop-shadow(0 0 12px rgba(245, 166, 35, 0.8));
+            animation: logoGlow 2.5s infinite;
+            flex-shrink: 0;
+        }
+        @keyframes logoGlow {
+            0%,
+            100% {
+                filter: drop-shadow(0 0 8px rgba(245, 166, 35, 0.5));
+            }
+            50% {
+                filter: drop-shadow(0 0 25px rgba(245, 166, 35, 1));
+            }
+        }
+
+        .d3-flip-wrapper {
+            display: inline-block;
+            position: relative;
+            perspective: 800px;
+        }
+        .d3-crown {
+            display: inline-block;
+            font-size: 2rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ffd966, #f5a623, #e67e22, #f5a623);
+            background-size: 300% 100%;
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 20px rgba(245, 166, 35, 0.8), 0 0 40px rgba(245, 166, 35, 0.4);
+            animation: shimmerText 4s infinite linear;
+            transform-style: preserve-3d;
+            position: relative;
+            z-index: 2;
+        }
+        @keyframes shimmerText {
+            0% {
+                background-position: 0% 50%;
+            }
+            100% {
+                background-position: 300% 50%;
+            }
+        }
+
+        .header-center {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .header-center .isp-name {
+            font-weight: 800;
+            font-size: 1.2rem;
+            line-height: 1.2;
+            background: linear-gradient(90deg, #fff, #ffd966, #ffb347, #fff);
+            background-size: 300% auto;
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            animation: neonPulse 1.8s infinite alternate, shimmerLight 4s infinite;
+            text-shadow: 0 0 12px rgba(255, 185, 35, 0.7);
+        }
+        .header-center .isp-name small {
+            display: block;
+            font-size: 0.55rem;
+            font-weight: 500;
+            color: var(--text2);
+            background: none;
+            -webkit-text-fill-color: var(--text2);
+            text-shadow: none;
+            animation: none;
+        }
+
+        .header-right {
+            text-align: right;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 2px;
+        }
+
+        .owner-glow {
+            display: inline-block;
+            font-weight: 700;
+            font-size: 0.7rem;
+            margin-top: 2px;
+            background: linear-gradient(90deg, #ffb347, #ffd700, #ffb347);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: shimmer 2s infinite;
+        }
+        @keyframes shimmer {
+            0% {
+                background-position: 0% center;
+            }
+            100% {
+                background-position: 200% center;
+            }
+        }
+
+        .logo-text {
+            display: flex;
+            align-items: baseline;
+            gap: 6px;
+            position: relative;
+            font-weight: 900;
+            line-height: 1.2;
+        }
+        .crown-fiber-text {
+            font-size: 0.8rem;
+            color: #ccc;
+            letter-spacing: 1px;
+            font-weight: 600;
+            text-shadow: 0 0 10px rgba(245, 166, 35, 0.3);
+        }
+
+        /* ===== EMERGENCY BUTTON ===== */
+        .emergency-toggle-btn {
+            padding: 6px 12px;
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+            animation: emergencyPulse 2s ease-in-out infinite;
+        }
+
+        .emergency-toggle-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(231, 76, 60, 0.6);
+        }
+
+        .emergency-toggle-btn.active {
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            animation: none;
+        }
+
+        @keyframes emergencyPulse {
+            0%,
+            100% {
+                box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+            }
+            50% {
+                box-shadow: 0 4px 25px rgba(231, 76, 60, 0.8);
+            }
+        }
+
+        .emergency-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 4px 10px 10px;
+        }
+
+        /* ===== OTHER STYLES ===== */
         .pkg-filter-bar {
             display: none;
             flex-wrap: wrap;
@@ -128,9 +313,6 @@
             font-weight: 700;
         }
 
-        /* ══════════════════════════════════════════
-           DRAGON HEADER (PC MODE)
-        ══════════════════════════════════════════ */
         .dragon-header-wrapper {
             display: none;
             align-items: center;
@@ -189,9 +371,6 @@
             }
         }
 
-        /* ══════════════════════════════════════════
-           BASE STYLES
-        ══════════════════════════════════════════ */
         * {
             margin: 0;
             padding: 0;
@@ -279,157 +458,14 @@
             display: flex !important;
         }
 
-        /* ─── Header ─── */
-        .header {
-            background: linear-gradient(135deg, #0f172a 0%, #1a2332 40%, #2a1f0e 100%);
-            padding: 14px 16px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-            border-bottom: 2px solid transparent;
-            border-image: linear-gradient(90deg, #f5a623, #ffd700, #f5a623) 1;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            flex-wrap: wrap;
-            box-shadow: 0 0 60px rgba(245, 166, 35, 0.15), 0 0 120px rgba(245, 166, 35, 0.08), inset 0 -2px 0 rgba(245, 166, 35, 0.2);
-            backdrop-filter: blur(4px);
-            transition: box-shadow 0.3s;
-        }
-        .header:hover {
-            box-shadow: 0 0 80px rgba(245, 166, 35, 0.25), 0 0 160px rgba(245, 166, 35, 0.12);
+        body.pc-mode .client-card .payment-status-toggle .btn-green {
+            padding: 6px 10px !important;
+            font-size: 0.65rem !important;
+            flex: 1 !important;
+            min-width: auto !important;
+            border-radius: 20px !important;
         }
 
-        .logo-svg {
-            width: 46px;
-            height: 46px;
-            filter: drop-shadow(0 0 12px rgba(245, 166, 35, 0.8));
-            animation: logoGlow 2.5s infinite;
-            flex-shrink: 0;
-        }
-        @keyframes logoGlow {
-            0%,
-            100% {
-                filter: drop-shadow(0 0 8px rgba(245, 166, 35, 0.5));
-            }
-            50% {
-                filter: drop-shadow(0 0 25px rgba(245, 166, 35, 1));
-            }
-        }
-
-        .d3-flip-wrapper {
-            display: inline-block;
-            position: relative;
-            perspective: 800px;
-        }
-        .d3-crown {
-            display: inline-block;
-            font-size: 2rem;
-            font-weight: 900;
-            background: linear-gradient(135deg, #ffd966, #f5a623, #e67e22, #f5a623);
-            background-size: 300% 100%;
-            background-clip: text;
-            -webkit-background-clip: text;
-            color: transparent;
-            text-shadow: 0 0 20px rgba(245, 166, 35, 0.8), 0 0 40px rgba(245, 166, 35, 0.4);
-            animation: shimmerText 4s infinite linear;
-            transform-style: preserve-3d;
-            position: relative;
-            z-index: 2;
-        }
-        @keyframes shimmerText {
-            0% {
-                background-position: 0% 50%;
-            }
-            100% {
-                background-position: 300% 50%;
-            }
-        }
-
-        .header-right {
-            text-align: right;
-            flex-shrink: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            gap: 2px;
-        }
-        .isp-name {
-            font-weight: 800;
-            font-size: 1.3rem;
-            line-height: 1.2;
-            background: linear-gradient(90deg, #fff, #ffd966, #ffb347, #fff);
-            background-size: 300% auto;
-            background-clip: text;
-            -webkit-background-clip: text;
-            color: transparent;
-            animation: neonPulse 1.8s infinite alternate, shimmerLight 4s infinite;
-            text-shadow: 0 0 12px rgba(255, 185, 35, 0.7);
-        }
-        @keyframes neonPulse {
-            0% {
-                text-shadow: 0 0 2px #ffb347, 0 0 4px #ffb347;
-            }
-            100% {
-                text-shadow: 0 0 18px #ffd966, 0 0 25px #f5a623;
-            }
-        }
-        @keyframes shimmerLight {
-            0% {
-                background-position: 0% center;
-            }
-            100% {
-                background-position: 300% center;
-            }
-        }
-        .isp-name small {
-            display: block;
-            font-size: 0.65rem;
-            font-weight: 500;
-            color: var(--text2);
-            background: none;
-            -webkit-text-fill-color: var(--text2);
-            text-shadow: none;
-            animation: none;
-        }
-        .owner-glow {
-            display: inline-block;
-            font-weight: 700;
-            font-size: 0.75rem;
-            margin-top: 2px;
-            background: linear-gradient(90deg, #ffb347, #ffd700, #ffb347);
-            background-size: 200% auto;
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            animation: shimmer 2s infinite;
-        }
-        @keyframes shimmer {
-            0% {
-                background-position: 0% center;
-            }
-            100% {
-                background-position: 200% center;
-            }
-        }
-        .logo-text {
-            display: flex;
-            align-items: baseline;
-            gap: 6px;
-            position: relative;
-            font-weight: 900;
-            line-height: 1.2;
-        }
-        .crown-fiber-text {
-            font-size: 0.8rem;
-            color: #ccc;
-            letter-spacing: 1px;
-            font-weight: 600;
-            text-shadow: 0 0 10px rgba(245, 166, 35, 0.3);
-        }
-
-        /* ─── FB Indicator ─── */
         .fb-space-indicator {
             display: flex;
             align-items: center;
@@ -503,7 +539,6 @@
             white-space: nowrap;
         }
 
-        /* ─── Stats ─── */
         .stats-scroll {
             display: flex;
             gap: 8px;
@@ -532,7 +567,6 @@
             margin-top: 2px;
         }
 
-        /* ─── Action Bar ─── */
         .action-bar {
             display: flex;
             gap: 8px;
@@ -550,17 +584,17 @@
             font-size: 0.6rem;
         }
 
-        /* ─── Tabs ─── */
         .tab-bar {
             display: flex;
             margin: 0 10px 8px;
             background: var(--card);
             border-radius: 12px;
             overflow: hidden;
+            flex-wrap: wrap;
         }
         .tab-btn {
             flex: 1;
-            padding: 10px;
+            padding: 10px 8px;
             text-align: center;
             font-weight: 600;
             font-size: 0.7rem;
@@ -569,6 +603,7 @@
             color: var(--text2);
             cursor: pointer;
             position: relative;
+            min-width: 60px;
         }
         .tab-btn.active {
             background: var(--gold);
@@ -597,7 +632,6 @@
             }
         }
 
-        /* ─── Search ─── */
         .search-box {
             padding: 0 10px 10px;
         }
@@ -612,7 +646,6 @@
             outline: none;
         }
 
-        /* ─── Client List ─── */
         .client-list {
             padding: 0 10px;
             display: flex;
@@ -646,7 +679,6 @@
             color: var(--text2);
         }
 
-        /* ─── Client Card ─── */
         .client-card {
             background: var(--card);
             border-radius: var(--radius);
@@ -737,6 +769,10 @@
         .label-pending {
             background: #3d2e1e;
             color: #f5a623;
+        }
+        .label-unpaid {
+            background: #3d1e1e;
+            color: #e74c3c;
         }
         .label-expired {
             background: #3d1e1e;
@@ -895,7 +931,6 @@
             display: inline-block;
         }
 
-        /* ─── FAB ─── */
         .fab {
             position: fixed;
             bottom: 22px;
@@ -911,7 +946,6 @@
             z-index: 90;
         }
 
-        /* ─── MODALS ─── */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -990,7 +1024,6 @@
             flex: 1;
         }
 
-        /* ─── Toast ─── */
         .toast {
             position: fixed;
             top: 16px;
@@ -1027,7 +1060,6 @@
             }
         }
 
-        /* ─── Login ─── */
         .login-overlay {
             position: fixed;
             top: 0;
@@ -1179,7 +1211,7 @@
             transform: scale(0.9);
         }
 
-        /* ─── Receipt ─── */
+        /* ===== RECEIPT STYLES ===== */
         .receipt-base {
             border-radius: 20px;
             padding: 0;
@@ -1359,14 +1391,10 @@
             color: #000;
         }
 
-        /* ══════════════════════════════════════════
-           ✨ NEW LEDGER — CLEAN & MODERN (0→100)
-        ══════════════════════════════════════════ */
+        /* ===== LEDGER ===== */
         .ledger-modern {
             font-size: 0.85rem;
         }
-
-        /* — summary hero — */
         .ledger-hero {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -1401,7 +1429,6 @@
             color: var(--gold);
         }
 
-        /* — progress ring — */
         .ledger-progress {
             background: var(--card2);
             border-radius: 12px;
@@ -1448,7 +1475,6 @@
             text-align: right;
         }
 
-        /* — month cards — */
         .ledger-month-card {
             background: var(--card);
             border-radius: 14px;
@@ -1540,7 +1566,6 @@
             min-width: 60px;
         }
 
-        /* — entry form — */
         .ledger-entry-form {
             background: var(--card2);
             border-radius: 14px;
@@ -1609,7 +1634,6 @@
             font-size: 0.6rem;
         }
 
-        /* — transaction table — */
         .ledger-txn-table {
             width: 100%;
             border-collapse: collapse;
@@ -1698,7 +1722,7 @@
             font-size: 0.7rem;
         }
 
-        /* ─── Billing ─── */
+        /* ===== BILLING ===== */
         .billing-summary {
             background: var(--card2);
             border-radius: 12px;
@@ -1724,7 +1748,6 @@
             color: var(--text);
         }
 
-        /* ─── Complaint ─── */
         .complaint-item {
             background: var(--card2);
             border-radius: 14px;
@@ -1802,7 +1825,6 @@
             color: #2ecc71;
         }
 
-        /* ─── Reminder ─── */
         .accent-account-box {
             margin-top: 12px;
             padding: 14px;
@@ -1854,7 +1876,6 @@
             background: linear-gradient(135deg, #c0392b, #e74c3c);
         }
 
-        /* ─── Package Manager ─── */
         .package-manager-table-wrapper {
             overflow-x: auto;
         }
@@ -2243,6 +2264,20 @@
                 width: 70px !important;
                 height: 60px !important;
             }
+            .header-center .isp-name {
+                font-size: 0.9rem !important;
+            }
+            .tab-btn {
+                font-size: 0.6rem !important;
+                padding: 8px 4px !important;
+                min-width: 45px !important;
+            }
+            body.pc-mode .client-card .payment-status-toggle .btn-green {
+                padding: 6px 8px !important;
+                font-size: 0.6rem !important;
+                flex: 1 !important;
+                min-width: auto !important;
+            }
         }
         @media (min-width: 601px) {
             body.pc-mode .dragon-header-wrapper {
@@ -2325,14 +2360,17 @@
                     </div>
                 </div>
 
+                <div class="header-center">
+                    <div class="isp-name">SHAHID ALI ABRO<small>Internet Service Provider</small></div>
+                    <div class="owner-glow">⚡ Khalid Ali Pechuho ⚡</div>
+                </div>
+
                 <div class="logo-text">
                     <div class="d3-flip-wrapper"><span class="d3-crown">D3</span></div>
                     <span class="crown-fiber-text">CROWN FIBER</span>
                 </div>
 
                 <div class="header-right">
-                    <div class="isp-name">SHAHID ALI ABRO<small>Internet Service Provider</small></div>
-                    <div class="owner-glow">⚡ Khalid Ali Pechuho ⚡</div>
                     <div class="fb-space-indicator" id="fbSpaceIndicator" title="Firebase storage usage">
                         <span class="fb-max-label">Total 1GB</span>
                         <span class="fb-dot online" id="fbDot"></span>
@@ -2345,6 +2383,12 @@
             <!-- STATS -->
             <div class="stats-scroll" id="statsRow"></div>
 
+            <!-- EMERGENCY BUTTON -->
+            <div class="emergency-wrapper">
+                <button class="emergency-toggle-btn" id="emergencyBtn" onclick="toggleEmergencyMode()">🚨 UNPAID</button>
+                <span style="font-size:0.55rem;color:var(--text2);">⚠️ Mark all clients as UNPAID (reset payments)</span>
+            </div>
+
             <!-- ACTION BAR -->
             <div class="action-bar">
                 <button class="btn btn-outline" onclick="openBackup()">⚙️ Backup & Restore</button>
@@ -2356,16 +2400,17 @@
 
             <!-- TABS -->
             <div class="tab-bar">
-                <button class="tab-btn active" id="tabAll" onclick="switchTab('all')">📋 All Clients</button>
-                <button class="tab-btn" id="tabExpired" onclick="switchTab('expired')">⏳ Expired / Expiring</button>
-                <button class="tab-btn" id="tabPaymentStatus" onclick="switchTab('payment')">💰 Paid / Unpaid</button>
+                <button class="tab-btn active" id="tabAll" onclick="switchTab('all')">📋 All</button>
+                <button class="tab-btn" id="tabPaid" onclick="switchTab('paid')">✅ Paid</button>
+                <button class="tab-btn" id="tabUnpaid" onclick="switchTab('unpaid')">❌ Unpaid</button>
+                <button class="tab-btn" id="tabExpired" onclick="switchTab('expired')">⏳ Expired</button>
                 <button class="tab-btn" id="tabComplaints" onclick="switchTab('complaints')">📨 Shikayat</button>
             </div>
 
             <!-- SEARCH -->
             <div class="search-box"><input type="text" id="searchInput" placeholder="Search by name or phone..." oninput="onSearchInput()"></div>
 
-            <!-- PACKAGE FILTER BAR (PC MODE) -->
+            <!-- PACKAGE FILTER BAR -->
             <div class="pkg-filter-bar" id="pkgFilterBar"></div>
 
             <!-- CLIENT LIST -->
@@ -2423,7 +2468,7 @@
                 </div>
             </div>
 
-            <!-- Ledger Modal (NEW RESTRUCTURED) -->
+            <!-- Ledger Modal -->
             <div class="modal-overlay" id="ledgerModal">
                 <div class="modal" style="max-width:520px;">
                     <div class="modal-head"><h3>📒 Ledger — <span id="ledgerClientName">---</span></h3>
@@ -2498,12 +2543,17 @@
             <!-- Package Manager Modal -->
             <div class="modal-overlay" id="packageManagerModal">
                 <div class="modal">
-                    <div class="modal-head"><h3>📦 Built‑in Package Manager</h3><button class="modal-close-btn" onclick="closeModal('packageManagerModal')">✕</button></div>
-                    <div style="font-size:0.65rem;color:var(--text2);margin-bottom:10px;">⚡ Packages are built‑in — you can only edit Sell & Cost prices. Name changes & deletion are locked.</div>
+                    <div class="modal-head"><h3>📦 Package Manager</h3><button class="modal-close-btn" onclick="closeModal('packageManagerModal')">✕</button></div>
+                    <div style="font-size:0.65rem;color:var(--text2);margin-bottom:10px;">⚡ Edit prices for your packages. Changes saved to Firebase automatically.</div>
+                    <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;">
+                        <button class="btn btn-blue btn-sm" onclick="exportPackages()">📤 Export Packages</button>
+                        <button class="btn btn-outline btn-sm" onclick="document.getElementById('importPackagesFile').click()">📥 Import Packages</button>
+                        <input type="file" id="importPackagesFile" accept=".json" style="display:none;" onchange="importPackages(event)">
+                    </div>
                     <div id="packageManagerList"></div>
                     <button class="btn btn-gold btn-full" onclick="applyAllPackagePricesToClients()" style="margin-top:12px;">🔄 Apply Prices to ALL Clients (except Custom)</button>
                     <div class="small-text" style="margin-top:8px;">⚠️ Updates every client's monthly fee & cost based on matching package name.</div>
-                    <div id="pkgAutoSaveIndicator" style="text-align:center;font-size:0.6rem;color:var(--green);margin-top:6px;">✅ Changes saved automatically</div>
+                    <div id="pkgAutoSaveIndicator" style="text-align:center;font-size:0.6rem;color:var(--green);margin-top:6px;">✅ Changes saved to Firebase automatically</div>
                 </div>
             </div>
 
@@ -2513,10 +2563,11 @@
                     <div class="modal-head"><h3>✅ Resolve Complaint</h3><button class="modal-close-btn" onclick="closeModal('resolveModal')">✕</button></div>
                     <div id="resolveClientInfo" style="margin-bottom:12px;font-size:0.8rem;background:var(--card2);padding:10px;border-radius:12px;"></div>
                     <div class="form-group">
-                        <label>💬 Resolution Message</label>
+                        <label>💬 Resolution Message <span style="color:var(--text2);font-weight:400;font-size:0.55rem;">(pre-filled based on issue type)</span></label>
                         <textarea id="resolveText" rows="3" style="width:100%;padding:12px;border-radius:16px;background:var(--card2);border:1px solid var(--border);color:var(--text);font-family:inherit;font-size:0.85rem;" placeholder="مشکل حل کر دی گئی ہے۔ براہ کرم اپنا روٹر ریسٹ کریں۔ شکریہ"></textarea>
                     </div>
-                    <button class="btn btn-green btn-full" onclick="submitResolution()">✅ Resolve Complaint</button>
+                    <button class="btn btn-green btn-full" onclick="submitResolution()">✅ Resolve & Send WhatsApp</button>
+                    <div id="resolveStatusMsg" style="text-align:center;font-size:0.7rem;margin-top:8px;min-height:20px;color:var(--text2);"></div>
                 </div>
             </div>
 
@@ -2540,9 +2591,8 @@
         <div class="receipt-wrap" id="receipt2Wrap"></div>
     </div>
 
-
     <!-- ════════════════════════════════════════════════════════════════
-    JAVASCRIPT — ISP Admin Panel (FIXED + LEDGER RESTRUCTURED)
+    JAVASCRIPT — ISP Admin Panel
     ════════════════════════════════════════════════════════════════ -->
     <script>
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -2562,6 +2612,7 @@
         const db = firebase.database();
         const CLIENTS_PATH = "d3_clients";
         const COMPLAINTS_PATH = "d3_complaints";
+        const PACKAGES_PATH = "d3_packages";
         let currentUser = null;
         let isLocalChange = false;
         let fbListener = null;
@@ -2588,6 +2639,16 @@
             "Opening Balance", "Reversed Payment", "Bill Cleared", "Refund",
             "Partial Payment", "Other (write your own)"
         ];
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        // COMPLAINT RESOLUTION MESSAGES — ACTUAL URDU SCRIPT (نستعلیق)
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        const RESOLUTION_MESSAGES = {
+            'red_light': 'آپ کا انٹرنیٹ منقطع ہونے کا مسئلہ حل کر دیا گیا ہے۔ آپ کے تعاون کا شکریہ۔ اب اپنے موڈیم کو ایک بار بند کر کے دوبارہ آن کریں۔',
+            'slow_internet': 'آپ کے سست انٹرنیٹ کا مسئلہ حل کر دیا گیا ہے۔ آپ کے تعاون کا شکریہ۔ اب اپنے موڈیم کو ایک بار بند کر کے دوبارہ آن کریں۔',
+            'disconnecting': 'آپ کا انٹرنیٹ بار بار بند ہونے کا مسئلہ حل کر دیا گیا ہے۔ آپ کے تعاون کا شکریہ۔ اب اپنے موڈیم کو ایک بار بند کر کے دوبارہ آن کریں۔',
+            'package_end': 'آپ کا ماہانہ انٹرنیٹ پیکیج بحال کر دیا گیا ہے۔ اس میں موڈیم کو بند کر کے چلانے کی ضرورت نہیں ہوتی، لیکن اگر انٹرنیٹ شروع نہ ہو تو آپ موڈیم کو ایک بار بند کر کے دوبارہ آن کر لیں۔ آپ کے تعاون کا شکریہ۔'
+        };
 
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
         // BUILT-IN PACKAGES
@@ -2649,6 +2710,59 @@
                 exactDemos = ['ahmed', 'demo', 'test', 'sample']; for (let kw of exactDemos) { if (name === kw) return true; }
             return false; }
 
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        // EMERGENCY MODE
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        let emergencyMode = false;
+
+        function toggleEmergencyMode() {
+            emergencyMode = !emergencyMode;
+            const btn = document.getElementById('emergencyBtn');
+            if (!btn) { toast('Emergency button not found', true); return; }
+
+            if (emergencyMode) {
+                if (!confirm('🚨 Mark ALL Clients as UNPAID?\n\nYeh action sab clients ke payments clear kar dega!\nFresh slate se start hoga.')) {
+                    emergencyMode = false;
+                    return;
+                }
+
+                const clients = getClients();
+                let updated = 0;
+
+                clients.forEach(c => {
+                    if (!c.paymentHistory) c.paymentHistory = [];
+                    c.paymentHistory = c.paymentHistory.filter(e => e.credit === 0 || !e.credit);
+                    const totalDebit = c.paymentHistory.reduce((s, e) => s + (Number(e.debit) || 0), 0);
+                    if (totalDebit === 0) {
+                        const now = new Date();
+                        const monthKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+                        c.paymentHistory.push({
+                            entryId: uid(),
+                            date: getDateTimeWithTime(),
+                            description: 'Monthly Bill (Reset)',
+                            credit: 0,
+                            debit: c.packageAmount || 800,
+                            monthKey: monthKey,
+                            fullDateTime: getDateTimeWithTime()
+                        });
+                    }
+                    c.status = 'active';
+                    updated++;
+                });
+
+                saveClients(clients, false);
+                btn.classList.add('active');
+                btn.textContent = '✅ ALL RESET';
+                toast(`🚨 ${updated} clients marked as UNPAID! Fresh slate.`, false);
+                switchTab('unpaid');
+            } else {
+                btn.classList.remove('active');
+                btn.textContent = '🚨 UNPAID';
+                toast('Normal mode restored', false);
+                switchTab('unpaid');
+            }
+        }
+
         function toast(msg, err) { const t = document.createElement('div');
             t.className = 'toast' + (err ? ' err' : '');
             t.textContent = msg; const c = document.getElementById('toastContainer'); if (c) { c.appendChild(t);
@@ -2658,25 +2772,36 @@
         // CLIENTS CRUD
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
         function sanitizeClient(c) {
+            if (!c) return null;
             if (!c.id) c.id = uid();
             c.name = c.name || 'Unknown Client';
             c.phone = c.phone || '';
             c.package = c.package || 'Custom';
             c.username = c.username || '';
             c.vlanId = c.vlanId || '';
-            if (!c.paymentHistory) c.paymentHistory = [];
-            if (c.paymentHistory) { c.paymentHistory = c.paymentHistory.filter(e => !(e.description && e.description
-                    .includes('Registration') && e.debit === 0 && e.credit === 0)); }
-            if (typeof c.packageAmount !== 'number') c.packageAmount = Number(c.packageAmount) || 800;
-            if (typeof c.packageCost !== 'number') c.packageCost = Number(c.packageCost) || 500;
+            if (c.paymentHistory && Array.isArray(c.paymentHistory)) {
+                c.paymentHistory = c.paymentHistory.filter(e =>
+                    !(e.description && e.description.includes('Registration') && e.debit === 0 && e.credit === 0)
+                );
+            } else {
+                c.paymentHistory = [];
+            }
+            if (typeof c.packageAmount !== 'number' || isNaN(c.packageAmount)) {
+                c.packageAmount = Number(c.packageAmount) || 800;
+            }
+            if (typeof c.packageCost !== 'number' || isNaN(c.packageCost)) {
+                c.packageCost = Number(c.packageCost) || 500;
+            }
             if (c.packageAmount < c.packageCost && c.packageAmount > 0 && c.packageCost > 0) {
                 const temp = c.packageAmount;
                 c.packageAmount = c.packageCost;
                 c.packageCost = temp;
             }
-            const totalDebit = c.paymentHistory.reduce((s, e) => s + (Number(e.debit) || 0), 0);
-            const totalCredit = c.paymentHistory.reduce((s, e) => s + (Number(e.credit) || 0), 0);
-            c.oldBill = Math.max(0, totalDebit - totalCredit);
+            if (c.oldBill === undefined || c.oldBill === null) {
+                const totalDebit = c.paymentHistory.reduce((s, e) => s + (Number(e.debit) || 0), 0);
+                const totalCredit = c.paymentHistory.reduce((s, e) => s + (Number(e.credit) || 0), 0);
+                c.oldBill = Math.max(0, totalDebit - totalCredit);
+            }
             if (!c.status) c.status = 'active';
             if (!c.packageStartDate) c.packageStartDate = new Date().toISOString().slice(0, 10);
             if (!c.joinDate) c.joinDate = c.packageStartDate;
@@ -2684,8 +2809,13 @@
             return c;
         }
 
-        function getClients() { try { let raw = JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; return raw.filter(c =>
-                    !isDemoClient(c)).map(sanitizeClient); } catch (e) { return []; } }
+        function getClients() {
+            try {
+                let raw = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+                let valid = raw.filter(c => !isDemoClient(c));
+                return valid.map(sanitizeClient);
+            } catch (e) { return []; }
+        }
 
         function saveClients(arr, skipCloudSync = true) {
             let filtered = arr.filter(c => !isDemoClient(c)).map(sanitizeClient);
@@ -2695,11 +2825,147 @@
             renderCurrentTab();
             updateFirebaseIndicator();
             buildPackageFilterBar();
+
+            if (!skipCloudSync && currentUser) {
+                syncAllToFirebase().catch(e => console.warn('Auto-sync failed:', e));
+            }
         }
 
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        // FIREBASE CRUD
+        // PACKAGE MANAGER
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        function getFirebasePackagesRef() {
+            if (!currentUser) throw new Error('Not authenticated');
+            return db.ref(`${PACKAGES_PATH}/${currentUser.uid}`);
+        }
+
+        async function loadPackagesFromFirebase() {
+            if (!currentUser) return null;
+            try {
+                const snap = await db.ref(`${PACKAGES_PATH}/${currentUser.uid}`).once('value');
+                const data = snap.val();
+                if (data && data.packages && Array.isArray(data.packages)) {
+                    return data.packages;
+                }
+                return null;
+            } catch (e) {
+                console.error('loadPackagesFromFirebase error:', e);
+                return null;
+            }
+        }
+
+        async function savePackagesToFirebase(pkgs) {
+            if (!currentUser) return;
+            try {
+                await db.ref(`${PACKAGES_PATH}/${currentUser.uid}`).set({
+                    packages: pkgs,
+                    lastUpdated: Date.now()
+                });
+                console.log('✅ Packages saved to Firebase');
+            } catch (e) {
+                console.error('savePackagesToFirebase error:', e);
+                throw e;
+            }
+        }
+
+        function getMasterPackages() {
+            let saved = localStorage.getItem(MASTER_PACKAGES_KEY);
+            if (saved) {
+                try {
+                    let savedPkgs = JSON.parse(saved);
+                    let result = savedPkgs.map(p => ({
+                        name: p.name || 'Custom',
+                        amount: typeof p.amount === 'number' ? p.amount : 0,
+                        cost: typeof p.cost === 'number' ? p.cost : 0
+                    }));
+                    for (let bp of BUILT_IN_PACKAGES) {
+                        if (!result.some(p => p.name === bp.name)) {
+                            result.push({ ...bp });
+                        }
+                    }
+                    return result;
+                } catch (e) {
+                    console.warn('Error parsing packages, using defaults:', e);
+                    return [...BUILT_IN_PACKAGES];
+                }
+            }
+            let defaultPkgs = BUILT_IN_PACKAGES.map(p => ({ ...p }));
+            localStorage.setItem(MASTER_PACKAGES_KEY, JSON.stringify(defaultPkgs));
+            return defaultPkgs;
+        }
+
+        async function saveMasterPackages(pkgs) {
+            let saveData = pkgs.map(p => ({ name: p.name, amount: p.amount, cost: p.cost }));
+            localStorage.setItem(MASTER_PACKAGES_KEY, JSON.stringify(saveData));
+
+            if (currentUser) {
+                try {
+                    await savePackagesToFirebase(saveData);
+                    toast('✅ Packages saved to Firebase Cloud');
+                } catch (e) {
+                    toast('⚠️ Packages saved locally but Firebase sync failed: ' + e.message, true);
+                }
+            }
+
+            syncPackagePricesToClients(pkgs);
+            refreshPackageDropdown();
+            const pm = document.getElementById('packageManagerModal');
+            if (pm && pm.classList.contains('show')) renderPackageList();
+            const ind = document.getElementById('pkgAutoSaveIndicator');
+            if (ind) {
+                ind.textContent = '✅ Saved at ' + new Date().toLocaleTimeString() + ' (Firebase + Local)';
+                ind.style.color = '#2ecc71';
+                setTimeout(() => { if (ind) ind.textContent = '✅ Changes saved to Firebase & Local'; }, 3000);
+            }
+            updateFirebaseIndicator();
+            buildPackageFilterBar();
+        }
+
+        function exportPackages() {
+            let pkgs = getMasterPackages();
+            let data = pkgs.map(p => ({ name: p.name, amount: p.amount, cost: p.cost }));
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'D3_Packages_' + new Date().toISOString().slice(0, 10) + '.json';
+            a.click();
+            toast('📦 Packages exported');
+        }
+
+        function importPackages(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(ev) {
+                try {
+                    const imported = JSON.parse(ev.target.result);
+                    if (!Array.isArray(imported)) throw new Error('Invalid format — expected array');
+                    let pkgs = getMasterPackages();
+                    let updated = 0;
+                    for (const p of imported) {
+                        if (!p.name) continue;
+                        let existing = pkgs.find(x => x.name === p.name);
+                        if (existing) {
+                            existing.amount = p.amount || existing.amount;
+                            existing.cost = p.cost || existing.cost;
+                            updated++;
+                        } else {
+                            pkgs.push({ name: p.name, amount: p.amount || 0, cost: p.cost || 0 });
+                            updated++;
+                        }
+                    }
+                    saveMasterPackages(pkgs);
+                    toast('📦 Imported ' + updated + ' packages');
+                    renderPackageList();
+                    refreshPackageDropdown();
+                } catch (ex) {
+                    toast('Import failed: ' + ex.message, true);
+                }
+            };
+            reader.readAsText(file);
+            event.target.value = '';
+        }
+
         function getFirebaseClientsRef() { if (!currentUser) throw new Error('Not authenticated'); return db.ref(
                 `${CLIENTS_PATH}/${currentUser.uid}/clients`); }
 
@@ -2754,15 +3020,26 @@
         }
 
         async function syncAllToFirebase() {
-            if (!currentUser) return;
+            if (!currentUser) {
+                toast('Not logged in!', true);
+                return;
+            }
             try {
                 let clients = getClients().filter(c => !isDemoClient(c));
+                let packages = getMasterPackages();
+
                 await db.ref(`${CLIENTS_PATH}/${currentUser.uid}`).set({ clients, lastUpdated: Date.now() });
+
+                let pkgData = packages.map(p => ({ name: p.name, amount: p.amount, cost: p.cost }));
+                await db.ref(`${PACKAGES_PATH}/${currentUser.uid}`).set({ packages: pkgData, lastUpdated: Date.now() });
+
                 updateLastSyncDisplay(Date.now());
                 updateFirebaseIndicator();
-                toast('✅ All clients synced to Firebase');
-            } catch (e) { console.error('syncAllToFirebase error:', e);
-                toast('Sync failed: ' + e.message, true); }
+                toast('✅ All data synced to Firebase (Clients + Packages)');
+            } catch (e) {
+                console.error('syncAllToFirebase error:', e);
+                toast('Sync failed: ' + e.message, true);
+            }
         }
 
         function updateFirebaseIndicator() {
@@ -2829,64 +3106,8 @@
                     y = parseInt(parts[2]); const date = new Date(y, m, d); if (date.getFullYear() === y && date
                         .getMonth() === m && date.getDate() === d) return date; } return null; }
 
-        function daysRemaining(expiryDate) {
-            if (!expiryDate) return null;
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            const expiry = new Date(expiryDate);
-            const diff = Math.ceil((expiry - today) / (1000 * 60 * 60 * 24));
-            return diff;
-        }
-
-        function updateCurrentMonthBill(client, newAmount) {
-            if (!client.paymentHistory) client.paymentHistory = [];
-            const now = new Date();
-            const monthKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
-            const monthName = now.toLocaleDateString('en-PK', { month: 'long', year: 'numeric' });
-
-            let existingDebit = null;
-            let existingIdx = -1;
-            for (let i = 0; i < client.paymentHistory.length; i++) {
-                const e = client.paymentHistory[i];
-                if (e.monthKey === monthKey && e.debit > 0) {
-                    const totalCreditForMonth = client.paymentHistory
-                        .filter(x => x.monthKey === monthKey && x.credit > 0)
-                        .reduce((s, x) => s + (Number(x.credit) || 0), 0);
-                    if (Number(e.debit) > totalCreditForMonth) {
-                        existingDebit = e;
-                        existingIdx = i;
-                        break;
-                    }
-                }
-            }
-
-            if (existingDebit && existingIdx !== -1) {
-                if (Number(existingDebit.debit) !== newAmount) {
-                    existingDebit.debit = newAmount;
-                    existingDebit.description = `Monthly Bill - ${monthName} (updated)`;
-                    existingDebit.updatedAt = new Date().toISOString();
-                    return true;
-                }
-                return false;
-            } else {
-                const entryId = uid();
-                const dateTimeStr = getDateTimeWithTime();
-                client.paymentHistory.push({
-                    entryId: entryId,
-                    date: dateTimeStr,
-                    description: `Monthly Bill - ${monthName}`,
-                    credit: 0,
-                    debit: newAmount,
-                    monthKey: monthKey,
-                    fullDateTime: dateTimeStr,
-                    autoMonth: monthKey
-                });
-                return true;
-            }
-        }
-
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        // PACKAGE PRICE SYNC
+        // PACKAGE FUNCTIONS
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
         function syncPackagePricesToClients(updatedPackages) {
             if (!updatedPackages || updatedPackages.length === 0) return 0;
@@ -2901,71 +3122,24 @@
                 const pkgDef = updatedPackages.find(p => p.name === c.package);
                 if (!pkgDef) continue;
 
-                c.packageAmount = pkgDef.amount;
-                c.packageCost = pkgDef.cost;
-                c.updatedAt = now.toISOString();
-
-                if (!c.paymentHistory) c.paymentHistory = [];
-                c.paymentHistory.push({
-                    entryId: uid(),
-                    date: dateTimeStr,
-                    description: `Account Recharge - ${c.package}`,
-                    credit: pkgDef.amount,
-                    debit: 0,
-                    monthKey: monthKey,
-                    fullDateTime: dateTimeStr
-                });
-                changed++;
+                if (c.packageAmount !== pkgDef.amount || c.packageCost !== pkgDef.cost) {
+                    c.packageAmount = pkgDef.amount;
+                    c.packageCost = pkgDef.cost;
+                    c.updatedAt = now.toISOString();
+                    changed++;
+                }
             }
 
             if (changed > 0) {
                 isLocalChange = true;
-                saveClients(clients);
+                saveClients(clients, true);
                 if (currentUser) {
                     syncAllToFirebase().catch(e => console.warn('Firebase sync after package update failed:', e));
                 }
                 isLocalChange = false;
-                toast(`✅ ${changed} clients: Account Recharge added in ledger`);
+                toast(`✅ ${changed} clients updated with new package prices`);
             }
             return changed;
-        }
-
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        // PACKAGE MANAGEMENT
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        function getMasterPackages() {
-            let saved = localStorage.getItem(MASTER_PACKAGES_KEY);
-            if (saved) {
-                try {
-                    let savedPkgs = JSON.parse(saved);
-                    let merged = BUILT_IN_PACKAGES.map(bp => {
-                        let found = savedPkgs.find(sp => sp.name === bp.name);
-                        if (found) {
-                            return { ...bp, amount: found.amount !== undefined ? found.amount : bp.amount,
-                                cost: found.cost !== undefined ? found.cost : bp.cost };
-                        }
-                        return { ...bp };
-                    });
-                    return merged;
-                } catch (e) { return [...BUILT_IN_PACKAGES]; }
-            }
-            return [...BUILT_IN_PACKAGES];
-        }
-
-        function saveMasterPackages(pkgs) {
-            const oldPkgs = getMasterPackages();
-            let saveData = pkgs.map(p => ({ name: p.name, amount: p.amount, cost: p.cost }));
-            localStorage.setItem(MASTER_PACKAGES_KEY, JSON.stringify(saveData));
-            syncPackagePricesToClients(pkgs);
-            refreshPackageDropdown();
-            const pm = document.getElementById('packageManagerModal');
-            if (pm && pm.classList.contains('show')) renderPackageList();
-            const ind = document.getElementById('pkgAutoSaveIndicator');
-            if (ind) { ind.textContent = '✅ Changes saved automatically at ' + new Date().toLocaleTimeString();
-                ind.style.color = '#2ecc71';
-                setTimeout(() => { if (ind) ind.textContent = '✅ Changes saved automatically'; }, 3000); }
-            updateFirebaseIndicator();
-            buildPackageFilterBar();
         }
 
         function refreshPackageDropdown() {
@@ -3027,7 +3201,13 @@
             });
             html += `</tbody></table></div>
                     <div style="font-size:0.55rem;color:var(--text2);margin-top:8px;text-align:center;">🔒 Package names are built‑in and cannot be changed or deleted.</div>
-                    <button class="btn btn-blue btn-sm" style="margin-top:10px; width:100%; padding:12px;" onclick="syncAllPackageEdits()">📌 Save All Price Changes & Apply to Clients</button>`;
+                    <div style="font-size:0.55rem;color:var(--gold);margin-top:4px;text-align:center;">☁️ Prices are saved to Firebase Cloud permanently</div>
+                    <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
+                        <button class="btn btn-blue" style="flex:1;padding:10px;" onclick="exportPackages()">📤 Export Packages</button>
+                        <button class="btn btn-outline" style="flex:1;padding:10px;" onclick="document.getElementById('importPackagesFile2').click()">📥 Import Packages</button>
+                        <input type="file" id="importPackagesFile2" accept=".json" style="display:none;" onchange="importPackages(event)">
+                    </div>
+                    <button class="btn btn-gold btn-full" style="margin-top:10px; padding:12px;" onclick="syncAllPackageEdits()">📌 Save All Price Changes & Apply to Clients</button>`;
             document.getElementById('packageManagerList').innerHTML = html;
         }
 
@@ -3041,7 +3221,7 @@
             if (!isNaN(newAmt)) pkgs[idx].amount = newAmt;
             if (!isNaN(newCost)) pkgs[idx].cost = newCost;
             saveMasterPackages(pkgs);
-            toast('Price updated for ' + pkgs[idx].name);
+            toast('✅ Price updated for ' + pkgs[idx].name + ' (Saved to Firebase)');
             renderPackageList();
             refreshPackageDropdown();
         };
@@ -3057,7 +3237,7 @@
             saveMasterPackages(pkgs);
             renderPackageList();
             refreshPackageDropdown();
-            toast('All price changes saved and applied to clients');
+            toast('✅ All price changes saved to Firebase & applied to clients');
         };
 
         function applyAllPackagePricesToClientsSilent() {
@@ -3155,7 +3335,7 @@
         };
 
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        // PACKAGE FILTER BAR (by SPEED)
+        // PACKAGE FILTER BAR
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
         function buildPackageFilterBar() {
             const bar = document.getElementById('pkgFilterBar');
@@ -3195,7 +3375,7 @@
         function onSearchInput() { renderCurrentTab(); }
 
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        // RENDERING — ADMIN (GROUP BY SPEED)
+        // RENDERING
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
         function clientCardHTML(c) {
             const totalDebit = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.debit) || 0), 0);
@@ -3212,7 +3392,8 @@
                 lc = '';
             if (isExpired) { pl = 'Expired';
                 lc = 'label-expired'; } else if (pending === 0 && c.status === 'active') { pl = 'Paid';
-                lc = 'label-paid'; } else { pl = 'Pending';
+                lc = 'label-paid'; } else if (pending > 0 && c.status === 'active') { pl = 'Unpaid';
+                lc = 'label-unpaid'; } else { pl = 'Pending';
                 lc = 'label-pending'; }
             const expiryText = days <= 0 ? `⚠️ Expired ${Math.abs(days)}d ago` : (days <= 3 ? `⚠️ Expires in ${days}d` :
                 '');
@@ -3345,71 +3526,208 @@
                 '<div style="text-align:center;padding:30px;color:#666;">All packages up to date</div>';
         }
 
-        function renderPaymentStatusClients() {
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        // PAID TAB
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        function renderPaidClients() {
             const clients = getClients();
             const searchEl = document.getElementById('searchInput');
             const q = searchEl ? searchEl.value.toLowerCase() : '';
-            let filtered = clients.filter(c =>
+
+            let filtered = clients.filter(c => {
+                const totalDebit = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.debit) || 0), 0);
+                const totalCredit = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.credit) || 0), 0);
+                const pending = Math.max(0, totalDebit - totalCredit);
+                return pending === 0 && c.status === 'active';
+            });
+
+            filtered = filtered.filter(c =>
                 !q ||
                 (c.name && String(c.name).toLowerCase().includes(q)) ||
                 (c.phone && String(c.phone).includes(q)) ||
                 (c.package && String(c.package).toLowerCase().includes(q))
             );
+
             if (activePkgFilter !== 'all') {
                 filtered = filtered.filter(c => {
                     const speed = extractSpeed(c.package) || 'Other';
                     return speed === activePkgFilter;
                 });
             }
-            let html = '';
-            if (filtered.length === 0) { html = '<div style="text-align:center;padding:30px;color:#666;">No clients</div>'; } else {
-                const sorted = filtered.sort((a, b) => String(a.name).localeCompare(String(b.name)));
-                const paidCount = sorted.filter(c => { const td = (c.paymentHistory || []).reduce((s, e) => s + (Number(e
-                            .debit) || 0), 0); const tc = (c.paymentHistory || []).reduce((s, e) => s + (Number(e
-                            .credit) || 0), 0); return Math.max(0, td - tc) === 0 && c.status === 'active'; }).length;
-                const unpaidCount = sorted.length - paidCount;
-                html =
-                    `<div style="display:flex;gap:10px;margin-bottom:12px;padding:8px 12px;background:var(--card2);border-radius:12px;flex-wrap:wrap;">
-                            <span style="font-size:0.75rem;font-weight:600;">📊 Total: ${sorted.length} Clients</span>
-                            <span style="font-size:0.75rem;color:#2ecc71;">✅ Paid: ${paidCount}</span>
-                            <span style="font-size:0.75rem;color:#e74c3c;">❌ Unpaid: ${unpaidCount}</span>
-                        </div>`;
+
+            const totalPaid = filtered.length;
+            const totalCollected = filtered.reduce((s, c) => {
+                return s + (c.paymentHistory || []).reduce((ss, e) => ss + (Number(e.credit) || 0), 0);
+            }, 0);
+
+            const totalProfit = filtered.reduce((s, c) => {
+                const profit = (c.packageAmount || 0) - (c.packageCost || 0);
+                return s + profit;
+            }, 0);
+
+            let html = `
+                <div style="display:flex;gap:10px;margin-bottom:12px;padding:10px 14px;background:var(--card2);border-radius:12px;flex-wrap:wrap;border:1px solid var(--green);">
+                    <span style="font-size:0.8rem;font-weight:700;color:var(--green);">✅ PAID CLIENTS</span>
+                    <span style="font-size:0.75rem;">👤 ${totalPaid} clients</span>
+                    <span style="font-size:0.75rem;color:#2ecc71;">💰 Collected: Rs.${totalCollected.toLocaleString()}</span>
+                    <span style="font-size:0.75rem;color:#2ecc71;">📈 Profit: Rs.${totalProfit.toLocaleString()}</span>
+                </div>
+            `;
+
+            if (filtered.length === 0) {
+                html += '<div style="text-align:center;padding:30px;color:#666;">No paid clients yet</div>';
+            } else {
+                html += renderGroupedHTML(filtered);
+            }
+
+            document.getElementById('clientList').innerHTML = html;
+        }
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        // UNPAID TAB
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        function renderUnpaidClients() {
+            const clients = getClients();
+            const searchEl = document.getElementById('searchInput');
+            const q = searchEl ? searchEl.value.toLowerCase() : '';
+
+            let filtered = clients.filter(c => {
+                const totalDebit = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.debit) || 0), 0);
+                const totalCredit = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.credit) || 0), 0);
+                const pending = Math.max(0, totalDebit - totalCredit);
+                return pending > 0 || c.status === 'overdue' || c.status === 'inactive';
+            });
+
+            filtered = filtered.filter(c =>
+                !q ||
+                (c.name && String(c.name).toLowerCase().includes(q)) ||
+                (c.phone && String(c.phone).includes(q)) ||
+                (c.package && String(c.package).toLowerCase().includes(q))
+            );
+
+            if (activePkgFilter !== 'all') {
+                filtered = filtered.filter(c => {
+                    const speed = extractSpeed(c.package) || 'Other';
+                    return speed === activePkgFilter;
+                });
+            }
+
+            const totalUnpaid = filtered.length;
+            const totalPending = filtered.reduce((s, c) => {
+                const td = (c.paymentHistory || []).reduce((ss, e) => ss + (Number(e.debit) || 0), 0);
+                const tc = (c.paymentHistory || []).reduce((ss, e) => ss + (Number(e.credit) || 0), 0);
+                return s + Math.max(0, td - tc);
+            }, 0);
+
+            let html = `
+                <div style="display:flex;gap:10px;margin-bottom:12px;padding:10px 14px;background:var(--card2);border-radius:12px;flex-wrap:wrap;border:1px solid var(--red);">
+                    <span style="font-size:0.8rem;font-weight:700;color:var(--red);">❌ UNPAID CLIENTS</span>
+                    <span style="font-size:0.75rem;">👤 ${totalUnpaid} clients</span>
+                    <span style="font-size:0.75rem;color:#e74c3c;">⚠️ Total Pending: Rs.${totalPending.toLocaleString()}</span>
+                    <span style="font-size:0.7rem;color:var(--text2);">📌 Click "Mark Paid" to collect payment</span>
+                </div>
+            `;
+
+            if (filtered.length === 0) {
+                html += '<div style="text-align:center;padding:30px;color:var(--green);">✨ All clients are paid! ✨</div>';
+            } else {
+                const sorted = filtered.sort((a, b) => {
+                    const pendingA = (a.paymentHistory || []).reduce((s, e) => s + (Number(e.debit) || 0) - (Number(e.credit) || 0), 0);
+                    const pendingB = (b.paymentHistory || []).reduce((s, e) => s + (Number(e.debit) || 0) - (Number(e.credit) || 0), 0);
+                    return pendingB - pendingA;
+                });
+
                 html += sorted.map(c => {
                     const td = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.debit) || 0), 0);
                     const tc = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.credit) || 0), 0);
                     const pending = Math.max(0, td - tc);
-                    const isPaid = pending === 0 && c.status === 'active';
-                    const statusLabel = isPaid ? '✅ PAID' : '❌ UNPAID';
-                    const statusClass = isPaid ? 'status-paid' : 'status-unpaid';
-                    const profit = (c.packageAmount || 0) - (c.packageCost || 0);
-                    const profitLabel = profit >= 0 ? `📈 +Rs.${profit.toLocaleString()}` :
-                        `📉 -Rs.${Math.abs(profit).toLocaleString()}`;
-                    return `<div class="client-card">
-                                <div class="client-row">
-                                    <div>
-                                        <div class="client-name">${c.name}</div>
-                                        <div class="client-phone">📱 ${c.phone}</div>
-                                        <div class="client-pkg">📦 ${c.package}</div>
-                                        <div style="font-size:0.55rem;color:var(--green);">${profitLabel}/mo</div>
-                                    </div>
-                                    <div style="text-align:right;">
-                                        <div><span class="status-pill ${statusClass}">${statusLabel}</span></div>
-                                        <div class="amount-due" style="font-size:0.8rem;">Rs. ${pending.toLocaleString()}</div>
-                                    </div>
+                    const packageAmount = c.packageAmount || 0;
+                    const days = daysUntilExpiry(c);
+                    const isExpired = days <= 0;
+
+                    return `
+                        <div class="client-card" style="border:2px solid var(--red);">
+                            <div class="client-row">
+                                <div>
+                                    <div class="client-name"><span class="status-dot ${isExpired ? 'dot-overdue' : 'dot-overdue'}"></span>${c.name} <span class="payment-label label-unpaid">❌ UNPAID</span></div>
+                                    <div class="client-phone">📱 ${c.phone}</div>
+                                    <div class="client-pkg">📦 ${c.package} <span style="color:var(--gold);font-weight:700;">— Rs. ${packageAmount.toLocaleString()}</span></div>
+                                    ${c.vlanId ? `<span class="vlan-badge">🔌 VLAN: ${c.vlanId}</span>` : ''}
+                                    ${c.username ? `<span class="vlan-badge" style="background:#1a3a5c;">👤 ${c.username}</span>` : ''}
+                                    ${isExpired ? `<div class="expiry-badge" style="color:#e74c3c;font-weight:700;">⚠️ EXPIRED</div>` : ''}
                                 </div>
-                                <div class="payment-status-toggle" style="margin-top:6px;">
-                                    <button class="btn btn-green btn-sm" onclick="togglePaymentStatus('${c.id}','paid')">✅ Mark Paid</button>
-                                    <button class="btn btn-red btn-sm" onclick="markUnpaidWithAmount('${c.id}')">❌ Mark Unpaid</button>
-                                    <button class="btn btn-wa btn-sm" onclick="openReminderOptions('${c.id}')">📨 Reminder</button>
-                                    <button class="btn btn-outline btn-sm" onclick="openEditClient('${c.id}')">✏️ Edit</button>
-                                    <button class="btn-clear-ledger" onclick="clearLedger('${c.id}')">🧹 Clear Ledger</button>
+                                <div style="text-align:right;">
+                                    <div class="amount-due" style="font-size:1.2rem;color:#e74c3c;">Rs. ${pending.toLocaleString()}</div>
+                                    <div style="font-size:0.6rem;color:var(--text2);">Due</div>
                                 </div>
-                            </div>`;
+                            </div>
+                            <div class="payment-status-toggle" style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;">
+                                <button class="btn btn-green" style="flex:2;padding:12px;font-size:0.85rem;border-radius:30px;" onclick="markPaidFromUnpaid('${c.id}')">✅ Mark Paid — Collect Rs. ${pending.toLocaleString()}</button>
+                                <button class="btn btn-wa" onclick="openReminderOptions('${c.id}')">📨 Reminder</button>
+                                <button class="btn btn-outline" onclick="openEditClient('${c.id}')">✏️ Edit</button>
+                            </div>
+                        </div>
+                    `;
                 }).join('');
             }
+
             document.getElementById('clientList').innerHTML = html;
         }
 
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        // MARK PAID FROM UNPAID TAB
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        window.markPaidFromUnpaid = function(clientId) {
+            const clients = getClients();
+            const c = clients.find(x => x.id === clientId);
+            if (!c) { toast('Client not found', true); return; }
+
+            const td = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.debit) || 0), 0);
+            const tc = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.credit) || 0), 0);
+            const pending = Math.max(0, td - tc);
+
+            if (pending <= 0) {
+                c.status = 'active';
+                saveClients(clients);
+                if (currentUser) { pushClientToFirebase(c).catch(e => console.warn('Firebase update failed:', e)); }
+                renderCurrentTab();
+                toast(`✅ ${c.name} marked as PAID`);
+                return;
+            }
+
+            if (!confirm(`Collect Rs. ${pending.toLocaleString()} from ${c.name}?\n\nThis will:\n✅ Mark as PAID\n💰 Add to Collected`)) { return; }
+
+            const dateTimeStr = getDateTimeWithTime();
+            const now = new Date();
+            const monthKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+            const monthName = now.toLocaleDateString('en-PK', { month: 'long', year: 'numeric' });
+
+            c.paymentHistory.push({
+                entryId: uid(),
+                date: dateTimeStr,
+                description: `Payment - ${monthName}`,
+                credit: pending,
+                debit: 0,
+                monthKey: monthKey,
+                fullDateTime: dateTimeStr
+            });
+
+            c.status = 'active';
+            c.updatedAt = new Date().toISOString();
+
+            saveClients(clients);
+            if (currentUser) { pushClientToFirebase(c).catch(e => console.warn('Firebase update failed:', e)); }
+
+            updateStats();
+            switchTab('paid');
+
+            const profit = (c.packageAmount || 0) - (c.packageCost || 0);
+            toast(`✅ Collected Rs. ${pending.toLocaleString()} from ${c.name} | Profit: Rs. ${profit.toLocaleString()}`);
+        };
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        // COMPLAINTS TAB
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
         async function renderComplaintsTab() {
             const container = document.getElementById('clientList');
             if (!container) return;
@@ -3450,6 +3768,7 @@
                     if (c.type === 'red_light') typeIcon = '🔴';
                     else if (c.type === 'slow_internet') typeIcon = '🟡';
                     else if (c.type === 'disconnecting') typeIcon = '🔌';
+                    else if (c.type === 'package_end') typeIcon = '📦';
                     const resolutionHtml = isResolved && c.resolution ?
                         `<div class="ci-resolution">💬 <strong>Resolution:</strong> ${escapeHtml(c.resolution)}</div>` :
                         '';
@@ -3476,8 +3795,9 @@
 
         function renderCurrentTab() {
             if (currentTab === 'all') renderAllClients();
+            else if (currentTab === 'paid') renderPaidClients();
+            else if (currentTab === 'unpaid') renderUnpaidClients();
             else if (currentTab === 'expired') renderExpiredClients();
-            else if (currentTab === 'payment') renderPaymentStatusClients();
             else if (currentTab === 'complaints') renderComplaintsTab();
             updateStats();
             buildPackageFilterBar();
@@ -3490,30 +3810,43 @@
                 const tc = (c.paymentHistory || []).reduce((ss, e) => ss + (Number(e.credit) || 0), 0);
                 return s + Math.max(0, td - tc);
             }, 0);
-            const coll = clients.reduce((s, c) => s + c.paymentHistory.reduce((ss, e) => ss + (Number(e.credit) || 0),
+            const collected = clients.reduce((s, c) => s + (c.paymentHistory || []).reduce((ss, e) => ss + (Number(e.credit) || 0),
                 0), 0);
-            const totalProfit = clients.reduce((s, c) => s + ((Number(c.packageAmount) || 0) - (Number(c.packageCost) ||
-                0)), 0);
+            const totalProfit = clients.reduce((s, c) => {
+                const profit = (Number(c.packageAmount) || 0) - (Number(c.packageCost) || 0);
+                const hasPayments = (c.paymentHistory || []).some(e => (Number(e.credit) || 0) > 0);
+                return s + (hasPayments ? profit : 0);
+            }, 0);
+
             document.getElementById('statsRow').innerHTML =
                 `<div class="stat-box"><div class="stat-num">${clients.length}</div><div class="stat-label">Total</div></div>
                  <div class="stat-box"><div class="stat-num" style="color:#2ecc71;">${clients.filter(c => c.status === 'active').length}</div><div class="stat-label">Active</div></div>
                  <div class="stat-box"><div class="stat-num" style="color:#e74c3c;">${clients.filter(c => c.status === 'overdue').length}</div><div class="stat-label">Overdue</div></div>
                  <div class="stat-box"><div class="stat-num">Rs.${outstanding.toLocaleString()}</div><div class="stat-label">Outstanding</div></div>
-                 <div class="stat-box"><div class="stat-num">Rs.${coll.toLocaleString()}</div><div class="stat-label">Collected</div></div>
+                 <div class="stat-box"><div class="stat-num" style="color:#2ecc71;">Rs.${collected.toLocaleString()}</div><div class="stat-label">Collected</div></div>
                  <div class="stat-box"><div class="stat-num" style="color:#2ecc71;">Rs.${totalProfit.toLocaleString()}</div><div class="stat-label">Profit</div></div>`;
         }
 
         window.switchTab = function(t) {
             currentTab = t;
-            document.getElementById('tabAll').classList.toggle('active', t === 'all');
-            document.getElementById('tabExpired').classList.toggle('active', t === 'expired');
-            document.getElementById('tabPaymentStatus').classList.toggle('active', t === 'payment');
-            document.getElementById('tabComplaints').classList.toggle('active', t === 'complaints');
+            document.querySelectorAll('.tab-bar .tab-btn').forEach(btn => btn.classList.remove('active'));
+
+            const tabMap = {
+                'all': 'tabAll',
+                'paid': 'tabPaid',
+                'unpaid': 'tabUnpaid',
+                'expired': 'tabExpired',
+                'complaints': 'tabComplaints'
+            };
+
+            const el = document.getElementById(tabMap[t]);
+            if (el) el.classList.add('active');
+
             renderCurrentTab();
         };
 
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        // CLEAR LEDGER (One-Click)
+        // CLEAR LEDGER
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
         window.clearLedger = function(clientId) {
             const clients = getClients();
@@ -3583,18 +3916,32 @@
 
         window.saveClient = function(e) {
             e.preventDefault();
-            const clients = getClients();
+
+            let clients = getClients();
             const id = document.getElementById('clientId').value;
+
             const dmy = document.getElementById('cStartDate').value.trim();
             const parsedDate = parseDMY(dmy);
-            if (!parsedDate) { toast('Please enter a valid date (DD/MM/YYYY)', true); return; }
+            if (!parsedDate) {
+                toast('Please enter a valid date (DD/MM/YYYY)', true);
+                return;
+            }
             const isoDate = parsedDate.toISOString().slice(0, 10);
+
             const name = document.getElementById('cName').value.trim();
-            if (isDemoClient({ name: name })) { toast('This name is not allowed. Please use a different name.', true); return; }
+            if (isDemoClient({ name: name })) {
+                toast('This name is not allowed. Please use a different name.', true);
+                return;
+            }
+
             let paymentHistory = [];
             let existingClient = id ? clients.find(c => c.id === id) : null;
-            if (existingClient) paymentHistory = existingClient.paymentHistory || [];
+            if (existingClient) {
+                paymentHistory = existingClient.paymentHistory || [];
+            }
+
             const oldBill = parseFloat(document.getElementById('cOldBill').value) || 0;
+
             const data = {
                 id: id || uid(),
                 name: name,
@@ -3605,35 +3952,101 @@
                 packageCost: parseInt(document.getElementById('cCost').value) || 0,
                 status: document.getElementById('cStatus').value,
                 packageStartDate: isoDate,
-                joinDate: id ? (clients.find(c => c.id === id)?.joinDate || new Date().toISOString().slice(0, 10)) :
-                    new Date().toISOString().slice(0, 10),
+                joinDate: id ? (clients.find(c => c.id === id)?.joinDate || new Date().toISOString().slice(0, 10)) : new Date().toISOString().slice(0, 10),
                 paymentHistory: paymentHistory,
                 vlanId: document.getElementById('cVlanId').value.trim(),
                 username: document.getElementById('cUsername').value.trim(),
                 updatedAt: new Date().toISOString()
             };
-            if (data.paymentHistory) { data.paymentHistory = data.paymentHistory.filter(e => !(e.description && e
-                    .description.includes('Registration') && e.debit === 0 && e.credit === 0)); }
-            let existing = clients.find(c => c.name.toLowerCase() === data.name.toLowerCase() && c.id !== data.id);
-            if (existing) { toast('A client with this name already exists!', true); return; }
+
+            if (data.paymentHistory) {
+                data.paymentHistory = data.paymentHistory.filter(e =>
+                    !(e.description && e.description.includes('Registration') && e.debit === 0 && e.credit === 0)
+                );
+            }
+
+            let existing = clients.find(c =>
+                c.name.toLowerCase() === data.name.toLowerCase() && c.id !== data.id
+            );
+            if (existing) {
+                toast('A client with this name already exists!', true);
+                return;
+            }
+
             const isNewClient = !id;
-            if (isNewClient && oldBill > 0) { const entryId = uid(); const dateTimeStr = getDateTimeWithTime(); const now =
-                    new Date(); const monthKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`; if (!
-                    data.paymentHistory) data.paymentHistory = [];
-                data.paymentHistory.push({ entryId: entryId, date: dateTimeStr, description: 'Opening Balance', credit: 0,
-                    debit: oldBill, monthKey: monthKey, fullDateTime: dateTimeStr }); if (data.status === 'active')
-                    data.status = 'overdue'; }
-            if (isNewClient) { const now = new Date(); const monthKey =
-                    `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`; const monthName = now
-                    .toLocaleDateString('en-PK', { month: 'long', year: 'numeric' });
-                addPendingBillForMonth(data, monthKey, monthName, data.packageAmount || 0); }
-            if (id) { const idx = clients.findIndex(c => c.id === id); if (idx >= 0) { clients[idx] = data;
-                    toast('Client updated'); } } else { clients.push(data);
-                toast('Client added with current month bill' + (oldBill > 0 ? ' + Old Balance Rs.' + oldBill
-                    .toLocaleString() : '')); }
+
+            if (isNewClient) {
+                const packageAmount = parseInt(document.getElementById('cAmount').value) || 0;
+                if (!data.paymentHistory) data.paymentHistory = [];
+
+                const entryId = uid();
+                const dateTimeStr = getDateTimeWithTime();
+                const now = new Date();
+                const monthKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+
+                data.paymentHistory.push({
+                    entryId: entryId,
+                    date: dateTimeStr,
+                    description: 'Monthly Bill',
+                    credit: 0,
+                    debit: packageAmount,
+                    monthKey: monthKey,
+                    fullDateTime: dateTimeStr
+                });
+
+                if (oldBill > 0) {
+                    data.paymentHistory.push({
+                        entryId: uid(),
+                        date: dateTimeStr,
+                        description: 'Opening Balance',
+                        credit: 0,
+                        debit: oldBill,
+                        monthKey: monthKey,
+                        fullDateTime: dateTimeStr
+                    });
+                    if (data.status === 'active') data.status = 'overdue';
+                }
+            } else if (!id && oldBill > 0) {
+                const entryId = uid();
+                const dateTimeStr = getDateTimeWithTime();
+                const now = new Date();
+                const monthKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+                if (!data.paymentHistory) data.paymentHistory = [];
+                data.paymentHistory.push({
+                    entryId: entryId,
+                    date: dateTimeStr,
+                    description: 'Opening Balance',
+                    credit: 0,
+                    debit: oldBill,
+                    monthKey: monthKey,
+                    fullDateTime: dateTimeStr
+                });
+                if (data.status === 'active') data.status = 'overdue';
+            }
+
+            if (id) {
+                const idx = clients.findIndex(c => c.id === id);
+                if (idx >= 0) {
+                    clients[idx] = data;
+                    toast('Client updated');
+                } else {
+                    toast('Client not found!', true);
+                    return;
+                }
+            } else {
+                clients.push(data);
+                toast('Client added' + (oldBill > 0 ? ' + Old Balance Rs.' + oldBill.toLocaleString() : ''));
+            }
+
             saveClients(clients);
-            if (currentUser) { pushClientToFirebase(data).catch(e => { console.warn('Firebase push failed:', e);
-                    toast('Firebase sync failed: ' + e.message, true); }); }
+
+            if (currentUser) {
+                pushClientToFirebase(data).catch(e => {
+                    console.warn('Firebase push failed:', e);
+                    toast('Firebase sync failed: ' + e.message, true);
+                });
+            }
+
             closeModal('clientModal');
             renderCurrentTab();
         };
@@ -3648,56 +4061,8 @@
             renderCurrentTab();
         };
 
-        window.markUnpaidWithAmount = function(id) {
-            const clients = getClients();
-            const c = clients.find(x => x.id === id);
-            if (!c) return;
-            const now = new Date();
-            const monthKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
-            const monthName = now.toLocaleDateString('en-PK', { month: 'long', year: 'numeric' });
-            const alreadyPending = (c.paymentHistory || []).some(e => e.monthKey === monthKey && e.description.includes(
-                'Buy Now Pay Later'));
-            if (alreadyPending) { toast('Already marked as Pay Later for this month', true); return; }
-            const amt = c.packageAmount || 0;
-            if (amt <= 0) { toast('Package amount is 0', true); return; }
-            const entryId = uid();
-            const dateTimeStr = getDateTimeWithTime();
-            c.paymentHistory.push({ entryId: entryId, date: dateTimeStr, description: `Buy Now Pay Later - ${monthName}`,
-                credit: 0, debit: amt, monthKey: monthKey, fullDateTime: dateTimeStr });
-            c.status = 'pending';
-            saveClients(clients);
-            if (currentUser) { pushClientToFirebase(c).catch(e => console.warn('Firebase update failed:', e)); }
-            renderCurrentTab();
-            toast(`Status: Pending | Ledger: Baqaya Rs.${amt.toLocaleString()}`);
-        };
-
-        window.togglePaymentStatus = function(clientId, action) {
-            const clients = getClients();
-            const c = clients.find(x => x.id === clientId);
-            if (!c) { toast('Client not found', true); return; }
-            if (action === 'paid') {
-                const td = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.debit) || 0), 0);
-                const tc = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.credit) || 0), 0);
-                const pendingAmount = Math.max(0, td - tc);
-                if (pendingAmount === 0) { toast('Payment for this month is already Clear ✅', true); return; }
-                if (!confirm(`Record payment of Rs. ${pendingAmount.toLocaleString()} for ${c.name}?`)) { return; }
-                const now = new Date();
-                const monthKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
-                const monthName = now.toLocaleDateString('en-PK', { month: 'long', year: 'numeric' });
-                if (!c.paymentHistory) c.paymentHistory = [];
-                const dateTimeStr = getDateTimeWithTime();
-                c.paymentHistory.push({ entryId: uid(), date: dateTimeStr, description: `Payment - ${monthName}`,
-                    credit: pendingAmount, debit: 0, monthKey: monthKey, fullDateTime: dateTimeStr });
-                c.status = 'active';
-                saveClients(clients);
-                if (currentUser) { pushClientToFirebase(c).catch(e => console.warn('Firebase update failed:', e)); }
-                toast(`✅ ${c.name} - Payment Rs. ${pendingAmount.toLocaleString()} recorded!`);
-                renderCurrentTab();
-            }
-        };
-
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        // ✨ NEW LEDGER — RESTRUCTURED (0→100) ✨
+        // LEDGER FUNCTIONS
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
         function getPendingMonths(client) {
             const history = client.paymentHistory || [];
@@ -3744,7 +4109,6 @@
             const pctPaid = totalDebit > 0 ? Math.min(100, Math.round((totalCredit / totalDebit) * 100)) : 0;
             const collectionRate = totalDebit > 0 ? Math.min(100, Math.round((totalCredit / totalDebit) * 100)) : 0;
 
-            // ── Hero Summary ──
             let heroHtml = `
                 <div class="ledger-hero">
                     <div class="lh-item"><div class="lh-label">💰 Total Billed</div><div class="lh-value red">Rs. ${totalDebit.toLocaleString()}</div></div>
@@ -3753,7 +4117,6 @@
                 </div>
             `;
 
-            // ── Progress ──
             let progClass = 'green';
             if (pctPaid < 30) progClass = 'low';
             else if (pctPaid < 70) progClass = 'partial';
@@ -3765,13 +4128,11 @@
                 </div>
             `;
 
-            // ── Client Info ──
             const clientInfo =
                 `<div style="font-size:0.7rem;color:var(--text2);margin-bottom:10px;padding:6px 0;border-bottom:1px dotted var(--border);">
                     📱 ${escapeHtml(client.phone)} &nbsp;|&nbsp; 📦 ${escapeHtml(client.package)} &nbsp;|&nbsp; 💰 Monthly: Rs.${client.packageAmount.toLocaleString()} &nbsp;|&nbsp; 🔌 ${escapeHtml(client.vlanId || '—')} &nbsp;|&nbsp; 👤 ${escapeHtml(client.username || '—')}
                 </div>`;
 
-            // ── Pending Months ──
             const pendingMonths = getPendingMonths(client);
             let pendingHtml = '';
             if (pendingMonths.length > 0) {
@@ -3806,7 +4167,6 @@
                     `<div class="ai-insight" style="margin:12px 0;background:#1e2a1e;border:1px solid #2ecc71;border-radius:12px;padding:10px;font-size:0.7rem;color:#a0d9a0;">✨ All months cleared — no pending dues!</div>`;
             }
 
-            // ── Entry Form ──
             const entryForm = `
                 <div class="ledger-entry-form">
                     <div class="ef-title">✏️ Add New Entry</div>
@@ -3832,7 +4192,6 @@
                 </div>
             `;
 
-            // ── Transaction Table ──
             let transactions = getSortedTransactions(client);
             if (ledgerMonthFilter !== 'all') {
                 transactions = transactions.filter(t => {
@@ -3861,18 +4220,15 @@
                     const displayDateTime = t.fullDateTime || formatDateTimeDisplay(t.date);
                     const isCredit = t.credit > 0;
                     const isDiscount = t.description && t.description.toLowerCase().includes('discount');
-                    // For discount, show as - (debit) with special styling
                     const amtClass = isDiscount ? 'discount-amt' : (isCredit ? 'credit' : 'debit');
                     const amtDisplay = isDiscount ? `Rs. ${(t.debit || 0).toLocaleString()}` :
                         (isCredit ? `Rs. ${t.credit.toLocaleString()}` : `Rs. ${(t.debit || 0).toLocaleString()}`);
-                    const sign = isDiscount ? '-' : (isCredit ? '+' : '-');
                     const badgeClass = isDiscount ? 'discount' : (isCredit ? 'payment' : 'bill');
                     const badgeLabel = isDiscount ? '💸' : (isCredit ? '💳' : '📄');
-                    const descDisplay = isDiscount ? `💸 ${t.description}` : t.description;
                     txnHtml += `
                         <tr>
                             <td style="font-size:0.55rem;">${displayDateTime}</td>
-                            <td class="txn-desc"><span class="txn-badge ${badgeClass}">${badgeLabel}</span> ${escapeHtml(descDisplay || '-')}</td>
+                            <td class="txn-desc"><span class="txn-badge ${badgeClass}">${badgeLabel}</span> ${escapeHtml(t.description || '-')}</td>
                             <td class="txn-amt" style="text-align:right;${isCredit && !isDiscount ? 'color:var(--green);font-weight:700;' : ''}">${isCredit && !isDiscount ? amtDisplay : '-'}</td>
                             <td class="txn-amt" style="text-align:right;${(!isCredit && !isDiscount) ? 'color:var(--red);font-weight:700;' : ''}${isDiscount ? 'color:var(--gold);font-weight:700;' : ''}">${(!isCredit || isDiscount) ? amtDisplay : '-'}</td>
                             <td class="txn-bal" style="text-align:right;">Rs. ${t.runningBalance.toLocaleString()}</td>
@@ -3892,8 +4248,6 @@
             if (sel.value === 'Other (write your own)') { customContainer.classList.add('show'); } else { customContainer
                     .classList.remove('show'); }
         };
-
-        // ── Ledger Actions ──
 
         window.addCustomEntry = function() {
             if (!currentLedgerId) { toast('No client selected', true); return; }
@@ -3974,7 +4328,6 @@
             toast(`Rs.${halfAmount.toLocaleString()} half payment for ${monthKey}`);
         };
 
-        // ── FIXED: Discount now shows as - (negative debit) ──
         window.applyDiscount = function() {
             if (!currentLedgerId) return;
             const clients = getClients();
@@ -3993,13 +4346,12 @@
             const now = new Date();
             const monthKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
             const dateTimeStr = getDateTimeWithTime();
-            // ✅ FIXED: Discount as negative debit → shows as - in ledger
             c.paymentHistory.push({
                 entryId,
                 date: dateTimeStr,
                 description: 'Discount',
                 credit: 0,
-                debit: -discount, // negative debit = reduces balance, shows as -
+                debit: -discount,
                 monthKey: monthKey,
                 fullDateTime: dateTimeStr
             });
@@ -4337,7 +4689,7 @@
             const receiptHtml =
                 `
                 <div class="premium-receipt receipt-base ${receiptClass}" style="position:relative;background:#fff;">
-                    <div class="stamp-overlay ${stampClass}" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-18deg);font-size:3.6rem;font-weight:900;opacity:0.18;pointer-events:none;z-index:10;text-align:center;line-height:1.2;letter-spacing:4px;white-space:nowrap;border:8px solid rgba(0,0,0,0.10);padding:8px 22px;border-radius:16px;background:rgba(255,255,255,0.06);backdrop-filter:blur(2px);color:${isPaid?'#1a7a3a':'#b37315'};border-color:${isPaid?'rgba(26,122,58,0.20)':'rgba(179,115,21,0.20)'};">
+                    <div class="stamp-overlay ${stampClass}" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-18deg);font-size:3.6rem;font-weight:900;opacity:0.18;pointer-events:none;z-index:10;text-align:center;line-height:1.2;letter-spacing:4px;white-space:nowrap;border:8px solid rgba(0,0,0,0.10);padding:8px 22px;border-radius:16px;background:rgba(255,255,255,0.06);backdrop-filter:blur(2px);color:${isPaid?'#1a7a3a':'#b37315'};border-color:${isPaid?'rgba(26,122,58,0.20)':'rgba(179,115,21,0.20)'};"> 
                         ${stampText}
                         <span class="stamp-sub-text" style="font-size:1.2rem;font-weight:700;display:block;letter-spacing:2px;">${stampSub}</span>
                     </div>
@@ -4377,7 +4729,6 @@
             openModal('receiptModal');
         };
 
-        // ── FIXED: markReceiptUnpaid now sets status to 'overdue' ──
         window.markReceiptPaidNow = function() {
             if (!currentReceiptId) { toast('No receipt selected', true); return; }
             let clients = getClients();
@@ -4408,7 +4759,6 @@
             toast(`✅ Payment Rs. ${amount.toLocaleString()} recorded — Crown Fiber Paid`);
         };
 
-        // ── FIXED: markReceiptUnpaid → status = 'overdue' ──
         window.markReceiptUnpaid = function() {
             if (!currentReceiptId) { toast('No receipt selected', true); return; }
             let clients = getClients();
@@ -4428,7 +4778,6 @@
             r.isPaid = false;
             r.paidAt = null;
             r.paymentAmount = 0;
-            // ✅ FIXED: Set status to 'overdue' so user shows as Overdue
             c.status = 'overdue';
             saveClients(clients);
             if (currentUser) { pushClientToFirebase(c).catch(e => console.warn('Firebase update failed:', e)); }
@@ -4516,7 +4865,7 @@
             const receiptHtml =
                 `
                 <div class="premium-receipt receipt-base ${receiptClass}" style="position:relative;background:#fff;">
-                    <div class="stamp-overlay ${stampClass}" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-18deg);font-size:3.6rem;font-weight:900;opacity:0.18;pointer-events:none;z-index:10;text-align:center;line-height:1.2;letter-spacing:4px;white-space:nowrap;border:8px solid rgba(0,0,0,0.10);padding:8px 22px;border-radius:16px;background:rgba(255,255,255,0.06);backdrop-filter:blur(2px);color:${isPaid?'#1a7a3a':'#b37315'};border-color:${isPaid?'rgba(26,122,58,0.20)':'rgba(179,115,21,0.20)'};">
+                    <div class="stamp-overlay ${stampClass}" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-18deg);font-size:3.6rem;font-weight:900;opacity:0.18;pointer-events:none;z-index:10;text-align:center;line-height:1.2;letter-spacing:4px;white-space:nowrap;border:8px solid rgba(0,0,0,0.10);padding:8px 22px;border-radius:16px;background:rgba(255,255,255,0.06);backdrop-filter:blur(2px);color:${isPaid?'#1a7a3a':'#b37315'};border-color:${isPaid?'rgba(26,122,58,0.20)':'rgba(179,115,21,0.20)'};"> 
                         ${stampText}
                         <span class="stamp-sub-text" style="font-size:1.2rem;font-weight:700;display:block;letter-spacing:2px;">${stampSub}</span>
                     </div>
@@ -4624,7 +4973,7 @@
             const cautionHtml =
                 `
                 <div class="caution-receipt receipt-base receipt-reminder" style="position:relative;background:#fff;">
-                    <div class="stamp-overlay receipt-reminder-stamp" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-15deg);font-size:2.8rem;font-weight:900;opacity:0.15;pointer-events:none;z-index:10;text-align:center;line-height:1.2;letter-spacing:3px;white-space:nowrap;border:6px solid rgba(0,0,0,0.10);padding:6px 16px;border-radius:12px;background:rgba(255,255,255,0.06);backdrop-filter:blur(2px);color:#c0392b;border-color:rgba(192,57,43,0.20);">
+                    <div class="stamp-overlay receipt-reminder-stamp" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-15deg);font-size:2.8rem;font-weight:900;opacity:0.15;pointer-events:none;z-index:10;text-align:center;line-height:1.2;letter-spacing:3px;white-space:nowrap;border:6px solid rgba(0,0,0,0.10);padding:6px 16px;border-radius:12px;background:rgba(255,255,255,0.06);backdrop-filter:blur(2px);color:#c0392b;border-color:rgba(192,57,43,0.20);"> 
                         REMINDER
                         <span class="stamp-sub-text" style="font-size:1.2rem;font-weight:700;display:block;letter-spacing:2px;">Crown Fiber ⚠</span>
                     </div>
@@ -4736,7 +5085,127 @@
         };
 
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        // BACKUP & IMPORT — ZERO BALANCE ON IMPORT
+        // RESOLVE COMPLAINT — ENHANCED WITH URDU SCRIPT
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        window.openResolveModal = function(compId) {
+            const modal = document.getElementById('resolveModal');
+            if (!modal) return;
+            modal.dataset.compId = compId;
+
+            getFirebaseComplaintsRef().once('value').then(snap => {
+                const arr = snap.val() || [];
+                const comp = arr.find(c => c.id === compId);
+                if (!comp) { toast('Complaint not found', true); return; }
+
+                const infoEl = document.getElementById('resolveClientInfo');
+                if (infoEl) {
+                    infoEl.innerHTML =
+                        `<b>${escapeHtml(comp.clientName || 'Unknown')}</b> — 📱 ${escapeHtml(comp.phone)}<br>📌 <strong>${escapeHtml(comp.typeLabel || comp.type)}</strong><br>🕒 ${comp.timestamp ? new Date(comp.timestamp).toLocaleString() : 'N/A'}`;
+                }
+
+                const textarea = document.getElementById('resolveText');
+                const statusMsg = document.getElementById('resolveStatusMsg');
+                if (statusMsg) statusMsg.textContent = '';
+
+                const type = comp.type || '';
+                let defaultMsg = RESOLUTION_MESSAGES[type] ||
+                    'آپ کا انٹرنیٹ کا مسئلہ حل کر دیا گیا ہے۔ آپ کے تعاون کا شکریہ۔';
+
+                if (textarea) {
+                    textarea.value = defaultMsg;
+                    const typeLabels = {
+                        'red_light': '🔴 Red Light — No Internet',
+                        'slow_internet': '🟡 Slow Internet — Buffering',
+                        'disconnecting': '🔌 Disconnecting — Frequent Drops',
+                        'package_end': '📦 Package End — Recharge Needed'
+                    };
+                    const label = typeLabels[type] || '📌 Complaint';
+                    textarea.placeholder = `${label} — اپنا حل پیغام یہاں لکھیں...`;
+                    textarea.style.borderColor = '#2ecc71';
+                }
+
+                openModal('resolveModal');
+            }).catch(e => {
+                toast('Error loading complaint: ' + e.message, true);
+                console.error(e);
+            });
+        };
+
+        window.submitResolution = async function() {
+            const compId = document.getElementById('resolveModal').dataset.compId;
+            const resolution = document.getElementById('resolveText').value.trim();
+            const statusMsg = document.getElementById('resolveStatusMsg');
+
+            if (!resolution) {
+                toast('براہ کرم کوئی حل پیغام لکھیں۔', true);
+                if (statusMsg) {
+                    statusMsg.textContent = '⚠️ براہ کرم کوئی پیغام لکھیں۔';
+                    statusMsg.style.color = '#e74c3c';
+                }
+                return;
+            }
+
+            if (statusMsg) {
+                statusMsg.textContent = '⏳ واٹس ایپ کھولا جا رہا ہے اور شکایت حل کی جا رہی ہے...';
+                statusMsg.style.color = '#f5a623';
+            }
+
+            try {
+                const ref = getFirebaseComplaintsRef();
+                const snap = await ref.once('value');
+                let arr = snap.val() || [];
+                const idx = arr.findIndex(c => c.id === compId);
+                if (idx === -1) {
+                    toast('شکایت نہیں ملی', true);
+                    if (statusMsg) {
+                        statusMsg.textContent = '❌ شکایت نہیں ملی۔';
+                        statusMsg.style.color = '#e74c3c';
+                    }
+                    return;
+                }
+
+                const comp = arr[idx];
+                const phone = comp.phone || '';
+
+                if (phone) {
+                    const formattedPhone = formatPhone(phone);
+                    const waUrl = 'https://wa.me/' + formattedPhone + '?text=' + encodeURIComponent(resolution);
+                    window.open(waUrl, '_blank');
+                    if (statusMsg) {
+                        statusMsg.textContent = '✅ واٹس ایپ کھل گیا۔ حل پیغام بھیج دیا گیا۔';
+                        statusMsg.style.color = '#2ecc71';
+                    }
+                    toast('واٹس ایپ کھل گیا ' + comp.clientName);
+                } else {
+                    toast('اس کلائنٹ کا کوئی فون نمبر نہیں ہے۔', true);
+                    if (statusMsg) {
+                        statusMsg.textContent = '⚠️ کوئی فون نمبر دستیاب نہیں۔';
+                        statusMsg.style.color = '#e74c3c';
+                    }
+                }
+
+                arr[idx].status = 'resolved';
+                arr[idx].resolution = resolution;
+                arr[idx].resolvedAt = new Date().toISOString();
+                arr[idx].updatedAt = new Date().toISOString();
+                await ref.set(arr);
+
+                closeModal('resolveModal');
+                toast('✅ شکایت حل ہو گئی — واٹس ایپ پیغام بھیج دیا گیا');
+                renderCurrentTab();
+
+            } catch (e) {
+                console.error('Resolution error:', e);
+                toast('Error: ' + e.message, true);
+                if (statusMsg) {
+                    statusMsg.textContent = '❌ Error: ' + e.message;
+                    statusMsg.style.color = '#e74c3c';
+                }
+            }
+        };
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        // BACKUP & IMPORT
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
         window.openBackup = function() {
             const toggle = document.getElementById('importLedgerToggle');
@@ -4780,29 +5249,70 @@
                     const data = JSON.parse(ev.target.result);
                     const importLedger = document.getElementById('importLedgerToggle').checked;
                     if (data.clients) {
-                        let clientsToSave = data.clients.map(c => {
-                            const { paymentHistory, oldBill, ...rest } = c;
-                            let pkgDef = getMasterPackages().find(p => p.name === c.package);
-                            let resolvedAmount = (pkgDef && pkgDef.amount > 0) ? pkgDef.amount : (c.packageAmount || 800);
-                            let resolvedCost = pkgDef ? pkgDef.cost : (c.packageCost || 500);
-                            const cleaned = {
-                                ...rest,
-                                paymentHistory: [],
-                                oldBill: 0,
-                                packageAmount: resolvedAmount,
-                                packageCost: resolvedCost,
+                        let clientsToSave = getClients();
+                        let added = 0,
+                            updated = 0;
+
+                        for (const importedClient of data.clients) {
+                            const existing = clientsToSave.find(c =>
+                                normalizePhone(c.phone) === normalizePhone(importedClient.phone) ||
+                                c.name.toLowerCase() === importedClient.name.toLowerCase()
+                            );
+
+                            let pkgDef = getMasterPackages().find(p => p.name === importedClient.package);
+                            let packageAmount = pkgDef ? pkgDef.amount : (importedClient.packageAmount || 800);
+                            let packageCost = pkgDef ? pkgDef.cost : (importedClient.packageCost || 500);
+
+                            const cleanClient = {
+                                id: importedClient.id || uid(),
+                                name: importedClient.name || 'Unknown',
+                                phone: importedClient.phone || '',
+                                address: importedClient.address || '',
+                                package: importedClient.package || 'Custom',
+                                packageAmount: packageAmount,
+                                packageCost: packageCost,
+                                status: 'active',
+                                packageStartDate: importedClient.packageStartDate || new Date().toISOString().slice(0, 10),
+                                joinDate: importedClient.joinDate || new Date().toISOString().slice(0, 10),
+                                paymentHistory: importLedger ? (importedClient.paymentHistory || []) : [],
+                                vlanId: importedClient.vlanId || '',
+                                username: importedClient.username || '',
+                                oldBill: importLedger ? (importedClient.oldBill || 0) : 0,
+                                updatedAt: new Date().toISOString()
                             };
-                            return cleaned;
-                        });
-                        toast('📂 JSON Import: All clients at Rs. 0 — prices from Package Manager');
+
+                            if (existing) {
+                                const oldHistory = existing.paymentHistory || [];
+                                existing.name = cleanClient.name;
+                                existing.phone = cleanClient.phone;
+                                existing.address = cleanClient.address || existing.address;
+                                existing.package = cleanClient.package;
+                                existing.packageAmount = cleanClient.packageAmount;
+                                existing.packageCost = cleanClient.packageCost;
+                                existing.packageStartDate = cleanClient.packageStartDate;
+                                existing.joinDate = cleanClient.joinDate;
+                                existing.vlanId = cleanClient.vlanId || existing.vlanId;
+                                existing.username = cleanClient.username || existing.username;
+                                existing.updatedAt = new Date().toISOString();
+                                if (importLedger) {
+                                    existing.paymentHistory = cleanClient.paymentHistory;
+                                    existing.oldBill = cleanClient.oldBill;
+                                }
+                                updated++;
+                            } else {
+                                clientsToSave.push(cleanClient);
+                                added++;
+                            }
+                        }
+
                         saveClients(clientsToSave);
+                        toast(`✅ Imported: ${added} new, ${updated} updated`);
                     }
                     if (data.masterPackages) {
                         localStorage.setItem(MASTER_PACKAGES_KEY, JSON.stringify(data.masterPackages));
+                        refreshPackageDropdown();
                     }
-                    refreshPackageDropdown();
                     renderCurrentTab();
-                    toast('✅ Imported: All clients added with Rs. 0 balance');
                 } catch (ex) {
                     toast('Invalid file: ' + ex.message, true);
                 }
@@ -4844,16 +5354,21 @@
                 const amt = amountIdx !== -1 && row[amountIdx] ? parseInt(String(row[amountIdx]).replace(/\D/g,
                     '')) || 800 : 800;
                 const addr = addrIdx !== -1 && row[addrIdx] ? String(row[addrIdx]).trim() : '';
+
+                let pkgDef = getMasterPackages().find(p => p.name === pkg);
+                let resolvedAmt = (pkgDef && pkgDef.amount > 0) ? pkgDef.amount : amt;
+                let cost = pkgDef ? pkgDef.cost : 500;
+
                 const existing = phoneRaw ? clients.find(c => normalizePhone(c.phone) === phoneNorm) : null;
                 if (existing) {
                     if (name) existing.name = name;
                     if (addr) existing.address = addr;
+                    existing.package = pkg;
+                    existing.packageAmount = resolvedAmt;
+                    existing.packageCost = cost;
                     existing.updatedAt = new Date().toISOString();
                     updated++;
                 } else {
-                    let pkgDef = getMasterPackages().find(p => p.name === pkg);
-                    let resolvedAmt = (pkgDef && pkgDef.amount > 0) ? pkgDef.amount : amt;
-                    let cost = pkgDef ? pkgDef.cost : 500;
                     const newClient = {
                         id: uid(),
                         name: displayName,
@@ -4911,7 +5426,7 @@
                         if (row.length >= 2) rows.push(row);
                     }
                     const { created, updated, incomplete } = processImportedRows(rows, headers, file.name);
-                    toast('CSV: ' + created + ' new, ' + updated + ' updated (all at Rs. 0 balance)' +
+                    toast('CSV: ' + created + ' new, ' + updated + ' updated' +
                         (incomplete ? ', ' + incomplete + ' incomplete rows' : ''));
                     renderCurrentTab();
                     closeModal('backupModal');
@@ -5037,42 +5552,25 @@
                     packageAmount = pkgDef.amount;
                 }
                 let packageCost = pkgDef ? pkgDef.cost : Math.round(packageAmount * 0.7);
-                const status = "active";
-                const updatedAt = new Date().toISOString();
-                const username = name.replace(/\s/g, '').toLowerCase() || id;
-                const vlanId = "";
+
                 const paymentHistory = [];
-                const receipt = {
-                    clientId: id,
-                    date: formatDateDisplay(rowsWithDate[rowsWithDate.length - 1].dateObj),
-                    generatedAt: new Date().toISOString(),
-                    isPaid: true,
-                    monthKey: formatMonthKey2(rowsWithDate[rowsWithDate.length - 1].dateObj),
-                    monthName: rowsWithDate[rowsWithDate.length - 1].dateObj.toLocaleDateString('en-PK', { month: 'long',
-                        year: 'numeric' }),
-                    paidAt: formatDateTimeDisplay2(rowsWithDate[rowsWithDate.length - 1].dateObj),
-                    paymentAmount: 0,
-                    rno: 'RCP-' + Date.now().toString().slice(-8),
-                    total: 0,
-                    totalAmount: 0
-                };
+
                 clients.push({
-                    _lastReceipt: receipt,
-                    address: address,
                     id: id,
-                    joinDate: joinDate,
                     name: name,
-                    oldBill: 0,
+                    phone: phone,
+                    address: address,
                     package: packageName,
                     packageAmount: packageAmount,
                     packageCost: packageCost,
+                    status: 'active',
                     packageStartDate: packageStartDate,
+                    joinDate: joinDate,
                     paymentHistory: paymentHistory,
-                    phone: phone,
-                    status: status,
-                    updatedAt: updatedAt,
-                    username: username,
-                    vlanId: vlanId
+                    oldBill: 0,
+                    vlanId: '',
+                    username: name.replace(/\s/g, '').toLowerCase() || id,
+                    updatedAt: new Date().toISOString()
                 });
                 for (const item of rowsWithDate) {
                     const pkg = String(getVal(item.row, 'Service')).trim();
@@ -5116,16 +5614,17 @@
                                 existing.joinDate = newClient.joinDate;
                                 existing.vlanId = newClient.vlanId || existing.vlanId;
                                 existing.username = newClient.username || existing.username;
-                                existing.status = newClient.status || existing.status;
-                                existing.oldBill = 0;
-                                existing.paymentHistory = existing.paymentHistory || [];
-                                if (newClient._lastReceipt) existing._lastReceipt = newClient._lastReceipt;
                                 existing.updatedAt = new Date().toISOString();
+                                if (importLedger) {
+                                    existing.paymentHistory = newClient.paymentHistory || [];
+                                    existing.oldBill = newClient.oldBill || 0;
+                                }
                                 updated++;
                             } else { skipped++; }
                         } else {
-                            newClient.paymentHistory = [];
-                            newClient.oldBill = 0;
+                            newClient.paymentHistory = importLedger ? (newClient.paymentHistory || []) : [];
+                            newClient.oldBill = importLedger ? (newClient.oldBill || 0) : 0;
+                            newClient.status = 'active';
                             existingClients.push(newClient);
                             created++;
                         }
@@ -5143,7 +5642,7 @@
                     }
                     renderCurrentTab();
                     toast(
-                        `✅ Excel Import: ${created} new, ${updated} updated, ${skipped} skipped — ALL at Rs. 0 balance`
+                        `✅ Excel Import: ${created} new, ${updated} updated`
                         );
                     closeModal('backupModal');
                 } catch (err) {
@@ -5198,40 +5697,6 @@
                 renderCurrentTab();
             } catch (e) { toast('Error: ' + e.message, true); }
         }
-
-        window.openResolveModal = function(compId) {
-            document.getElementById('resolveModal').dataset.compId = compId;
-            getComplaintsRef().once('value').then(snap => {
-                const arr = snap.val() || [];
-                const comp = arr.find(c => c.id === compId);
-                if (comp) {
-                    document.getElementById('resolveClientInfo').innerHTML =
-                        `<b>${escapeHtml(comp.clientName || 'Unknown')}</b> — 📱 ${escapeHtml(comp.phone)}<br>📌 ${escapeHtml(comp.typeLabel || comp.type)}<br>🕒 ${comp.timestamp ? new Date(comp.timestamp).toLocaleString() : 'N/A'}`;
-                }
-                openModal('resolveModal');
-            }).catch(e => toast('Error loading complaint', true));
-        };
-
-        window.submitResolution = async function() {
-            const compId = document.getElementById('resolveModal').dataset.compId;
-            const resolution = document.getElementById('resolveText').value.trim();
-            if (!resolution) { toast('Please write a resolution message', true); return; }
-            try {
-                const ref = getComplaintsRef();
-                const snap = await ref.once('value');
-                let arr = snap.val() || [];
-                const idx = arr.findIndex(c => c.id === compId);
-                if (idx === -1) { toast('Complaint not found', true); return; }
-                arr[idx].status = 'resolved';
-                arr[idx].resolution = resolution;
-                arr[idx].resolvedAt = new Date().toISOString();
-                arr[idx].updatedAt = new Date().toISOString();
-                await ref.set(arr);
-                toast('✅ Complaint resolved');
-                closeModal('resolveModal');
-                renderCurrentTab();
-            } catch (e) { toast('Error: ' + e.message, true); }
-        };
 
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
         // THEME
@@ -5429,6 +5894,17 @@
                     } else {
                         toast('No data in Firebase. Starting fresh.');
                     }
+
+                    const fbPackages = await loadPackagesFromFirebase();
+                    if (fbPackages && fbPackages.length > 0) {
+                        localStorage.setItem(MASTER_PACKAGES_KEY, JSON.stringify(fbPackages));
+                        toast('✅ Loaded packages from Firebase');
+                    } else {
+                        let defaultPkgs = BUILT_IN_PACKAGES.map(p => ({ ...p }));
+                        await savePackagesToFirebase(defaultPkgs);
+                        localStorage.setItem(MASTER_PACKAGES_KEY, JSON.stringify(defaultPkgs));
+                        toast('📦 Default packages saved to Firebase');
+                    }
                 } catch (e) {
                     console.warn('Firebase load error:', e);
                     toast('Could not load from Firebase: ' + e.message, true);
@@ -5540,9 +6016,12 @@
         window.cleanupDemoClients = cleanupDemoClients;
         window.isDemoClient = isDemoClient;
         window.renderComplaintsTab = renderComplaintsTab;
+        window.toggleEmergencyMode = toggleEmergencyMode;
 
-        setTimeout(() => { updateFirebaseIndicator();
-            buildPackageFilterBar(); }, 500);
+        setTimeout(() => {
+            updateFirebaseIndicator();
+            buildPackageFilterBar();
+        }, 500);
 
         const originalSaveClients = saveClients;
         saveClients = function(arr, skipCloudSync = true) {
@@ -5550,16 +6029,10 @@
             buildPackageFilterBar();
         };
 
-        console.log("👑 D3 Crown Fiber — ISP Admin Panel (FIXED + LEDGER RESTRUCTURED)");
-        console.log("✅ Key Fixes & New Features:");
-        console.log("   🔹 LEDGER RESTRUCTURED: Clean 0→100 design with hero cards, month breakdown, progress bars");
-        console.log("   🔹 DISCOUNT FIX: Discount now shows as - (negative debit) in ledger");
-        console.log("   🔹 UNPAID FIX: Mark Unpaid in receipt now sets client status to OVERDUE (not pending)");
-        console.log("   🔹 Month-wise cards show Paid/Partial/Unpaid with progress bars");
-        console.log("   🔹 Transaction table with badges (Bill/Payment/Discount)");
-        console.log("   🔹 Collection rate progress bar in ledger summary");
-        console.log("   🔹 All imports set clients to Rs. 0 balance with Package Manager prices");
-        console.log("🐉 Dragon Mode Active — Fire breathing crown on PC view!");
+        console.log("👑 D3 Crown Fiber — ISP Admin Panel (URDU SCRIPT)");
+        console.log("✅ Complaint Resolution messages now use actual Urdu script (نستعلیق)");
+        console.log("✅ Red Light, Slow Internet, Disconnecting, Package End — all in Urdu");
+        console.log("✅ Resolve complaint → Pre-filled Urdu message + WhatsApp auto-open");
     </script>
 </body>
 </html>
