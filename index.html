@@ -4099,6 +4099,9 @@
             return result.reverse();
         }
 
+        // ============================================================
+        // ✅ UPDATED renderLedger() — Discount shows in Credit column
+        // ============================================================
         function renderLedger(client) {
             if (client.paymentHistory) { client.paymentHistory = client.paymentHistory.filter(e => !(e.description && e
                     .description.includes('Registration') && e.debit === 0 && e.credit === 0)); }
@@ -4218,19 +4221,31 @@
             } else {
                 transactions.forEach(t => {
                     const displayDateTime = t.fullDateTime || formatDateTimeDisplay(t.date);
-                    const isCredit = t.credit > 0;
                     const isDiscount = t.description && t.description.toLowerCase().includes('discount');
-                    const amtClass = isDiscount ? 'discount-amt' : (isCredit ? 'credit' : 'debit');
-                    const amtDisplay = isDiscount ? `Rs. ${(t.debit || 0).toLocaleString()}` :
-                        (isCredit ? `Rs. ${t.credit.toLocaleString()}` : `Rs. ${(t.debit || 0).toLocaleString()}`);
+                    const isCredit = t.credit > 0;
+
+                    let amtDisplay, amtClass;
+                    if (isDiscount) {
+                        // ✅ Discount now shows in Credit column with positive amount
+                        amtDisplay = `Rs. ${(t.credit || 0).toLocaleString()}`;
+                        amtClass = 'discount-amt';  // gold color
+                    } else if (isCredit) {
+                        amtDisplay = `Rs. ${(t.credit || 0).toLocaleString()}`;
+                        amtClass = 'credit';
+                    } else {
+                        amtDisplay = `Rs. ${(t.debit || 0).toLocaleString()}`;
+                        amtClass = 'debit';
+                    }
+
                     const badgeClass = isDiscount ? 'discount' : (isCredit ? 'payment' : 'bill');
                     const badgeLabel = isDiscount ? '💸' : (isCredit ? '💳' : '📄');
+
                     txnHtml += `
                         <tr>
                             <td style="font-size:0.55rem;">${displayDateTime}</td>
                             <td class="txn-desc"><span class="txn-badge ${badgeClass}">${badgeLabel}</span> ${escapeHtml(t.description || '-')}</td>
-                            <td class="txn-amt" style="text-align:right;${isCredit && !isDiscount ? 'color:var(--green);font-weight:700;' : ''}">${isCredit && !isDiscount ? amtDisplay : '-'}</td>
-                            <td class="txn-amt" style="text-align:right;${(!isCredit && !isDiscount) ? 'color:var(--red);font-weight:700;' : ''}${isDiscount ? 'color:var(--gold);font-weight:700;' : ''}">${(!isCredit || isDiscount) ? amtDisplay : '-'}</td>
+                            <td class="txn-amt" style="text-align:right;${(isDiscount || isCredit) ? 'color:var(--green);font-weight:700;' : ''}">${(isDiscount || isCredit) ? amtDisplay : '-'}</td>
+                            <td class="txn-amt" style="text-align:right;${(!isCredit && !isDiscount) ? 'color:var(--red);font-weight:700;' : ''}">${(!isCredit && !isDiscount) ? amtDisplay : '-'}</td>
                             <td class="txn-bal" style="text-align:right;">Rs. ${t.runningBalance.toLocaleString()}</td>
                             <td><button class="txn-del" onclick="deleteLedgerEntry('${client.id}','${t.entryId}')">✕</button></td>
                         </tr>
@@ -4328,38 +4343,50 @@
             toast(`Rs.${halfAmount.toLocaleString()} half payment for ${monthKey}`);
         };
 
+        // ============================================================
+        // ✅ UPDATED applyDiscount() — Discount stored as positive credit
+        // ============================================================
         window.applyDiscount = function() {
             if (!currentLedgerId) return;
             const clients = getClients();
             const c = clients.find(x => x.id === currentLedgerId);
             if (!c) return;
+
             const td = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.debit) || 0), 0);
             const tc = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.credit) || 0), 0);
             const pending = Math.max(0, td - tc);
             const amt = prompt('Discount amount (Rs.):\n\nPending: Rs.' + pending.toLocaleString());
             if (!amt || isNaN(amt) || parseInt(amt) <= 0) return;
             const discount = parseInt(amt);
-            if (discount > pending) { toast('Discount cannot exceed pending amount (Rs.' + pending.toLocaleString() +
-                    ')', true); return; }
+            if (discount > pending) {
+                toast('Discount cannot exceed pending amount (Rs.' + pending.toLocaleString() + ')', true);
+                return;
+            }
             if (!confirm(`Apply Rs.${discount.toLocaleString()} discount to ${c.name}?`)) return;
+
             const entryId = uid();
             const now = new Date();
             const monthKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
             const dateTimeStr = getDateTimeWithTime();
+
+            // ✅ FIX: Discount as positive credit (not negative debit)
             c.paymentHistory.push({
                 entryId,
                 date: dateTimeStr,
                 description: 'Discount',
-                credit: 0,
-                debit: -discount,
+                credit: discount,   // positive amount in credit column
+                debit: 0,           // no debit
                 monthKey: monthKey,
                 fullDateTime: dateTimeStr
             });
+
             saveClients(clients);
-            if (currentUser) { pushClientToFirebase(c).catch(e => console.warn('Firebase update failed:', e)); }
+            if (currentUser) {
+                pushClientToFirebase(c).catch(e => console.warn('Firebase update failed:', e));
+            }
             renderLedger(c);
             renderCurrentTab();
-            toast(`💸 Discount Rs.${discount.toLocaleString()} applied (shown as - in ledger)`);
+            toast(`💸 Discount Rs.${discount.toLocaleString()} applied (shown in Credit column)`);
         };
 
         window.markCleared = function() {
@@ -6033,6 +6060,7 @@
         console.log("✅ Complaint Resolution messages now use actual Urdu script (نستعلیق)");
         console.log("✅ Red Light, Slow Internet, Disconnecting, Package End — all in Urdu");
         console.log("✅ Resolve complaint → Pre-filled Urdu message + WhatsApp auto-open");
+        console.log("✅ Discount fix applied — Discount stored as positive Credit, displayed in Credit column");
     </script>
 </body>
 </html>
