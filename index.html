@@ -961,6 +961,16 @@
             background: #555;
             color: #aaa;
         }
+        .btn-discount {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            color: #fff;
+            border: none;
+            font-weight: 700;
+        }
+        .btn-discount:hover {
+            transform: scale(0.95);
+            box-shadow: 0 4px 15px rgba(243, 156, 18, 0.4);
+        }
 
         /* FAB */
         .fab {
@@ -2332,6 +2342,128 @@
                 opacity: 0;
             }
         }
+
+        /* ===== NEW: Discount Quick Modal ===== */
+        .discount-quick-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.78);
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(6px);
+            animation: fadeInUp 0.3s ease;
+        }
+        .discount-quick-modal .dq-box {
+            background: var(--card);
+            border-radius: 24px;
+            padding: 24px 28px;
+            max-width: 360px;
+            width: 90%;
+            border: 2px solid var(--gold);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
+            position: relative;
+        }
+        .discount-quick-modal .dq-box .dq-icon {
+            font-size: 2.8rem;
+            text-align: center;
+            margin-bottom: 6px;
+        }
+        .discount-quick-modal .dq-box .dq-title {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--gold);
+            text-align: center;
+            margin-bottom: 4px;
+        }
+        .discount-quick-modal .dq-box .dq-sub {
+            font-size: 0.7rem;
+            color: var(--text2);
+            text-align: center;
+            margin-bottom: 14px;
+            line-height: 1.5;
+        }
+        .discount-quick-modal .dq-box .dq-pending {
+            background: var(--card2);
+            border-radius: 12px;
+            padding: 8px 12px;
+            font-size: 0.75rem;
+            text-align: center;
+            margin-bottom: 14px;
+            border: 1px solid var(--border);
+        }
+        .discount-quick-modal .dq-box .dq-pending .dq-pending-label {
+            color: var(--text2);
+            font-weight: 600;
+        }
+        .discount-quick-modal .dq-box .dq-pending .dq-pending-amount {
+            font-weight: 800;
+            color: var(--red);
+            font-size: 1.1rem;
+        }
+        .discount-quick-modal .dq-box .dq-input-wrap {
+            margin-bottom: 14px;
+        }
+        .discount-quick-modal .dq-box .dq-input-wrap input {
+            width: 100%;
+            padding: 14px 16px;
+            border-radius: 30px;
+            border: 2px solid var(--gold);
+            background: var(--card2);
+            color: var(--text);
+            font-size: 1.1rem;
+            font-weight: 700;
+            outline: none;
+            text-align: center;
+        }
+        .discount-quick-modal .dq-box .dq-input-wrap input:focus {
+            border-color: #ffd700;
+            box-shadow: 0 0 20px rgba(245, 166, 35, 0.25);
+        }
+        .discount-quick-modal .dq-box .dq-actions {
+            display: flex;
+            gap: 10px;
+        }
+        .discount-quick-modal .dq-box .dq-actions button {
+            flex: 1;
+            padding: 12px 8px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .discount-quick-modal .dq-box .dq-actions .dq-cancel {
+            background: var(--card2);
+            color: var(--text2);
+            border: 1.5px solid var(--border);
+        }
+        .discount-quick-modal .dq-box .dq-actions .dq-cancel:hover {
+            background: var(--border);
+        }
+        .discount-quick-modal .dq-box .dq-actions .dq-apply {
+            background: linear-gradient(135deg, #f5a623, #e67e22);
+            color: #000;
+            border: none;
+            flex: 2;
+        }
+        .discount-quick-modal .dq-box .dq-actions .dq-apply:hover {
+            transform: scale(0.96);
+            box-shadow: 0 6px 20px rgba(245, 166, 35, 0.4);
+        }
+        .discount-quick-modal .dq-box .dq-existing {
+            font-size: 0.55rem;
+            color: var(--gold);
+            text-align: center;
+            margin-top: 8px;
+            background: var(--card2);
+            padding: 4px 10px;
+            border-radius: 20px;
+            display: inline-block;
+            width: 100%;
+        }
     </style>
 </head>
 <body>
@@ -3699,6 +3831,9 @@
             document.getElementById('clientList').innerHTML = html;
         }
 
+        // =================================================================
+        // 11b. RENDER UNPAID CLIENTS (with Discount Button)
+        // =================================================================
         function renderUnpaidClients() {
             const clients = getClients();
             const searchEl = document.getElementById('searchInput');
@@ -3749,6 +3884,9 @@
                     const packageAmount = c.packageAmount || 0;
                     const days = daysUntilExpiry(c);
                     const isExpired = days <= 0;
+                    const discountDisplay = (c.discount && c.discount > 0) ?
+                        `<div style="font-size:0.55rem;color:var(--gold);">💸 Discount: Rs.${c.discount.toLocaleString()}</div>` :
+                        '';
 
                     return `
                         <div class="client-card" style="border:2px solid var(--red);">
@@ -3760,7 +3898,8 @@
                                     ${c.vlanId ? `<span class="vlan-badge">🔌 VLAN: ${c.vlanId}</span>` : ''}
                                     ${c.username ? `<span class="vlan-badge" style="background:#1a3a5c;">👤 ${c.username}</span>` : ''}
                                     ${isExpired ? `<div class="expiry-badge" style="color:#e74c3c;font-weight:700;">⚠️ EXPIRED</div>` : ''}
-                                    ${(c.discount && c.discount > 0) ? `<div style="font-size:0.55rem;color:var(--gold);">💸 Discount: Rs.${c.discount.toLocaleString()}</div>` : ''}
+                                    ${discountDisplay}
+                                    <div style="font-size:0.55rem;color:var(--text2);margin-top:2px;">💰 Cost: Rs.${(c.packageCost||0).toLocaleString()}</div>
                                 </div>
                                 <div style="text-align:right;">
                                     <div class="amount-due" style="font-size:1.2rem;color:#e74c3c;">Rs. ${pending.toLocaleString()}</div>
@@ -3769,9 +3908,11 @@
                             </div>
                             <div class="payment-status-toggle" style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;">
                                 <button class="btn btn-green" style="flex:2;padding:12px;font-size:0.85rem;border-radius:30px;" onclick="markPaidFromUnpaid('${c.id}')">✅ Mark Paid — Collect Rs. ${pending.toLocaleString()}</button>
+                                <button class="btn btn-discount" style="flex:1;padding:12px;font-size:0.75rem;border-radius:30px;" onclick="applyDiscountFromUnpaid('${c.id}')">💸 Discount</button>
                                 <button class="btn btn-wa" onclick="openReminderOptions('${c.id}')">📨 Reminder</button>
                                 <button class="btn btn-outline" onclick="openEditClient('${c.id}')">✏️ Edit</button>
                             </div>
+                            <div style="font-size:0.55rem;color:var(--text2);margin-top:6px;text-align:center;">💡 Discount button: Enter amount to cut from pending balance</div>
                         </div>
                     `;
                 }).join('');
@@ -3827,6 +3968,113 @@
 
             const profit = (c.packageAmount || 0) - (c.packageCost || 0);
             toast(`✅ Collected Rs. ${pending.toLocaleString()} from ${c.name} | Profit: Rs. ${profit.toLocaleString()}`);
+        };
+
+        // =================================================================
+        // 12b. DISCOUNT FROM UNPAID TAB (NEW FUNCTION)
+        // =================================================================
+        window.applyDiscountFromUnpaid = function(clientId) {
+            const clients = getClients();
+            const c = clients.find(x => x.id === clientId);
+            if (!c) { toast('Client not found', true); return; }
+
+            const pending = Math.max(0, calculateBalance(c));
+            if (pending <= 0) {
+                toast('✅ No pending balance to discount — client is already paid.', true);
+                return;
+            }
+
+            // Create a clean modal for discount input
+            const modal = document.createElement('div');
+            modal.className = 'discount-quick-modal';
+            modal.id = 'discountQuickModalUnpaid';
+            modal.innerHTML = `
+                <div class="dq-box">
+                    <div class="dq-icon">💸</div>
+                    <div class="dq-title">Discount Lagao</div>
+                    <div class="dq-sub">Pending balance me se katna hai — amount enter karo</div>
+                    <div class="dq-pending">
+                        <div class="dq-pending-label">Current Pending</div>
+                        <div class="dq-pending-amount">Rs. ${pending.toLocaleString()}</div>
+                    </div>
+                    <div class="dq-input-wrap">
+                        <input type="number" id="discountAmountUnpaid" placeholder="Enter Rs. amount" min="1" max="${pending}" step="1" autofocus>
+                    </div>
+                    <div class="dq-actions">
+                        <button class="dq-cancel" onclick="document.getElementById('discountQuickModalUnpaid').remove()">❌ Cancel</button>
+                        <button class="dq-apply" onclick="confirmDiscountFromUnpaid('${clientId}', ${pending})">✅ Apply Discount</button>
+                    </div>
+                    <div class="dq-existing">${(c.discount && c.discount > 0) ? '💸 Existing monthly discount: Rs.' + c.discount.toLocaleString() : ''}</div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+
+            // Focus the input after a short delay
+            setTimeout(() => {
+                const inp = document.getElementById('discountAmountUnpaid');
+                if (inp) inp.focus();
+            }, 150);
+        };
+
+        window.confirmDiscountFromUnpaid = function(clientId, pending) {
+            const inp = document.getElementById('discountAmountUnpaid');
+            if (!inp) return;
+
+            const discount = parseInt(inp.value);
+            if (!discount || isNaN(discount) || discount <= 0) {
+                toast('❌ Sahi amount enter karo (positive number)', true);
+                return;
+            }
+            if (discount > pending) {
+                toast(`❌ Discount (Rs. ${discount.toLocaleString()}) pending (Rs. ${pending.toLocaleString()}) se zyada nahi ho sakta!`, true);
+                return;
+            }
+
+            // Remove the modal
+            const modal = document.getElementById('discountQuickModalUnpaid');
+            if (modal) modal.remove();
+
+            // Confirm with user
+            if (!confirm(`💸 Rs. ${discount.toLocaleString()} discount apply kar rahe ho ${clients.find(x=>x.id===clientId)?.name} ke pending balance par?\n\nNew pending: Rs. ${(pending - discount).toLocaleString()}`)) {
+                return;
+            }
+
+            const clients = getClients();
+            const c = clients.find(x => x.id === clientId);
+            if (!c) { toast('Client not found', true); return; }
+
+            const entryId = uid();
+            const now = new Date();
+            const monthKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+            const dateTimeStr = getDateTimeWithTime();
+
+            // Add discount as a credit entry (reduces pending balance)
+            c.paymentHistory.push({
+                entryId: entryId,
+                date: dateTimeStr,
+                description: 'Discount — One Time',
+                credit: discount,
+                debit: 0,
+                monthKey: monthKey,
+                fullDateTime: dateTimeStr,
+                entryType: 'discount'
+            });
+
+            // Optionally, also update the discount field if user wants it tracked
+            // But we'll keep it separate — one-time discount vs recurring monthly discount
+            // However, to show it in the UI, we add it to the discount field as well
+            // but this would affect calculateBalance. So we only add credit entry.
+            // The discount field remains for monthly recurring discounts.
+
+            c.updatedAt = new Date().toISOString();
+
+            saveClients(clients);
+            if (currentUser) {
+                pushClientToFirebase(c).catch(e => console.warn('Firebase update failed:', e));
+            }
+
+            renderCurrentTab();
+            toast(`💸 Rs. ${discount.toLocaleString()} discount applied to ${c.name}. New pending: Rs. ${(pending - discount).toLocaleString()}`);
         };
 
         // =================================================================
@@ -3972,7 +4220,7 @@
         };
 
         // =================================================================
-        // 15. CLIENT ADD/EDIT
+        // 15. CLIENT ADD/EDIT (FIXED: Package dropdown now shows correct package)
         // =================================================================
         window.openAddClient = function() {
             document.getElementById('clientModalTitle').textContent = '➕ Add New Client';
@@ -3980,6 +4228,8 @@
             document.getElementById('cName').value = '';
             document.getElementById('cPhone').value = '';
             document.getElementById('cAddress').value = '';
+            // Refresh dropdown FIRST, then set value
+            refreshPackageDropdown();
             document.getElementById('cPackage').value = 'DHCP-4Mbps';
             document.getElementById('cAmount').value = '800';
             document.getElementById('cOldBill').value = '0';
@@ -3989,7 +4239,6 @@
             document.getElementById('cVlanId').value = '';
             document.getElementById('cUsername').value = '';
             document.getElementById('cDiscount').value = '0';
-            refreshPackageDropdown();
             autoSetPackagePrice();
             updateProfitDisplay();
             openModal('clientModal');
@@ -4003,7 +4252,33 @@
             document.getElementById('cName').value = c.name;
             document.getElementById('cPhone').value = c.phone;
             document.getElementById('cAddress').value = c.address || '';
-            document.getElementById('cPackage').value = c.package;
+
+            // FIX: Refresh dropdown FIRST, then set the value
+            refreshPackageDropdown();
+
+            // Now set the package value — this will select the correct option
+            const pkgSelect = document.getElementById('cPackage');
+            if (pkgSelect) {
+                // Check if the client's package exists in the dropdown
+                const options = pkgSelect.options;
+                let found = false;
+                for (let i = 0; i < options.length; i++) {
+                    if (options[i].value === c.package) {
+                        pkgSelect.selectedIndex = i;
+                        found = true;
+                        break;
+                    }
+                }
+                // If not found, add it as a temporary option
+                if (!found) {
+                    const opt = document.createElement('option');
+                    opt.value = c.package;
+                    opt.textContent = c.package + ' (Custom)';
+                    pkgSelect.appendChild(opt);
+                    pkgSelect.value = c.package;
+                }
+            }
+
             document.getElementById('cAmount').value = c.packageAmount;
             document.getElementById('cOldBill').value = c.oldBill || 0;
             document.getElementById('cCost').value = (c.packageCost != null ? c.packageCost : 500);
@@ -4012,7 +4287,8 @@
             document.getElementById('cVlanId').value = c.vlanId || '';
             document.getElementById('cUsername').value = c.username || '';
             document.getElementById('cDiscount').value = c.discount || 0;
-            refreshPackageDropdown();
+
+            autoSetPackagePrice();
             updateProfitDisplay();
             openModal('clientModal');
         };
@@ -6262,7 +6538,7 @@
         }, 500);
 
         console.log("👑 D3 Crown Fiber — ISP Admin Panel");
-        console.log("✅ v2.0 — Bug Fixed Build by Claude (Khalid Ali Pechuho)");
+        console.log("✅ v2.0 — Fixed: Discount Button in Unpaid Tab + Edit Package Selection Fix");
         console.log("✅ calculateBalance() integrated into Ledger System");
     </script>
 </body>
