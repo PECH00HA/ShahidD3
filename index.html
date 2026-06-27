@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>D3 Crown Fiber — ISP Admin Panel</title>
 
+    <!-- ===== EXTERNAL LIBS ===== -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js">
     </script>
     <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js">
@@ -18,7 +19,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
     <style>
-        /* ===== ROOT VARIABLES ===== */
+        /* ===== 1. ROOT VARIABLES ===== */
         :root {
             --bg: #0b0f15;
             --card: #151b24;
@@ -51,11 +52,6 @@
             --border: #ddd;
         }
 
-        body.light-theme {
-            background: #f0f2f5;
-            color: #1a1a1a;
-        }
-
         .royal-theme {
             --bg: #0a0e1a;
             --card: #0f1829;
@@ -72,12 +68,165 @@
             --radius: 16px;
         }
 
+        /* ===== 2. GLOBAL RESET & BASE ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            font-size: 16px;
+            scroll-behavior: smooth;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: var(--font);
+            background: var(--bg);
+            color: var(--text);
+            max-width: 500px;
+            margin: 0 auto;
+            min-height: 100vh;
+            padding-bottom: 90px;
+            line-height: 1.6;
+            transition: max-width 0.4s ease, padding 0.4s ease, background 0.6s ease;
+            position: relative;
+        }
+
+        body.light-theme {
+            background: #f0f2f5;
+            color: #1a1a1a;
+        }
+
         body.royal-theme {
             background: radial-gradient(ellipse at top, #0d1833 0%, #060a13 60%);
             color: #f0f4ff;
         }
 
-        /* ===== HEADER ===== */
+        /* ===== 3. PC MODE OVERRIDES ===== */
+        body.pc-mode {
+            max-width: 1400px !important;
+            padding: 20px 30px 90px 30px !important;
+        }
+
+        body.pc-mode .client-list {
+            display: grid !important;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)) !important;
+            gap: 14px !important;
+            padding: 0 4px !important;
+        }
+        body.pc-mode .client-list .package-section {
+            grid-column: 1 / -1 !important;
+        }
+        body.pc-mode .client-list .package-section .client-card {
+            margin-bottom: 0 !important;
+        }
+        body.pc-mode .header {
+            flex-wrap: nowrap !important;
+        }
+        body.pc-mode .stats-scroll {
+            flex-wrap: wrap !important;
+            justify-content: flex-start !important;
+        }
+        body.pc-mode .stat-box {
+            min-width: 100px !important;
+            flex: 0 1 auto !important;
+        }
+        body.pc-mode .action-bar {
+            flex-wrap: wrap !important;
+        }
+        body.pc-mode .tab-bar .tab-btn {
+            padding: 12px 24px !important;
+            font-size: 0.85rem !important;
+        }
+        body.pc-mode .search-box input {
+            font-size: 1rem !important;
+            padding: 14px 20px !important;
+        }
+        body.pc-mode .modal {
+            max-width: 640px !important;
+        }
+        body.pc-mode .fab {
+            width: 64px !important;
+            height: 64px !important;
+            font-size: 2.2rem !important;
+            bottom: 30px !important;
+            right: 30px !important;
+        }
+        body.pc-mode .logout-btn {
+            bottom: 30px !important;
+            left: 30px !important;
+            padding: 10px 22px !important;
+            font-size: 0.85rem !important;
+        }
+        body.pc-mode .logo-text {
+            display: none !important;
+        }
+        body.pc-mode .header .logo-svg {
+            display: none !important;
+        }
+        body.pc-mode .dragon-header-wrapper {
+            display: flex !important;
+        }
+
+        body.pc-mode .client-card .payment-status-toggle .btn-green {
+            padding: 6px 10px !important;
+            font-size: 0.65rem !important;
+            flex: 1 !important;
+            min-width: auto !important;
+            border-radius: 20px !important;
+        }
+
+        @media (max-width: 600px) {
+            body.pc-mode {
+                padding: 12px 8px 80px 8px !important;
+                max-width: 100% !important;
+            }
+            body.pc-mode .client-list {
+                grid-template-columns: 1fr !important;
+            }
+            body.pc-mode .header {
+                flex-wrap: wrap !important;
+            }
+            body.pc-mode .dragon-header-wrapper {
+                display: none !important;
+            }
+            body.pc-mode .logo-text {
+                display: flex !important;
+            }
+            body.pc-mode .header .logo-svg {
+                display: block !important;
+            }
+            .dragon-svg-container {
+                width: 70px !important;
+                height: 60px !important;
+            }
+            .header-center .isp-name {
+                font-size: 0.9rem !important;
+            }
+            .tab-btn {
+                font-size: 0.6rem !important;
+                padding: 8px 4px !important;
+                min-width: 45px !important;
+            }
+        }
+
+        @media (min-width: 601px) {
+            body.pc-mode .dragon-header-wrapper {
+                display: flex !important;
+            }
+            body.pc-mode .logo-text {
+                display: none !important;
+            }
+            body.pc-mode .header .logo-svg {
+                display: none !important;
+            }
+        }
+
+        /* ===== 4. COMPONENT STYLES ===== */
+
+        /* Header */
         .header {
             background: linear-gradient(135deg, #0f172a 0%, #1a2332 40%, #2a1f0e 100%);
             padding: 14px 16px;
@@ -152,7 +301,6 @@
             flex: 1;
             min-width: 0;
         }
-
         .header-center .isp-name {
             font-weight: 800;
             font-size: 1.2rem;
@@ -222,11 +370,34 @@
             text-shadow: 0 0 10px rgba(245, 166, 35, 0.3);
         }
 
-        /* ===== EMERGENCY BUTTON ===== */
+        .dragon-header-wrapper {
+            display: none;
+            align-items: center;
+            gap: 12px;
+            position: relative;
+        }
+        body.pc-mode .dragon-header-wrapper {
+            display: flex;
+        }
+
+        .dragon-svg-container {
+            width: 100px;
+            height: 90px;
+            flex-shrink: 0;
+            position: relative;
+        }
+        .dragon-svg-container svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+            filter: drop-shadow(0 0 30px rgba(255, 69, 0, 0.5));
+        }
+
+        /* Emergency */
         .emergency-toggle-btn {
             padding: 6px 12px;
             background: linear-gradient(135deg, #e74c3c, #c0392b);
-            color: white;
+            color: #fff;
             border: none;
             border-radius: 20px;
             font-size: 0.7rem;
@@ -236,17 +407,14 @@
             box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
             animation: emergencyPulse 2s ease-in-out infinite;
         }
-
         .emergency-toggle-btn:hover {
             transform: scale(1.05);
             box-shadow: 0 6px 20px rgba(231, 76, 60, 0.6);
         }
-
         .emergency-toggle-btn.active {
             background: linear-gradient(135deg, #2ecc71, #27ae60);
             animation: none;
         }
-
         @keyframes emergencyPulse {
             0%,
             100% {
@@ -256,7 +424,6 @@
                 box-shadow: 0 4px 25px rgba(231, 76, 60, 0.8);
             }
         }
-
         .emergency-wrapper {
             display: flex;
             align-items: center;
@@ -264,7 +431,7 @@
             padding: 4px 10px 10px;
         }
 
-        /* ===== OTHER STYLES ===== */
+        /* Package Filter */
         .pkg-filter-bar {
             display: none;
             flex-wrap: wrap;
@@ -313,159 +480,7 @@
             font-weight: 700;
         }
 
-        .dragon-header-wrapper {
-            display: none;
-            align-items: center;
-            gap: 12px;
-            position: relative;
-        }
-        body.pc-mode .dragon-header-wrapper {
-            display: flex;
-        }
-        .dragon-svg-container {
-            width: 100px;
-            height: 90px;
-            flex-shrink: 0;
-            position: relative;
-        }
-        .dragon-svg-container svg {
-            width: 100%;
-            height: 100%;
-            display: block;
-            filter: drop-shadow(0 0 30px rgba(255, 69, 0, 0.5));
-        }
-        .dragon-fire-particle {
-            position: absolute;
-            border-radius: 50%;
-            pointer-events: none;
-            opacity: 0;
-            animation: dragonFireRise linear infinite;
-            z-index: 5;
-        }
-        @keyframes dragonFireRise {
-            0% {
-                transform: translate(0, 0) scale(1.2);
-                opacity: 0.95;
-            }
-            100% {
-                transform: translate(var(--dx), var(--dy)) scale(0.1);
-                opacity: 0;
-            }
-        }
-        .dragon-spark {
-            position: absolute;
-            border-radius: 50%;
-            pointer-events: none;
-            opacity: 0;
-            animation: dragonSparkBurst linear infinite;
-            z-index: 4;
-        }
-        @keyframes dragonSparkBurst {
-            0% {
-                transform: translate(0, 0) scale(1);
-                opacity: 1;
-            }
-            100% {
-                transform: translate(var(--sx), var(--sy)) scale(0.05);
-                opacity: 0;
-            }
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        html {
-            font-size: 16px;
-            scroll-behavior: smooth;
-            -webkit-tap-highlight-color: transparent;
-        }
-        body {
-            font-family: var(--font);
-            background: var(--bg);
-            color: var(--text);
-            max-width: 500px;
-            margin: 0 auto;
-            min-height: 100vh;
-            padding-bottom: 90px;
-            line-height: 1.6;
-            transition: max-width 0.4s ease, padding 0.4s ease, background 0.6s ease;
-            position: relative;
-        }
-
-        body.pc-mode {
-            max-width: 1400px !important;
-            padding: 20px 30px 90px 30px !important;
-        }
-        body.pc-mode .client-list {
-            display: grid !important;
-            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)) !important;
-            gap: 14px !important;
-            padding: 0 4px !important;
-        }
-        body.pc-mode .client-list .package-section {
-            grid-column: 1 / -1 !important;
-        }
-        body.pc-mode .client-list .package-section .client-card {
-            margin-bottom: 0 !important;
-        }
-        body.pc-mode .header {
-            flex-wrap: nowrap !important;
-        }
-        body.pc-mode .stats-scroll {
-            flex-wrap: wrap !important;
-            justify-content: flex-start !important;
-        }
-        body.pc-mode .stat-box {
-            min-width: 100px !important;
-            flex: 0 1 auto !important;
-        }
-        body.pc-mode .action-bar {
-            flex-wrap: wrap !important;
-        }
-        body.pc-mode .tab-bar .tab-btn {
-            padding: 12px 24px !important;
-            font-size: 0.85rem !important;
-        }
-        body.pc-mode .search-box input {
-            font-size: 1rem !important;
-            padding: 14px 20px !important;
-        }
-        body.pc-mode .modal {
-            max-width: 640px !important;
-        }
-        body.pc-mode .fab {
-            width: 64px !important;
-            height: 64px !important;
-            font-size: 2.2rem !important;
-            bottom: 30px !important;
-            right: 30px !important;
-        }
-        body.pc-mode .logout-btn {
-            bottom: 30px !important;
-            left: 30px !important;
-            padding: 10px 22px !important;
-            font-size: 0.85rem !important;
-        }
-        body.pc-mode .logo-text {
-            display: none !important;
-        }
-        body.pc-mode .header .logo-svg {
-            display: none !important;
-        }
-        body.pc-mode .dragon-header-wrapper {
-            display: flex !important;
-        }
-
-        body.pc-mode .client-card .payment-status-toggle .btn-green {
-            padding: 6px 10px !important;
-            font-size: 0.65rem !important;
-            flex: 1 !important;
-            min-width: auto !important;
-            border-radius: 20px !important;
-        }
-
+        /* Firebase Indicator */
         .fb-space-indicator {
             display: flex;
             align-items: center;
@@ -539,6 +554,7 @@
             white-space: nowrap;
         }
 
+        /* Stats */
         .stats-scroll {
             display: flex;
             gap: 8px;
@@ -567,6 +583,7 @@
             margin-top: 2px;
         }
 
+        /* Action Bar */
         .action-bar {
             display: flex;
             gap: 8px;
@@ -584,6 +601,7 @@
             font-size: 0.6rem;
         }
 
+        /* Tabs */
         .tab-bar {
             display: flex;
             margin: 0 10px 8px;
@@ -632,6 +650,7 @@
             }
         }
 
+        /* Search */
         .search-box {
             padding: 0 10px 10px;
         }
@@ -645,7 +664,11 @@
             font-size: 0.85rem;
             outline: none;
         }
+        .light-theme .search-box input {
+            color: #1a1a1a;
+        }
 
+        /* Client List */
         .client-list {
             padding: 0 10px;
             display: flex;
@@ -736,6 +759,7 @@
             color: var(--gold);
             font-weight: 600;
         }
+
         .status-dot {
             width: 7px;
             height: 7px;
@@ -754,6 +778,11 @@
         .dot-inactive {
             background: #666;
         }
+        .dot-expired {
+            background: #ff8c42;
+            box-shadow: 0 0 6px #ff8c42;
+        }
+
         .payment-label {
             font-size: 0.6rem;
             font-weight: 600;
@@ -778,6 +807,7 @@
             background: #3d1e1e;
             color: #e74c3c;
         }
+
         .expiry-badge {
             font-size: 0.6rem;
             color: #ff8c42;
@@ -813,6 +843,17 @@
             color: #fff;
         }
 
+        .vlan-badge {
+            background: #2c3e50;
+            color: #f1c40f;
+            font-size: 0.6rem;
+            padding: 2px 6px;
+            border-radius: 20px;
+            margin-left: 8px;
+            display: inline-block;
+        }
+
+        /* Buttons */
         .btn-row {
             display: flex;
             flex-wrap: wrap;
@@ -921,16 +962,7 @@
             color: #aaa;
         }
 
-        .vlan-badge {
-            background: #2c3e50;
-            color: #f1c40f;
-            font-size: 0.6rem;
-            padding: 2px 6px;
-            border-radius: 20px;
-            margin-left: 8px;
-            display: inline-block;
-        }
-
+        /* FAB */
         .fab {
             position: fixed;
             bottom: 22px;
@@ -946,6 +978,7 @@
             z-index: 90;
         }
 
+        /* Modal */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -996,6 +1029,11 @@
             align-items: center;
             justify-content: center;
         }
+        .light-theme .modal-close-btn {
+            color: #1a1a1a;
+        }
+
+        /* Form */
         .form-group {
             margin-bottom: 12px;
         }
@@ -1016,6 +1054,10 @@
             color: #fff;
             font-size: 0.85rem;
         }
+        .light-theme .form-group input,
+        .light-theme .form-group select {
+            color: #1a1a1a;
+        }
         .form-row {
             display: flex;
             gap: 10px;
@@ -1024,6 +1066,7 @@
             flex: 1;
         }
 
+        /* Toast */
         .toast {
             position: fixed;
             top: 16px;
@@ -1060,6 +1103,7 @@
             }
         }
 
+        /* Login */
         .login-overlay {
             position: fixed;
             top: 0;
@@ -1167,9 +1211,11 @@
         .login-btn:active {
             transform: scale(0.97);
         }
+
         #mainAppContainer {
             display: none;
         }
+
         .logout-btn {
             position: fixed;
             bottom: 20px;
@@ -1185,6 +1231,7 @@
             cursor: pointer;
             backdrop-filter: blur(4px);
         }
+
         .theme-toggle {
             position: fixed;
             top: 12px;
@@ -1207,11 +1254,8 @@
             transform: scale(1.1);
             border-color: #ffd700;
         }
-        .theme-toggle:active {
-            transform: scale(0.9);
-        }
 
-        /* ===== RECEIPT STYLES ===== */
+        /* Receipt */
         .receipt-base {
             border-radius: 20px;
             padding: 0;
@@ -1277,6 +1321,7 @@
             text-align: center;
             padding: 8px;
         }
+
         .receipt-paid .rec-header {
             background: linear-gradient(135deg, #1a7a3a, #2ecc71);
             color: #fff;
@@ -1289,6 +1334,7 @@
             background: linear-gradient(135deg, #c0392b, #e74c3c);
             color: #fff;
         }
+
         .stamp-overlay {
             position: absolute;
             top: 50%;
@@ -1382,16 +1428,7 @@
             letter-spacing: 2px;
         }
 
-        .billing-receipt-paid .rec-header {
-            background: linear-gradient(135deg, #1a7a3a, #2ecc71);
-            color: #fff;
-        }
-        .billing-receipt-unpaid .rec-header {
-            background: linear-gradient(135deg, #b37315, #f5a623);
-            color: #000;
-        }
-
-        /* ===== LEDGER ===== */
+        /* Ledger */
         .ledger-modern {
             font-size: 0.85rem;
         }
@@ -1601,6 +1638,10 @@
             color: var(--text);
             width: 100%;
         }
+        .light-theme .ledger-entry-form .ef-row .ef-group select,
+        .light-theme .ledger-entry-form .ef-row .ef-group input {
+            color: #1a1a1a;
+        }
         .ledger-entry-form .ef-row .btn {
             padding: 6px 14px;
             font-size: 0.7rem;
@@ -1714,7 +1755,6 @@
             background: #1e2a3d;
             color: #4da6ff;
         }
-
         .ledger-no-txn {
             text-align: center;
             padding: 20px;
@@ -1722,7 +1762,6 @@
             font-size: 0.7rem;
         }
 
-        /* ===== BILLING ===== */
         .billing-summary {
             background: var(--card2);
             border-radius: 12px;
@@ -1853,6 +1892,7 @@
             font-size: 1.2rem;
             font-weight: 600;
         }
+
         .reminder-options {
             display: flex;
             gap: 10px;
@@ -1901,6 +1941,9 @@
             border: 1px solid var(--border);
             color: var(--text);
         }
+        .light-theme .package-manager-table input {
+            color: #1a1a1a;
+        }
         .small-text {
             font-size: 0.6rem;
             color: #aaa;
@@ -1917,6 +1960,7 @@
             display: inline-block;
             animation: pulseRed 1.5s infinite;
         }
+
         .status-pill {
             display: inline-block;
             padding: 6px 18px;
@@ -1935,6 +1979,7 @@
             background: #3d1e1e;
             color: #e74c3c;
         }
+
         .payment-status-toggle {
             display: inline-flex;
             gap: 8px;
@@ -1949,6 +1994,7 @@
             min-width: 100px;
             justify-content: center;
         }
+
         .receipt-actions {
             display: flex;
             flex-wrap: wrap;
@@ -2240,63 +2286,60 @@
             color: #c0392b;
         }
 
-        @media (max-width: 600px) {
-            body.pc-mode {
-                padding: 12px 8px 80px 8px !important;
-                max-width: 100% !important;
+        /* Misc */
+        .flex-between {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        /* Dragon particles */
+        .dragon-fire-particle {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0;
+            animation: dragonFireRise linear infinite;
+            z-index: 5;
+        }
+        @keyframes dragonFireRise {
+            0% {
+                transform: translate(0, 0) scale(1.2);
+                opacity: 0.95;
             }
-            body.pc-mode .client-list {
-                grid-template-columns: 1fr !important;
-            }
-            body.pc-mode .header {
-                flex-wrap: wrap !important;
-            }
-            body.pc-mode .dragon-header-wrapper {
-                display: none !important;
-            }
-            body.pc-mode .logo-text {
-                display: flex !important;
-            }
-            body.pc-mode .header .logo-svg {
-                display: block !important;
-            }
-            .dragon-svg-container {
-                width: 70px !important;
-                height: 60px !important;
-            }
-            .header-center .isp-name {
-                font-size: 0.9rem !important;
-            }
-            .tab-btn {
-                font-size: 0.6rem !important;
-                padding: 8px 4px !important;
-                min-width: 45px !important;
-            }
-            body.pc-mode .client-card .payment-status-toggle .btn-green {
-                padding: 6px 8px !important;
-                font-size: 0.6rem !important;
-                flex: 1 !important;
-                min-width: auto !important;
+            100% {
+                transform: translate(var(--dx), var(--dy)) scale(0.1);
+                opacity: 0;
             }
         }
-        @media (min-width: 601px) {
-            body.pc-mode .dragon-header-wrapper {
-                display: flex !important;
+        .dragon-spark {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0;
+            animation: dragonSparkBurst linear infinite;
+            z-index: 4;
+        }
+        @keyframes dragonSparkBurst {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
             }
-            body.pc-mode .logo-text {
-                display: none !important;
-            }
-            body.pc-mode .header .logo-svg {
-                display: none !important;
+            100% {
+                transform: translate(var(--sx), var(--sy)) scale(0.05);
+                opacity: 0;
             }
         }
     </style>
 </head>
 <body>
 
+    <!-- ===== THEME TOGGLE ===== -->
     <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">🌙</button>
 
-    <!-- ─── LOGIN OVERLAY ─── -->
+    <!-- ===== LOGIN OVERLAY ===== -->
     <div class="login-overlay" id="loginOverlay">
         <div class="login-card">
             <div class="glowing-company">✨ D3 Crown Fiber Internet PVT Limited ™ ✨</div>
@@ -2308,7 +2351,7 @@
         </div>
     </div>
 
-    <!-- ─── MAIN APP ─── -->
+    <!-- ===== MAIN APP ===== -->
     <div id="mainAppContainer">
         <div id="ispApp">
 
@@ -2383,7 +2426,7 @@
             <!-- STATS -->
             <div class="stats-scroll" id="statsRow"></div>
 
-            <!-- EMERGENCY BUTTON -->
+            <!-- EMERGENCY -->
             <div class="emergency-wrapper">
                 <button class="emergency-toggle-btn" id="emergencyBtn" onclick="toggleEmergencyMode()">🚨 UNPAID</button>
                 <span style="font-size:0.55rem;color:var(--text2);">⚠️ Mark all clients as UNPAID (reset payments)</span>
@@ -2410,7 +2453,7 @@
             <!-- SEARCH -->
             <div class="search-box"><input type="text" id="searchInput" placeholder="Search by name or phone..." oninput="onSearchInput()"></div>
 
-            <!-- PACKAGE FILTER BAR -->
+            <!-- PKG FILTER -->
             <div class="pkg-filter-bar" id="pkgFilterBar"></div>
 
             <!-- CLIENT LIST -->
@@ -2419,7 +2462,7 @@
             <!-- FAB -->
             <button class="fab" onclick="openAddClient()">+</button>
 
-            <!-- ─── MODALS ─── -->
+            <!-- ===== MODALS ===== -->
 
             <!-- Client Modal -->
             <div class="modal-overlay" id="clientModal">
@@ -2443,6 +2486,11 @@
                         <div class="form-row">
                             <div class="form-group"><label>📅 Package Start (DD/MM/YYYY)</label><input type="text" id="cStartDate" placeholder="DD/MM/YYYY" pattern="\d{2}/\d{2}/\d{4}" required></div>
                             <div class="form-group"><label>📌 Old Balance</label><input type="number" id="cOldBill" value="0" style="font-weight:700;"></div>
+                        </div>
+                        <!-- NEW: Discount Field -->
+                        <div class="form-row">
+                            <div class="form-group"><label>💸 Discount (Rs.)</label><input type="number" id="cDiscount" value="0" min="0" style="font-weight:700;color:var(--gold);" oninput="updateProfitDisplay()"></div>
+                            <div class="form-group"><label style="font-size:0.55rem;color:var(--text2);">After Discount</label><input type="text" id="cAfterDiscountDisplay" value="Rs. 800" readonly style="background:var(--card2);color:var(--gold);font-weight:700;"></div>
                         </div>
                         <div class="form-row">
                             <div class="form-group"><label>🔌 VLAN ID</label><input type="text" id="cVlanId" placeholder="e.g., 101"></div>
@@ -2517,7 +2565,6 @@
                         <input type="file" id="excelFile" accept=".xlsx, .xls" onchange="importExcel(event)" style="display:none;">
                         <button class="btn btn-full" style="background:#2a7f3f; color:#fff;" onclick="document.getElementById('csvFile').click()">📂 Choose CSV File</button>
                         <button class="btn btn-full" style="background:#1e6f3f; color:#fff; margin-top:8px;" onclick="document.getElementById('excelFile').click()">📊 Choose Excel File (XLSX/XLS) — RedTone Format</button>
-
                         <div style="margin-top:14px; padding:14px; background:var(--card2); border-radius:12px; border:2px solid var(--gold);">
                             <div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
                                 <label style="display:flex; align-items:center; gap:10px; font-size:0.8rem; font-weight:700; cursor:pointer;">
@@ -2583,7 +2630,7 @@
 
     <button id="logoutBtn" style="display:none;" class="logout-btn">🚪 Logout</button>
 
-    <!-- ─── RECEIPT CONTAINERS (hidden) ─── -->
+    <!-- ===== RECEIPT CONTAINERS (hidden) ===== -->
     <div id="receipt1Container" class="receipt-hidden" style="width:500px;">
         <div class="receipt-wrap" id="receipt1Wrap"></div>
     </div>
@@ -2591,13 +2638,13 @@
         <div class="receipt-wrap" id="receipt2Wrap"></div>
     </div>
 
-    <!-- ════════════════════════════════════════════════════════════════
-    JAVASCRIPT — ISP Admin Panel
-    ════════════════════════════════════════════════════════════════ -->
+    <!-- ============================================================ -->
+    <!-- ===== JAVASCRIPT ===== -->
+    <!-- ============================================================ -->
     <script>
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        // FIREBASE CONFIG
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        // =================================================================
+        // 1. FIREBASE CONFIG
+        // =================================================================
         const firebaseConfig = {
             apiKey: "AIzaSyDZHUNdkun0f3cY3JqfzrI86mpxy7zY7x0",
             authDomain: "d3crown-805ce.firebaseapp.com",
@@ -2634,15 +2681,13 @@
         let ledgerMonthFilter = 'all';
         let currentTab = 'all';
         let activePkgFilter = 'all';
+        let emergencyMode = false;
         const DESCRIPTION_ITEMS = [
             "Monthly Bill", "Full Payment", "Half Payment", "Discount",
             "Opening Balance", "Reversed Payment", "Bill Cleared", "Refund",
             "Partial Payment", "Other (write your own)"
         ];
 
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        // COMPLAINT RESOLUTION MESSAGES — ACTUAL URDU SCRIPT (نستعلیق)
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
         const RESOLUTION_MESSAGES = {
             'red_light': 'آپ کا انٹرنیٹ منقطع ہونے کا مسئلہ حل کر دیا گیا ہے۔ آپ کے تعاون کا شکریہ۔ اب اپنے موڈیم کو ایک بار بند کر کے دوبارہ آن کریں۔',
             'slow_internet': 'آپ کے سست انٹرنیٹ کا مسئلہ حل کر دیا گیا ہے۔ آپ کے تعاون کا شکریہ۔ اب اپنے موڈیم کو ایک بار بند کر کے دوبارہ آن کریں۔',
@@ -2650,9 +2695,6 @@
             'package_end': 'آپ کا ماہانہ انٹرنیٹ پیکیج بحال کر دیا گیا ہے۔ اس میں موڈیم کو بند کر کے چلانے کی ضرورت نہیں ہوتی، لیکن اگر انٹرنیٹ شروع نہ ہو تو آپ موڈیم کو ایک بار بند کر کے دوبارہ آن کر لیں۔ آپ کے تعاون کا شکریہ۔'
         };
 
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        // BUILT-IN PACKAGES
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
         const BUILT_IN_PACKAGES = [
             { name: "DHCP-4Mbps", amount: 800, cost: 500 },
             { name: "DHCP-6Mbps", amount: 1000, cost: 650 },
@@ -2664,23 +2706,24 @@
             { name: "Custom", amount: 0, cost: 0 }
         ];
 
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        // HELPERS
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        // =================================================================
+        // 2. UTILITY HELPERS
+        // =================================================================
         function escapeHtml(str) { if (!str) return ''; return String(str).replace(/[&<>]/g, function(m) { if (m === '&')
                     return '&amp;'; if (m === '<') return '&lt;'; if (m === '>') return '&gt;'; return m; }); }
 
         function uid() { return 'D3-' + Date.now().toString(36).toUpperCase() + '-' + Math.random().toString(36).substr(2,
-            4).toUpperCase(); }
+                4).toUpperCase(); }
 
         function getTime12Hour() { const now = new Date(); let h = now.getHours(); const a = h >= 12 ? 'PM' : 'AM';
             h = h % 12 || 12; return h + ':' + String(now.getMinutes()).padStart(2, '0') + ' ' + a; }
 
         function getDateTimeWithTime() { const now = new Date(); return now.toISOString().slice(0, 10) + ' ' +
-            getTime12Hour(); }
+                getTime12Hour(); }
 
         function formatDateTimeDisplay(isoStr) { if (!isoStr) return ''; const d = new Date(isoStr); const dp = String(d
-                .getDate()).padStart(2, '0') + '/' + String(d.getMonth() + 1).padStart(2, '0') + '/' + d.getFullYear();
+                    .getDate()).padStart(2, '0') + '/' + String(d.getMonth() + 1).padStart(2, '0') + '/' + d
+                .getFullYear();
             let h = d.getHours(); const a = h >= 12 ? 'PM' : 'AM';
             h = h % 12 || 12; return dp + ' ' + h + ':' + String(d.getMinutes()).padStart(2, '0') + ' ' + a; }
 
@@ -2700,7 +2743,7 @@
             d.setDate(d.getDate() + PACKAGE_DURATION); return d.toISOString().slice(0, 10); }
 
         function daysUntilExpiry(c) { const e = getPackageExpiry(c); return e ? Math.ceil((new Date(e) - new Date()) / (
-            1000 * 60 * 60 * 24)) : Infinity; }
+                1000 * 60 * 60 * 24)) : Infinity; }
 
         function daysInMonth(y, m) { return new Date(y, m + 1, 0).getDate(); }
 
@@ -2710,67 +2753,94 @@
                 exactDemos = ['ahmed', 'demo', 'test', 'sample']; for (let kw of exactDemos) { if (name === kw) return true; }
             return false; }
 
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        // EMERGENCY MODE
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        let emergencyMode = false;
+        function formatPhone(p) { if (!p) return ''; let c = String(p).replace(/\D/g, ''); if (c.startsWith('0') && c
+                .length === 11) c = '92' + c.substring(1);
+            else if (c.length === 10 && c.startsWith('3')) c = '92' + c; return c.replace(/^\+/, ''); }
 
-        function toggleEmergencyMode() {
-            emergencyMode = !emergencyMode;
-            const btn = document.getElementById('emergencyBtn');
-            if (!btn) { toast('Emergency button not found', true); return; }
+        function parseDMY(str) { if (!str) return null; let match = str.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/); if (match) {
+                const y = parseInt(match[1]),
+                    m = parseInt(match[2]) - 1,
+                    d = parseInt(match[3]); const date = new Date(y, m, d); if (date.getFullYear() === y && date
+                        .getMonth() === m && date.getDate() === d) return date; } const parts = str.split('/'); if (parts
+                    .length === 3) { const d = parseInt(parts[0]),
+                    m = parseInt(parts[1]) - 1,
+                    y = parseInt(parts[2]); const date = new Date(y, m, d); if (date.getFullYear() === y && date
+                        .getMonth() === m && date.getDate() === d) return date; } return null; }
 
-            if (emergencyMode) {
-                if (!confirm('🚨 Mark ALL Clients as UNPAID?\n\nYeh action sab clients ke payments clear kar dega!\nFresh slate se start hoga.')) {
-                    emergencyMode = false;
-                    return;
-                }
-
-                const clients = getClients();
-                let updated = 0;
-
-                clients.forEach(c => {
-                    if (!c.paymentHistory) c.paymentHistory = [];
-                    c.paymentHistory = c.paymentHistory.filter(e => e.credit === 0 || !e.credit);
-                    const totalDebit = c.paymentHistory.reduce((s, e) => s + (Number(e.debit) || 0), 0);
-                    if (totalDebit === 0) {
-                        const now = new Date();
-                        const monthKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
-                        c.paymentHistory.push({
-                            entryId: uid(),
-                            date: getDateTimeWithTime(),
-                            description: 'Monthly Bill (Reset)',
-                            credit: 0,
-                            debit: c.packageAmount || 800,
-                            monthKey: monthKey,
-                            fullDateTime: getDateTimeWithTime()
-                        });
-                    }
-                    c.status = 'active';
-                    updated++;
-                });
-
-                saveClients(clients, false);
-                btn.classList.add('active');
-                btn.textContent = '✅ ALL RESET';
-                toast(`🚨 ${updated} clients marked as UNPAID! Fresh slate.`, false);
-                switchTab('unpaid');
-            } else {
-                btn.classList.remove('active');
-                btn.textContent = '🚨 UNPAID';
-                toast('Normal mode restored', false);
-                switchTab('unpaid');
-            }
+        function generateReceiptNumber() {
+            const now = new Date();
+            const d = String(now.getDate()).padStart(2, '0');
+            const m = String(now.getMonth() + 1).padStart(2, '0');
+            const y = String(now.getFullYear()).slice(2);
+            const h = String(now.getHours()).padStart(2, '0');
+            const min = String(now.getMinutes()).padStart(2, '0');
+            return `D3-${y}${m}${d}-${h}${min}${String(Math.floor(Math.random() * 100)).padStart(2, '0')}`;
         }
 
+        // =================================================================
+        // 2.5 — CALCULATE BALANCE (USER REQUESTED FUNCTION)
+        // =================================================================
+        /**
+         * calculateBalance(client)
+         * Formula: (Total Amount - Discount) - Total Paid
+         *   - Total Amount = packageAmount (monthly fee)
+         *   - Discount = client.discount (if set, else 0)
+         *   - Total Paid = sum of all credit entries in paymentHistory
+         *
+         * Returns: number (positive = outstanding balance, negative = overpaid)
+         */
+        function calculateBalance(client) {
+            // Effective bill = package amount minus any discount
+            const effectiveBill = (client.packageAmount || 0) - (client.discount || 0);
+            // Total paid = sum of all credit entries (payments made)
+            const totalPaid = (client.paymentHistory || []).reduce((sum, entry) => sum + (entry.credit || 0), 0);
+            return effectiveBill - totalPaid;
+        }
+
+        // Expose globally so other functions can use it
+        window.calculateBalance = calculateBalance;
+
+        // Helper to display formatted balance
+        function formatBalance(client) {
+            const bal = calculateBalance(client);
+            const sign = bal > 0 ? '+' : (bal < 0 ? '' : '');
+            const color = bal > 0 ? 'var(--red)' : (bal < 0 ? 'var(--green)' : 'var(--text2)');
+            return `<span style="color:${color};font-weight:700;">${sign}Rs. ${Math.abs(bal).toLocaleString()}</span>`;
+        }
+
+        // =================================================================
+        // 3. TOAST
+        // =================================================================
         function toast(msg, err) { const t = document.createElement('div');
             t.className = 'toast' + (err ? ' err' : '');
             t.textContent = msg; const c = document.getElementById('toastContainer'); if (c) { c.appendChild(t);
                 setTimeout(() => t.remove(), 2700); } }
 
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        // CLIENTS CRUD
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        // =================================================================
+        // 4. MODAL HELPERS
+        // =================================================================
+        function openModal(id) { const el = document.getElementById(id); if (!el) { toast('Modal not found', true); return; }
+            document.querySelectorAll('.modal-overlay').forEach(m => { if (m.id !== id && m.style.display === 'flex') { m
+                        .style.display = 'none';
+                    m.classList.remove('show'); } });
+            el.style.display = 'flex';
+            el.classList.add('show');
+            document.body.style.overflow = 'hidden'; }
+
+        function closeModal(id) { const el = document.getElementById(id); if (!el) return;
+            el.style.display = 'none';
+            el.classList.remove('show');
+            document.body.style.overflow = ''; }
+        window.closeModal = closeModal;
+        window.openModal = openModal;
+        document.addEventListener('click', function(e) { if (e.target.classList.contains('modal-overlay') && e.target
+                .style.display === 'flex') { e.target.style.display = 'none';
+                e.target.classList.remove('show');
+                document.body.style.overflow = ''; } });
+
+        // =================================================================
+        // 5. CLIENTS CRUD
+        // =================================================================
         function sanitizeClient(c) {
             if (!c) return null;
             if (!c.id) c.id = uid();
@@ -2779,6 +2849,10 @@
             c.package = c.package || 'Custom';
             c.username = c.username || '';
             c.vlanId = c.vlanId || '';
+            // Ensure discount field exists (default 0)
+            if (typeof c.discount !== 'number' || isNaN(c.discount)) {
+                c.discount = 0;
+            }
             if (c.paymentHistory && Array.isArray(c.paymentHistory)) {
                 c.paymentHistory = c.paymentHistory.filter(e =>
                     !(e.description && e.description.includes('Registration') && e.debit === 0 && e.credit === 0)
@@ -2798,9 +2872,13 @@
                 c.packageCost = temp;
             }
             if (c.oldBill === undefined || c.oldBill === null) {
-                const totalDebit = c.paymentHistory.reduce((s, e) => s + (Number(e.debit) || 0), 0);
-                const totalCredit = c.paymentHistory.reduce((s, e) => s + (Number(e.credit) || 0), 0);
-                c.oldBill = Math.max(0, totalDebit - totalCredit);
+                if (c.paymentHistory && c.paymentHistory.length > 0) {
+                    const totalDebit = c.paymentHistory.reduce((s, e) => s + Math.max(0, Number(e.debit) || 0), 0);
+                    const totalCredit = c.paymentHistory.reduce((s, e) => s + (Number(e.credit) || 0), 0);
+                    c.oldBill = Math.max(0, totalDebit - totalCredit);
+                } else {
+                    c.oldBill = 0;
+                }
             }
             if (!c.status) c.status = 'active';
             if (!c.packageStartDate) c.packageStartDate = new Date().toISOString().slice(0, 10);
@@ -2831,9 +2909,9 @@
             }
         }
 
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        // PACKAGE MANAGER
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        // =================================================================
+        // 6. PACKAGE MANAGER
+        // =================================================================
         function getFirebasePackagesRef() {
             if (!currentUser) throw new Error('Not authenticated');
             return db.ref(`${PACKAGES_PATH}/${currentUser.uid}`);
@@ -2966,6 +3044,169 @@
             event.target.value = '';
         }
 
+        function syncPackagePricesToClients(updatedPackages) {
+            if (!updatedPackages || updatedPackages.length === 0) return 0;
+            const clients = getClients();
+            let changed = 0;
+            for (const c of clients) {
+                if (!c.package || c.package === 'Custom') continue;
+                const pkgDef = updatedPackages.find(p => p.name === c.package);
+                if (!pkgDef) continue;
+                if (c.packageAmount !== pkgDef.amount || c.packageCost !== pkgDef.cost) {
+                    c.packageAmount = pkgDef.amount;
+                    c.packageCost = pkgDef.cost;
+                    c.updatedAt = new Date().toISOString();
+                    changed++;
+                }
+            }
+            if (changed > 0) {
+                isLocalChange = true;
+                saveClients(clients, true);
+                if (currentUser) {
+                    syncAllToFirebase().catch(e => console.warn('Firebase sync after package update failed:', e));
+                }
+                isLocalChange = false;
+                toast(`✅ ${changed} clients updated with new package prices`);
+            }
+            return changed;
+        }
+
+        function refreshPackageDropdown() {
+            let select = document.getElementById('cPackage');
+            if (!select) return;
+            let pkgs = getMasterPackages();
+            select.innerHTML = '';
+            pkgs.forEach(p => { let opt = document.createElement('option');
+                opt.value = p.name;
+                opt.textContent = p.name + (p.name === 'Custom' ? ' (Flexible)' : '') + ' - Rs.' + p.amount;
+                select.appendChild(opt); });
+        }
+
+        function autoSetPackagePrice() {
+            const pkgSelect = document.getElementById('cPackage');
+            if (!pkgSelect) return;
+            let pkgName = pkgSelect.value;
+            let master = getMasterPackages().find(p => p.name === pkgName);
+            if (master && pkgName !== 'Custom') { document.getElementById('cAmount').value = master.amount;
+                document.getElementById('cCost').value = master.cost; } else if (pkgName === 'Custom') { document
+                    .getElementById('cAmount').value = '';
+                document.getElementById('cCost').value = ''; }
+            updateProfitDisplay();
+        }
+
+        function updateProfitDisplay() {
+            let amt = parseInt(document.getElementById('cAmount').value) || 0;
+            let cost = parseInt(document.getElementById('cCost').value) || 0;
+            let discount = parseInt(document.getElementById('cDiscount').value) || 0;
+            let profit = amt - cost;
+            const displayEl = document.getElementById('cProfitDisplay');
+            if (displayEl) { displayEl.value = 'Rs. ' + profit.toLocaleString();
+                displayEl.style.color = profit >= 0 ? '#2ecc71' : '#e74c3c'; }
+            // Also update "After Discount" display
+            const afterDiscEl = document.getElementById('cAfterDiscountDisplay');
+            if (afterDiscEl) {
+                let effective = Math.max(0, amt - discount);
+                afterDiscEl.value = 'Rs. ' + effective.toLocaleString();
+                afterDiscEl.style.color = effective > 0 ? 'var(--gold)' : 'var(--text2)';
+            }
+        }
+
+        function openPackageManager() { renderPackageList();
+            openModal('packageManagerModal'); }
+
+        function renderPackageList() {
+            let pkgs = getMasterPackages();
+            let html =
+                `<div class="package-manager-table-wrapper"><table class="package-manager-table">
+                <thead><tr>
+                    <th style="min-width:120px;">Package Name</th>
+                    <th>Cost (Rs.)</th>
+                    <th>Sell (Rs.)</th>
+                    <th style="width:40px;"></th>
+                </tr></thead><tbody>`;
+            pkgs.forEach((p, idx) => {
+                const isCustom = p.name === 'Custom';
+                const nameDisplay = isCustom ? `<b>${p.name}</b> (flexible)` : p.name;
+                html += `<tr>
+                            <td style="font-weight:${isCustom?'700':'400'};color:${isCustom?'var(--gold)':'var(--text)'};">${nameDisplay}</td>
+                            <td><input type="number" id="editCost_${idx}" value="${p.cost}" style="width:70px;padding:4px;border-radius:12px;background:var(--card2);border:1px solid var(--border);color:var(--text);"></td>
+                            <td><input type="number" id="editAmt_${idx}" value="${p.amount}" style="width:70px;padding:4px;border-radius:12px;background:var(--card2);border:1px solid var(--border);color:var(--text);"></td>
+                            <td>
+                                <button class="btn btn-sm btn-gold" onclick="updateSinglePackage(${idx})" style="padding:4px 10px;font-size:0.6rem;" title="Save price changes">💾</button>
+                            </td>
+                          </tr>`;
+            });
+            html += `</tbody></table></div>
+                    <div style="font-size:0.55rem;color:var(--text2);margin-top:8px;text-align:center;">🔒 Package names are built‑in and cannot be changed or deleted.</div>
+                    <div style="font-size:0.55rem;color:var(--gold);margin-top:4px;text-align:center;">☁️ Prices are saved to Firebase Cloud permanently</div>
+                    <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
+                        <button class="btn btn-blue" style="flex:1;padding:10px;" onclick="exportPackages()">📤 Export Packages</button>
+                        <button class="btn btn-outline" style="flex:1;padding:10px;" onclick="document.getElementById('importPackagesFile2').click()">📥 Import Packages</button>
+                        <input type="file" id="importPackagesFile2" accept=".json" style="display:none;" onchange="importPackages(event)">
+                    </div>
+                    <button class="btn btn-gold btn-full" style="margin-top:10px; padding:12px;" onclick="syncAllPackageEdits()">📌 Save All Price Changes & Apply to Clients</button>`;
+            document.getElementById('packageManagerList').innerHTML = html;
+        }
+
+        window.updateSinglePackage = function(idx) {
+            let pkgs = getMasterPackages();
+            if (idx < 0 || idx >= pkgs.length) return;
+            let amtEl = document.getElementById(`editAmt_${idx}`);
+            let costEl = document.getElementById(`editCost_${idx}`);
+            let newAmt = parseInt(amtEl ? amtEl.value : pkgs[idx].amount);
+            let newCost = parseInt(costEl ? costEl.value : pkgs[idx].cost);
+            if (!isNaN(newAmt)) pkgs[idx].amount = newAmt;
+            if (!isNaN(newCost)) pkgs[idx].cost = newCost;
+            saveMasterPackages(pkgs);
+            toast('✅ Price updated for ' + pkgs[idx].name + ' (Saved to Firebase)');
+            renderPackageList();
+            refreshPackageDropdown();
+        };
+
+        window.syncAllPackageEdits = function() {
+            let pkgs = getMasterPackages();
+            for (let i = 0; i < pkgs.length; i++) {
+                let amtEl = document.getElementById(`editAmt_${i}`);
+                let costEl = document.getElementById(`editCost_${i}`);
+                if (amtEl) pkgs[i].amount = parseInt(amtEl.value) || pkgs[i].amount;
+                if (costEl) pkgs[i].cost = parseInt(costEl.value) || pkgs[i].cost;
+            }
+            saveMasterPackages(pkgs);
+            renderPackageList();
+            refreshPackageDropdown();
+            toast('✅ All price changes saved to Firebase & applied to clients');
+        };
+
+        function applyAllPackagePricesToClientsSilent() {
+            let clients = getClients();
+            let master = getMasterPackages();
+            let updated = 0;
+            for (let c of clients) {
+                if (c.package && c.package !== 'Custom') {
+                    let pkgDef = master.find(p => p.name === c.package);
+                    if (pkgDef && (c.packageAmount !== pkgDef.amount || c.packageCost !== pkgDef.cost)) {
+                        c.packageAmount = pkgDef.amount;
+                        c.packageCost = pkgDef.cost;
+                        updated++;
+                    }
+                }
+            }
+            if (updated) { saveClients(clients); }
+            return updated;
+        }
+
+        function applyAllPackagePricesToClients() {
+            if (!confirm(
+                    "⚠️ This will update EVERY client's Monthly Fee and ISP Cost based on current Master Package list.\nClients with 'Custom' package will NOT be changed.\nContinue?"
+                )) { return; }
+            let updated = applyAllPackagePricesToClientsSilent();
+            if (updated > 0) toast(`${updated} clients updated with new package prices`);
+            else toast('No changes needed');
+        }
+
+        // =================================================================
+        // 7. FIREBASE SYNC
+        // =================================================================
         function getFirebaseClientsRef() { if (!currentUser) throw new Error('Not authenticated'); return db.ref(
                 `${CLIENTS_PATH}/${currentUser.uid}/clients`); }
 
@@ -3068,208 +3309,80 @@
                     dot.title = 'Firebase disconnected'; } }
         }
 
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        // MODAL HELPERS
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        function openModal(id) { const el = document.getElementById(id); if (!el) { toast('Modal not found', true); return; }
-            document.querySelectorAll('.modal-overlay').forEach(m => { if (m.id !== id && m.style.display === 'flex') { m
-                        .style.display = 'none';
-                    m.classList.remove('show'); } });
-            el.style.display = 'flex';
-            el.classList.add('show');
-            document.body.style.overflow = 'hidden';
-            void el.offsetHeight;
-            el.style.zIndex = 200; }
-
-        function closeModal(id) { const el = document.getElementById(id); if (!el) return;
-            el.style.display = 'none';
-            el.classList.remove('show');
-            document.body.style.overflow = ''; }
-        window.closeModal = closeModal;
-        window.openModal = openModal;
-        document.addEventListener('click', function(e) { if (e.target.classList.contains('modal-overlay') && e.target
-                .style.display === 'flex') { e.target.style.display = 'none';
-                e.target.classList.remove('show');
-                document.body.style.overflow = ''; } });
-
-        function formatPhone(p) { if (!p) return ''; let c = String(p).replace(/\D/g, ''); if (c.startsWith('0') && c
-                .length === 11) c = '92' + c.substring(1);
-            else if (c.length === 10 && c.startsWith('3')) c = '92' + c; return c.replace(/^\+/, ''); }
-
-        function parseDMY(str) { if (!str) return null; let match = str.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/); if (match) {
-                const y = parseInt(match[1]),
-                    m = parseInt(match[2]) - 1,
-                    d = parseInt(match[3]); const date = new Date(y, m, d); if (date.getFullYear() === y && date
-                        .getMonth() === m && date.getDate() === d) return date; } const parts = str.split('/'); if (parts
-                    .length === 3) { const d = parseInt(parts[0]),
-                    m = parseInt(parts[1]) - 1,
-                    y = parseInt(parts[2]); const date = new Date(y, m, d); if (date.getFullYear() === y && date
-                        .getMonth() === m && date.getDate() === d) return date; } return null; }
-
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        // PACKAGE FUNCTIONS
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        function syncPackagePricesToClients(updatedPackages) {
-            if (!updatedPackages || updatedPackages.length === 0) return 0;
-            const clients = getClients();
-            let changed = 0;
-            const now = new Date();
-            const dateTimeStr = getDateTimeWithTime();
-            const monthKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
-
-            for (const c of clients) {
-                if (!c.package || c.package === 'Custom') continue;
-                const pkgDef = updatedPackages.find(p => p.name === c.package);
-                if (!pkgDef) continue;
-
-                if (c.packageAmount !== pkgDef.amount || c.packageCost !== pkgDef.cost) {
-                    c.packageAmount = pkgDef.amount;
-                    c.packageCost = pkgDef.cost;
-                    c.updatedAt = now.toISOString();
-                    changed++;
-                }
-            }
-
-            if (changed > 0) {
-                isLocalChange = true;
-                saveClients(clients, true);
-                if (currentUser) {
-                    syncAllToFirebase().catch(e => console.warn('Firebase sync after package update failed:', e));
-                }
-                isLocalChange = false;
-                toast(`✅ ${changed} clients updated with new package prices`);
-            }
-            return changed;
-        }
-
-        function refreshPackageDropdown() {
-            let select = document.getElementById('cPackage');
-            if (!select) return;
-            let pkgs = getMasterPackages();
-            select.innerHTML = '';
-            pkgs.forEach(p => { let opt = document.createElement('option');
-                opt.value = p.name;
-                opt.textContent = p.name + (p.name === 'Custom' ? ' (Flexible)' : '') + ' - Rs.' + p.amount;
-                select.appendChild(opt); });
-        }
-
-        function autoSetPackagePrice() {
-            const pkgSelect = document.getElementById('cPackage');
-            if (!pkgSelect) return;
-            let pkgName = pkgSelect.value;
-            let master = getMasterPackages().find(p => p.name === pkgName);
-            if (master && pkgName !== 'Custom') { document.getElementById('cAmount').value = master.amount;
-                document.getElementById('cCost').value = master.cost; } else if (pkgName === 'Custom') { document
-                    .getElementById('cAmount').value = '';
-                document.getElementById('cCost').value = ''; }
-            updateProfitDisplay();
-        }
-
-        function updateProfitDisplay() {
-            let amt = parseInt(document.getElementById('cAmount').value) || 0;
-            let cost = parseInt(document.getElementById('cCost').value) || 0;
-            let profit = amt - cost;
-            const displayEl = document.getElementById('cProfitDisplay');
-            if (displayEl) { displayEl.value = 'Rs. ' + profit.toLocaleString();
-                displayEl.style.color = profit >= 0 ? '#2ecc71' : '#e74c3c'; }
-        }
-
-        function openPackageManager() { renderPackageList();
-            openModal('packageManagerModal'); }
-
-        function renderPackageList() {
-            let pkgs = getMasterPackages();
-            let html =
-                `<div class="package-manager-table-wrapper"><table class="package-manager-table">
-                <thead><tr>
-                    <th style="min-width:120px;">Package Name</th>
-                    <th>Cost (Rs.)</th>
-                    <th>Sell (Rs.)</th>
-                    <th style="width:40px;"></th>
-                </tr></thead><tbody>`;
-            pkgs.forEach((p, idx) => {
-                const isCustom = p.name === 'Custom';
-                const nameDisplay = isCustom ? `<b>${p.name}</b> (flexible)` : p.name;
-                html += `<tr>
-                            <td style="font-weight:${isCustom?'700':'400'};color:${isCustom?'var(--gold)':'var(--text)'};">${nameDisplay}</td>
-                            <td><input type="number" id="editCost_${idx}" value="${p.cost}" style="width:70px;padding:4px;border-radius:12px;background:var(--card2);border:1px solid var(--border);color:var(--text);"></td>
-                            <td><input type="number" id="editAmt_${idx}" value="${p.amount}" style="width:70px;padding:4px;border-radius:12px;background:var(--card2);border:1px solid var(--border);color:var(--text);"></td>
-                            <td>
-                                <button class="btn btn-sm btn-gold" onclick="updateSinglePackage(${idx})" style="padding:4px 10px;font-size:0.6rem;" title="Save price changes">💾</button>
-                            </td>
-                          </tr>`;
-            });
-            html += `</tbody></table></div>
-                    <div style="font-size:0.55rem;color:var(--text2);margin-top:8px;text-align:center;">🔒 Package names are built‑in and cannot be changed or deleted.</div>
-                    <div style="font-size:0.55rem;color:var(--gold);margin-top:4px;text-align:center;">☁️ Prices are saved to Firebase Cloud permanently</div>
-                    <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
-                        <button class="btn btn-blue" style="flex:1;padding:10px;" onclick="exportPackages()">📤 Export Packages</button>
-                        <button class="btn btn-outline" style="flex:1;padding:10px;" onclick="document.getElementById('importPackagesFile2').click()">📥 Import Packages</button>
-                        <input type="file" id="importPackagesFile2" accept=".json" style="display:none;" onchange="importPackages(event)">
-                    </div>
-                    <button class="btn btn-gold btn-full" style="margin-top:10px; padding:12px;" onclick="syncAllPackageEdits()">📌 Save All Price Changes & Apply to Clients</button>`;
-            document.getElementById('packageManagerList').innerHTML = html;
-        }
-
-        window.updateSinglePackage = function(idx) {
-            let pkgs = getMasterPackages();
-            if (idx < 0 || idx >= pkgs.length) return;
-            let amtEl = document.getElementById(`editAmt_${idx}`);
-            let costEl = document.getElementById(`editCost_${idx}`);
-            let newAmt = parseInt(amtEl ? amtEl.value : pkgs[idx].amount);
-            let newCost = parseInt(costEl ? costEl.value : pkgs[idx].cost);
-            if (!isNaN(newAmt)) pkgs[idx].amount = newAmt;
-            if (!isNaN(newCost)) pkgs[idx].cost = newCost;
-            saveMasterPackages(pkgs);
-            toast('✅ Price updated for ' + pkgs[idx].name + ' (Saved to Firebase)');
-            renderPackageList();
-            refreshPackageDropdown();
-        };
-
-        window.syncAllPackageEdits = function() {
-            let pkgs = getMasterPackages();
-            for (let i = 0; i < pkgs.length; i++) {
-                let amtEl = document.getElementById(`editAmt_${i}`);
-                let costEl = document.getElementById(`editCost_${i}`);
-                if (amtEl) pkgs[i].amount = parseInt(amtEl.value) || pkgs[i].amount;
-                if (costEl) pkgs[i].cost = parseInt(costEl.value) || pkgs[i].cost;
-            }
-            saveMasterPackages(pkgs);
-            renderPackageList();
-            refreshPackageDropdown();
-            toast('✅ All price changes saved to Firebase & applied to clients');
-        };
-
-        function applyAllPackagePricesToClientsSilent() {
-            let clients = getClients();
-            let master = getMasterPackages();
-            let updated = 0;
-            for (let c of clients) {
-                if (c.package && c.package !== 'Custom') {
-                    let pkgDef = master.find(p => p.name === c.package);
-                    if (pkgDef && (c.packageAmount !== pkgDef.amount || c.packageCost !== pkgDef.cost)) {
-                        c.packageAmount = pkgDef.amount;
-                        c.packageCost = pkgDef.cost;
-                        updated++;
+        function updateLastSyncDisplay(timestamp) {
+            const span = document.getElementById('lastSyncTime');
+            if (span) {
+                if (timestamp) {
+                    localStorage.setItem('lastFirebaseSync', String(timestamp));
+                    span.textContent = new Date(timestamp).toLocaleString();
+                } else {
+                    const last = localStorage.getItem('lastFirebaseSync');
+                    if (last) {
+                        span.textContent = new Date(parseInt(last)).toLocaleString();
+                    } else {
+                        span.textContent = 'Never';
                     }
                 }
             }
-            if (updated) { saveClients(clients); }
-            return updated;
         }
 
-        function applyAllPackagePricesToClients() {
-            if (!confirm(
-                    "⚠️ This will update EVERY client's Monthly Fee and ISP Cost based on current Master Package list.\nClients with 'Custom' package will NOT be changed.\nContinue?"
-                )) { return; }
-            let updated = applyAllPackagePricesToClientsSilent();
-            if (updated > 0) toast(`${updated} clients updated with new package prices`);
-            else toast('No changes needed');
+        window.syncToFirebaseNow = function() { if (!currentUser) { toast('Not logged in', true); return; }
+            syncAllToFirebase(); };
+
+        // =================================================================
+        // 8. EMERGENCY MODE
+        // =================================================================
+        function toggleEmergencyMode() {
+            emergencyMode = !emergencyMode;
+            const btn = document.getElementById('emergencyBtn');
+            if (!btn) { toast('Emergency button not found', true); return; }
+
+            if (emergencyMode) {
+                if (!confirm('🚨 Mark ALL Clients as UNPAID?\n\nYeh action sab clients ke payments clear kar dega!\nFresh slate se start hoga.')) {
+                    emergencyMode = false;
+                    return;
+                }
+
+                const clients = getClients();
+                let updated = 0;
+
+                clients.forEach(c => {
+                    if (!c.paymentHistory) c.paymentHistory = [];
+                    c.paymentHistory = c.paymentHistory.filter(e => e.credit === 0 || !e.credit);
+                    const totalDebit = c.paymentHistory.reduce((s, e) => s + (Number(e.debit) || 0), 0);
+                    if (totalDebit === 0) {
+                        const now = new Date();
+                        const monthKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+                        c.paymentHistory.push({
+                            entryId: uid(),
+                            date: getDateTimeWithTime(),
+                            description: 'Monthly Bill (Reset)',
+                            credit: 0,
+                            debit: c.packageAmount || 800,
+                            monthKey: monthKey,
+                            fullDateTime: getDateTimeWithTime()
+                        });
+                    }
+                    c.status = 'active';
+                    updated++;
+                });
+
+                saveClients(clients, false);
+                btn.classList.add('active');
+                btn.textContent = '✅ ALL RESET';
+                toast(`🚨 ${updated} clients marked as UNPAID! Fresh slate.`, false);
+                switchTab('unpaid');
+            } else {
+                btn.classList.remove('active');
+                btn.textContent = '🚨 UNPAID';
+                toast('Normal mode restored', false);
+                switchTab('unpaid');
+            }
         }
 
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        // AUTO BILL & RENEW
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        // =================================================================
+        // 9. AUTO BILL & RENEW
+        // =================================================================
         function addPendingBillForMonth(client, monthKey, monthName, amount, descriptionSuffix = "") {
             if (!client.paymentHistory) client.paymentHistory = [];
             client.paymentHistory = client.paymentHistory.filter(e => !(e.description && e.description.includes(
@@ -3334,9 +3447,9 @@
             toast(`✅ Package renewed for ${c.name}! Expires: ${monthName}`);
         };
 
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        // PACKAGE FILTER BAR
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        // =================================================================
+        // 10. PACKAGE FILTER BAR
+        // =================================================================
         function buildPackageFilterBar() {
             const bar = document.getElementById('pkgFilterBar');
             if (!bar) return;
@@ -3374,11 +3487,11 @@
 
         function onSearchInput() { renderCurrentTab(); }
 
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        // RENDERING
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        // =================================================================
+        // 11. RENDERING
+        // =================================================================
         function clientCardHTML(c) {
-            const totalDebit = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.debit) || 0), 0);
+            const totalDebit = (c.paymentHistory || []).reduce((s, e) => s + Math.max(0, Number(e.debit) || 0), 0);
             const totalCredit = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.credit) || 0), 0);
             const pending = Math.max(0, totalDebit - totalCredit);
             const packageAmount = c.packageAmount || 0;
@@ -3414,9 +3527,15 @@
                 `<button class="btn btn-renew-active" disabled style="background:#555;color:#aaa;cursor:not-allowed;opacity:0.6;">✅ Active</button>`;
             const pkgDisplay =
                 `${c.package} <span style="color:var(--gold);font-weight:700;">— Rs. ${packageAmount.toLocaleString()}</span>`;
-            const pendingLine = pending === 0 ?
-                `<div class="pending-sub"><span class="paid-text">✅ Fully Paid</span></div>` :
-                `<div class="pending-sub"><span class="pending-text">Pending: Rs. ${pending.toLocaleString()}</span></div>`;
+
+            // Use calculateBalance for pending display (new function)
+            const balance = calculateBalance(c);
+            const pendingDisplay = balance > 0 ? `Pending: Rs. ${balance.toLocaleString()}` : (balance < 0 ?
+                `Overpaid: Rs. ${Math.abs(balance).toLocaleString()}` : '✅ Fully Paid');
+            const pendingColor = balance > 0 ? 'var(--gold)' : (balance < 0 ? 'var(--green)' : 'var(--green)');
+
+            const pendingLine =
+                `<div class="pending-sub"><span style="color:${pendingColor};font-weight:600;">${pendingDisplay}</span></div>`;
 
             const profitBadge = profit >= 0 ?
                 `<span class="profit-badge">📈 +Rs.${profit.toLocaleString()}/mo</span>` :
@@ -3424,6 +3543,11 @@
 
             const clearLedgerBtn =
                 `<button class="btn-clear-ledger" onclick="clearLedger('${c.id}')" title="Delete ALL ledger entries for this client">🧹 Clear Ledger</button>`;
+
+            // Show discount if any
+            const discountDisplay = (c.discount && c.discount > 0) ?
+                `<div style="font-size:0.55rem;color:var(--gold);">💸 Discount: Rs.${c.discount.toLocaleString()}</div>` :
+                '';
 
             return `
                 <div class="client-card">
@@ -3436,6 +3560,7 @@
                             <div style="font-size:0.6rem;color:#888;margin-top:2px;">📅 Start: ${startDateStr} ${expiryCountdownHtml}</div>
                             ${expiryText?`<div class="expiry-badge" style="color:#e74c3c;font-weight:700;">${expiryText}</div>`:''}
                             ${profitBadge}
+                            ${discountDisplay}
                         </div>
                         <div>
                             <div class="amount-due">Rs. ${packageAmount.toLocaleString()}</div>
@@ -3472,11 +3597,7 @@
             });
             return keys.map(k => {
                 const totalDue = groups[k].reduce((s, c) => {
-                    const td = (c.paymentHistory || []).reduce((ss, e) => ss + (Number(e.debit) || 0),
-                        0);
-                    const tc = (c.paymentHistory || []).reduce((ss, e) => ss + (Number(e.credit) || 0),
-                        0);
-                    return s + Math.max(0, td - tc);
+                    return s + calculateBalance(c);
                 }, 0);
                 const label = k === 'Other' ? '📌 Other / Custom' : `⚡ ${k}`;
                 return `<div class="package-section">
@@ -3526,19 +3647,14 @@
                 '<div style="text-align:center;padding:30px;color:#666;">All packages up to date</div>';
         }
 
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        // PAID TAB
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
         function renderPaidClients() {
             const clients = getClients();
             const searchEl = document.getElementById('searchInput');
             const q = searchEl ? searchEl.value.toLowerCase() : '';
 
             let filtered = clients.filter(c => {
-                const totalDebit = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.debit) || 0), 0);
-                const totalCredit = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.credit) || 0), 0);
-                const pending = Math.max(0, totalDebit - totalCredit);
-                return pending === 0 && c.status === 'active';
+                const bal = calculateBalance(c);
+                return bal <= 0 && c.status === 'active';
             });
 
             filtered = filtered.filter(c =>
@@ -3583,19 +3699,14 @@
             document.getElementById('clientList').innerHTML = html;
         }
 
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        // UNPAID TAB
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
         function renderUnpaidClients() {
             const clients = getClients();
             const searchEl = document.getElementById('searchInput');
             const q = searchEl ? searchEl.value.toLowerCase() : '';
 
             let filtered = clients.filter(c => {
-                const totalDebit = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.debit) || 0), 0);
-                const totalCredit = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.credit) || 0), 0);
-                const pending = Math.max(0, totalDebit - totalCredit);
-                return pending > 0 || c.status === 'overdue' || c.status === 'inactive';
+                const bal = calculateBalance(c);
+                return bal > 0 || c.status === 'overdue' || c.status === 'inactive';
             });
 
             filtered = filtered.filter(c =>
@@ -3614,9 +3725,7 @@
 
             const totalUnpaid = filtered.length;
             const totalPending = filtered.reduce((s, c) => {
-                const td = (c.paymentHistory || []).reduce((ss, e) => ss + (Number(e.debit) || 0), 0);
-                const tc = (c.paymentHistory || []).reduce((ss, e) => ss + (Number(e.credit) || 0), 0);
-                return s + Math.max(0, td - tc);
+                return s + Math.max(0, calculateBalance(c));
             }, 0);
 
             let html = `
@@ -3632,15 +3741,11 @@
                 html += '<div style="text-align:center;padding:30px;color:var(--green);">✨ All clients are paid! ✨</div>';
             } else {
                 const sorted = filtered.sort((a, b) => {
-                    const pendingA = (a.paymentHistory || []).reduce((s, e) => s + (Number(e.debit) || 0) - (Number(e.credit) || 0), 0);
-                    const pendingB = (b.paymentHistory || []).reduce((s, e) => s + (Number(e.debit) || 0) - (Number(e.credit) || 0), 0);
-                    return pendingB - pendingA;
+                    return calculateBalance(b) - calculateBalance(a);
                 });
 
                 html += sorted.map(c => {
-                    const td = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.debit) || 0), 0);
-                    const tc = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.credit) || 0), 0);
-                    const pending = Math.max(0, td - tc);
+                    const pending = Math.max(0, calculateBalance(c));
                     const packageAmount = c.packageAmount || 0;
                     const days = daysUntilExpiry(c);
                     const isExpired = days <= 0;
@@ -3655,6 +3760,7 @@
                                     ${c.vlanId ? `<span class="vlan-badge">🔌 VLAN: ${c.vlanId}</span>` : ''}
                                     ${c.username ? `<span class="vlan-badge" style="background:#1a3a5c;">👤 ${c.username}</span>` : ''}
                                     ${isExpired ? `<div class="expiry-badge" style="color:#e74c3c;font-weight:700;">⚠️ EXPIRED</div>` : ''}
+                                    ${(c.discount && c.discount > 0) ? `<div style="font-size:0.55rem;color:var(--gold);">💸 Discount: Rs.${c.discount.toLocaleString()}</div>` : ''}
                                 </div>
                                 <div style="text-align:right;">
                                     <div class="amount-due" style="font-size:1.2rem;color:#e74c3c;">Rs. ${pending.toLocaleString()}</div>
@@ -3674,17 +3780,15 @@
             document.getElementById('clientList').innerHTML = html;
         }
 
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        // MARK PAID FROM UNPAID TAB
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        // =================================================================
+        // 12. MARK PAID FROM UNPAID TAB
+        // =================================================================
         window.markPaidFromUnpaid = function(clientId) {
             const clients = getClients();
             const c = clients.find(x => x.id === clientId);
             if (!c) { toast('Client not found', true); return; }
 
-            const td = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.debit) || 0), 0);
-            const tc = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.credit) || 0), 0);
-            const pending = Math.max(0, td - tc);
+            const pending = Math.max(0, calculateBalance(c));
 
             if (pending <= 0) {
                 c.status = 'active';
@@ -3725,9 +3829,9 @@
             toast(`✅ Collected Rs. ${pending.toLocaleString()} from ${c.name} | Profit: Rs. ${profit.toLocaleString()}`);
         };
 
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        // COMPLAINTS TAB
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        // =================================================================
+        // 13. COMPLAINTS TAB
+        // =================================================================
         async function renderComplaintsTab() {
             const container = document.getElementById('clientList');
             if (!container) return;
@@ -3805,11 +3909,7 @@
 
         function updateStats() {
             const clients = getClients();
-            const outstanding = clients.reduce((s, c) => {
-                const td = (c.paymentHistory || []).reduce((ss, e) => ss + (Number(e.debit) || 0), 0);
-                const tc = (c.paymentHistory || []).reduce((ss, e) => ss + (Number(e.credit) || 0), 0);
-                return s + Math.max(0, td - tc);
-            }, 0);
+            const outstanding = clients.reduce((s, c) => s + Math.max(0, calculateBalance(c)), 0);
             const collected = clients.reduce((s, c) => s + (c.paymentHistory || []).reduce((ss, e) => ss + (Number(e.credit) || 0),
                 0), 0);
             const totalProfit = clients.reduce((s, c) => {
@@ -3845,9 +3945,9 @@
             renderCurrentTab();
         };
 
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        // CLEAR LEDGER
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        // =================================================================
+        // 14. CLEAR LEDGER
+        // =================================================================
         window.clearLedger = function(clientId) {
             const clients = getClients();
             const c = clients.find(x => x.id === clientId);
@@ -3871,9 +3971,9 @@
             if (currentLedgerId === clientId) { renderLedger(c); }
         };
 
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        // CLIENT ADD/EDIT
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        // =================================================================
+        // 15. CLIENT ADD/EDIT
+        // =================================================================
         window.openAddClient = function() {
             document.getElementById('clientModalTitle').textContent = '➕ Add New Client';
             document.getElementById('clientId').value = '';
@@ -3888,8 +3988,10 @@
             document.getElementById('cStartDate').value = formatDMY(new Date().toISOString());
             document.getElementById('cVlanId').value = '';
             document.getElementById('cUsername').value = '';
+            document.getElementById('cDiscount').value = '0';
             refreshPackageDropdown();
             autoSetPackagePrice();
+            updateProfitDisplay();
             openModal('clientModal');
         };
 
@@ -3909,6 +4011,7 @@
             document.getElementById('cStartDate').value = formatDMY(c.packageStartDate);
             document.getElementById('cVlanId').value = c.vlanId || '';
             document.getElementById('cUsername').value = c.username || '';
+            document.getElementById('cDiscount').value = c.discount || 0;
             refreshPackageDropdown();
             updateProfitDisplay();
             openModal('clientModal');
@@ -3941,6 +4044,7 @@
             }
 
             const oldBill = parseFloat(document.getElementById('cOldBill').value) || 0;
+            const discount = parseInt(document.getElementById('cDiscount').value) || 0;
 
             const data = {
                 id: id || uid(),
@@ -3950,6 +4054,7 @@
                 package: document.getElementById('cPackage').value,
                 packageAmount: parseInt(document.getElementById('cAmount').value) || 0,
                 packageCost: parseInt(document.getElementById('cCost').value) || 0,
+                discount: discount,
                 status: document.getElementById('cStatus').value,
                 packageStartDate: isoDate,
                 joinDate: id ? (clients.find(c => c.id === id)?.joinDate || new Date().toISOString().slice(0, 10)) : new Date().toISOString().slice(0, 10),
@@ -4006,22 +4111,6 @@
                     });
                     if (data.status === 'active') data.status = 'overdue';
                 }
-            } else if (!id && oldBill > 0) {
-                const entryId = uid();
-                const dateTimeStr = getDateTimeWithTime();
-                const now = new Date();
-                const monthKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
-                if (!data.paymentHistory) data.paymentHistory = [];
-                data.paymentHistory.push({
-                    entryId: entryId,
-                    date: dateTimeStr,
-                    description: 'Opening Balance',
-                    credit: 0,
-                    debit: oldBill,
-                    monthKey: monthKey,
-                    fullDateTime: dateTimeStr
-                });
-                if (data.status === 'active') data.status = 'overdue';
             }
 
             if (id) {
@@ -4035,7 +4124,8 @@
                 }
             } else {
                 clients.push(data);
-                toast('Client added' + (oldBill > 0 ? ' + Old Balance Rs.' + oldBill.toLocaleString() : ''));
+                toast('Client added' + (oldBill > 0 ? ' + Old Balance Rs.' + oldBill.toLocaleString() : '') +
+                    (discount > 0 ? ' + Discount Rs.' + discount.toLocaleString() : ''));
             }
 
             saveClients(clients);
@@ -4061,9 +4151,9 @@
             renderCurrentTab();
         };
 
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        // LEDGER FUNCTIONS
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        // =================================================================
+        // 16. LEDGER FUNCTIONS
+        // =================================================================
         function getPendingMonths(client) {
             const history = client.paymentHistory || [];
             const monthMap = new Map();
@@ -4073,7 +4163,7 @@
                     mk = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`; } else if (!mk) { mk = 'other'; }
                 if (!monthMap.has(mk)) monthMap.set(mk, { debit: 0, credit: 0 });
                 const rec = monthMap.get(mk);
-                rec.debit += Number(entry.debit) || 0;
+                rec.debit += Math.max(0, Number(entry.debit) || 0);
                 rec.credit += Number(entry.credit) || 0;
             }
             const pending = [];
@@ -4086,37 +4176,58 @@
         function getSortedTransactions(client) {
             const history = client.paymentHistory || [];
             const sorted = [...history]
-                .filter(e => !(e.description && e.description.includes('Registration') && e.debit === 0 && e.credit ===
-                    0))
+                .filter(e => !(e.description && e.description.includes('Registration') && (e.debit || 0) === 0 && (e.credit || 0) === 0))
                 .sort((a, b) => new Date(a.date) - new Date(b.date));
             let bal = 0;
             const result = sorted.map(entry => {
-                const debit = Number(entry.debit) || 0;
-                const credit = Number(entry.credit) || 0;
-                bal = bal + credit - debit;
-                return { ...entry, runningBalance: bal };
+                const debit = Math.max(0, Number(entry.debit) || 0);
+                const credit = Math.max(0, Number(entry.credit) || 0);
+                bal = bal + debit - credit;
+                const displayBal = Math.max(0, bal);
+                return { ...entry, runningBalance: displayBal, _rawBalance: bal };
             });
             return result.reverse();
         }
 
-        // ============================================================
-        // ✅ UPDATED renderLedger() — Discount shows in Credit column
-        // ============================================================
         function renderLedger(client) {
             if (client.paymentHistory) { client.paymentHistory = client.paymentHistory.filter(e => !(e.description && e
                     .description.includes('Registration') && e.debit === 0 && e.credit === 0)); }
 
-            const totalDebit = client.paymentHistory.reduce((s, e) => s + (Number(e.debit) || 0), 0);
-            const totalCredit = client.paymentHistory.reduce((s, e) => s + (Number(e.credit) || 0), 0);
-            const pendingTotal = Math.max(0, totalDebit - totalCredit);
+            // Use calculateBalance for overall pending
+            const balance = calculateBalance(client);
+            const totalDebit = client.paymentHistory.reduce((s, e) => s + Math.max(0, Number(e.debit) || 0), 0);
+            const totalCredit = client.paymentHistory.reduce((s, e) => s + Math.max(0, Number(e.credit) || 0), 0);
+            const pendingTotal = Math.max(0, balance);
             const pctPaid = totalDebit > 0 ? Math.min(100, Math.round((totalCredit / totalDebit) * 100)) : 0;
-            const collectionRate = totalDebit > 0 ? Math.min(100, Math.round((totalCredit / totalDebit) * 100)) : 0;
+            const collectionRate = pctPaid;
+
+            // Show discount info
+            const discountDisplay = (client.discount && client.discount > 0) ?
+                `<div style="font-size:0.6rem;color:var(--gold);background:var(--card2);padding:2px 12px;border-radius:20px;display:inline-block;margin-left:6px;">💸 Discount: Rs.${client.discount.toLocaleString()}</div>` :
+                '';
 
             let heroHtml = `
                 <div class="ledger-hero">
-                    <div class="lh-item"><div class="lh-label">💰 Total Billed</div><div class="lh-value red">Rs. ${totalDebit.toLocaleString()}</div></div>
-                    <div class="lh-item"><div class="lh-label">✅ Total Paid</div><div class="lh-value green">Rs. ${totalCredit.toLocaleString()}</div></div>
-                    <div class="lh-item"><div class="lh-label">📊 Pending</div><div class="lh-value gold">Rs. ${pendingTotal.toLocaleString()}</div></div>
+                    <div class="lh-item">
+                        <div class="lh-label">📄 Total Billed</div>
+                        <div class="lh-value red">Rs. ${totalDebit.toLocaleString()}</div>
+                        <div style="font-size:0.5rem;color:var(--text2);">Kul Debit</div>
+                    </div>
+                    <div class="lh-item">
+                        <div class="lh-label">💳 Total Paid</div>
+                        <div class="lh-value green">Rs. ${totalCredit.toLocaleString()}</div>
+                        <div style="font-size:0.5rem;color:var(--text2);">Kul Credit</div>
+                    </div>
+                    <div class="lh-item" style="border:2px solid ${pendingTotal > 0 ? '#e74c3c' : '#2ecc71'};border-radius:10px;padding:6px;">
+                        <div class="lh-label">⚖️ Baqi (Pending)</div>
+                        <div class="lh-value ${pendingTotal > 0 ? 'red' : 'green'}">${pendingTotal > 0 ? 'Rs. '+pendingTotal.toLocaleString() : '✅ Clear'}</div>
+                        <div style="font-size:0.5rem;color:var(--text2);">${pendingTotal > 0 ? 'Debit - Credit' : 'Sab ada ho gaya'}</div>
+                    </div>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px;">
+                    <span style="font-size:0.7rem;font-weight:600;color:var(--text2);">💵 Monthly Fee: Rs.${(client.packageAmount||0).toLocaleString()}</span>
+                    ${discountDisplay}
+                    <span style="font-size:0.7rem;font-weight:600;color:var(--gold);">🧾 Effective: Rs.${Math.max(0,(client.packageAmount||0)-(client.discount||0)).toLocaleString()}</span>
                 </div>
             `;
 
@@ -4172,25 +4283,64 @@
 
             const entryForm = `
                 <div class="ledger-entry-form">
-                    <div class="ef-title">✏️ Add New Entry</div>
+                    <div class="ef-title">✏️ New Entry Dalo</div>
+
+                    <!-- Entry Type Toggle -->
+                    <div style="display:flex;gap:6px;margin-bottom:10px;">
+                        <button onclick="setEntryType('debit')" id="typeDebitBtn"
+                            style="flex:1;padding:8px;border-radius:30px;border:2px solid #e74c3c;background:#3d1e1e;color:#e74c3c;font-weight:700;font-size:0.7rem;cursor:pointer;transition:all 0.2s;"
+                            class="entry-type-btn active-debit">
+                            📄 Bill / Charge (Debit)
+                        </button>
+                        <button onclick="setEntryType('credit')" id="typeCreditBtn"
+                            style="flex:1;padding:8px;border-radius:30px;border:2px solid var(--border);background:var(--card2);color:var(--text2);font-weight:700;font-size:0.7rem;cursor:pointer;transition:all 0.2s;"
+                            class="entry-type-btn">
+                            💳 Payment / Credit
+                        </button>
+                    </div>
+                    <input type="hidden" id="entryTypeToggle" value="debit">
+
                     <div class="ef-row">
-                        <div class="ef-group">
-                            <select id="ledgerDescSelect" onchange="toggleCustomDesc()">
-                                ${DESCRIPTION_ITEMS.map(item => `<option value="${item}">${item}</option>`).join('')}
+                        <div class="ef-group" id="descGroupDebit">
+                            <select id="ledgerDescSelect" onchange="toggleCustomDesc()" style="font-size:0.7rem;">
+                                <optgroup label="📄 Bill / Charges (Debit)">
+                                    <option value="Monthly Bill">📅 Monthly Bill</option>
+                                    <option value="Opening Balance">📂 Opening Balance</option>
+                                    <option value="Extra Charge">⚡ Extra Charge</option>
+                                    <option value="Late Fee">⏰ Late Fee</option>
+                                    <option value="Connection Fee">🔌 Connection Fee</option>
+                                    <option value="Equipment Charge">📡 Equipment Charge</option>
+                                    <option value="Other (Apna likho)">✍️ Apna likho...</option>
+                                </optgroup>
+                                <optgroup label="💳 Payment / Credit">
+                                    <option value="Payment">💳 Payment Received</option>
+                                    <option value="Advance Payment">💰 Advance Payment</option>
+                                    <option value="Partial Payment">🪙 Partial Payment</option>
+                                    <option value="Discount">💸 Discount</option>
+                                    <option value="Waiver">🎁 Waiver (Maafi)</option>
+                                </optgroup>
                             </select>
                         </div>
                         <div class="ef-group">
-                            <input type="number" id="ledgerAmount" placeholder="Amount" value="${client.packageAmount || 0}" min="0" step="1">
+                            <input type="number" id="ledgerAmount" placeholder="Rs. Amount"
+                                value="${client.packageAmount || 0}" min="1" step="1"
+                                style="font-weight:700;font-size:0.85rem;">
                         </div>
-                        <button class="btn btn-green" onclick="addCustomEntry()">✅ Add</button>
+                        <button class="btn btn-green" onclick="addCustomEntry()" style="white-space:nowrap;">✅ Add</button>
                     </div>
                     <div class="ef-custom" id="customDescContainer">
-                        <input type="text" id="customDescInput" placeholder="Write your own description">
+                        <input type="text" id="customDescInput" placeholder="Apna description likho...">
                     </div>
-                    <div class="ef-quick">
-                        <button class="btn btn-blue" onclick="addHalfPayment()">💰 Half Payment</button>
+
+                    <!-- Info hint -->
+                    <div id="entryHint" style="font-size:0.6rem;color:#e74c3c;margin-top:6px;padding:6px 10px;background:#2a1515;border-radius:8px;border-left:3px solid #e74c3c;">
+                        📄 <b>Debit Mode:</b> Ye client par pending badhayega (Bill/Charge)
+                    </div>
+
+                    <div class="ef-quick" style="margin-top:10px;">
+                        <button class="btn btn-blue" onclick="addHalfPayment()">💰 Adha Payment</button>
                         <button class="btn btn-gold" onclick="applyDiscount()">💸 Discount</button>
-                        <button class="btn btn-green" onclick="markCleared()">✅ Clear All</button>
+                        <button class="btn btn-green" onclick="markCleared()">✅ Sab Clear</button>
                     </div>
                 </div>
             `;
@@ -4210,43 +4360,45 @@
                 `<div style="overflow-x:auto;"><table class="ledger-txn-table">
                     <thead><tr>
                         <th style="min-width:70px;">Date</th>
-                        <th style="min-width:120px;">Description</th>
-                        <th style="text-align:right;min-width:70px;">Credit</th>
-                        <th style="text-align:right;min-width:70px;">Debit</th>
-                        <th style="text-align:right;min-width:70px;">Balance</th>
+                        <th style="min-width:120px;">Tafseel</th>
+                        <th style="text-align:right;min-width:70px;color:#2ecc71;">💳 Credit<br><small style="font-weight:400;font-size:0.5rem;">(Paid/Discount)</small></th>
+                        <th style="text-align:right;min-width:70px;color:#e74c3c;">📄 Debit<br><small style="font-weight:400;font-size:0.5rem;">(Bill/Charge)</small></th>
+                        <th style="text-align:right;min-width:70px;color:#f5a623;">⚖️ Baqi<br><small style="font-weight:400;font-size:0.5rem;">(Pending)</small></th>
                         <th style="width:30px;"></th>
                     </tr></thead><tbody>`;
             if (transactions.length === 0) {
-                txnHtml += `<tr><td colspan="6" class="ledger-no-txn">No transactions yet.</td></tr>`;
+                txnHtml += `<tr><td colspan="6" class="ledger-no-txn">Koi transaction nahi mili.</td></tr>`;
             } else {
                 transactions.forEach(t => {
                     const displayDateTime = t.fullDateTime || formatDateTimeDisplay(t.date);
-                    const isDiscount = t.description && t.description.toLowerCase().includes('discount');
-                    const isCredit = t.credit > 0;
+                    const isCredit = (t.credit || 0) > 0 && (t.debit || 0) === 0;
+                    const isDebit = (t.debit || 0) > 0;
+                    const isDiscount = t.description && (t.description.toLowerCase() === 'discount' || t.description.toLowerCase() === 'waiver');
+                    const creditAmt = t.credit || 0;
+                    const debitAmt = t.debit || 0;
+                    const bal = t.runningBalance;
 
-                    let amtDisplay, amtClass;
-                    if (isDiscount) {
-                        // ✅ Discount now shows in Credit column with positive amount
-                        amtDisplay = `Rs. ${(t.credit || 0).toLocaleString()}`;
-                        amtClass = 'discount-amt';  // gold color
-                    } else if (isCredit) {
-                        amtDisplay = `Rs. ${(t.credit || 0).toLocaleString()}`;
-                        amtClass = 'credit';
-                    } else {
-                        amtDisplay = `Rs. ${(t.debit || 0).toLocaleString()}`;
-                        amtClass = 'debit';
-                    }
-
-                    const badgeClass = isDiscount ? 'discount' : (isCredit ? 'payment' : 'bill');
-                    const badgeLabel = isDiscount ? '💸' : (isCredit ? '💳' : '📄');
+                    let badgeType, badgeIcon;
+                    if (isDiscount) { badgeType = 'discount'; badgeIcon = '💸'; }
+                    else if (isDebit) { badgeType = 'bill'; badgeIcon = '📄'; }
+                    else { badgeType = 'payment'; badgeIcon = '💳'; }
 
                     txnHtml += `
                         <tr>
                             <td style="font-size:0.55rem;">${displayDateTime}</td>
-                            <td class="txn-desc"><span class="txn-badge ${badgeClass}">${badgeLabel}</span> ${escapeHtml(t.description || '-')}</td>
-                            <td class="txn-amt" style="text-align:right;${(isDiscount || isCredit) ? 'color:var(--green);font-weight:700;' : ''}">${(isDiscount || isCredit) ? amtDisplay : '-'}</td>
-                            <td class="txn-amt" style="text-align:right;${(!isCredit && !isDiscount) ? 'color:var(--red);font-weight:700;' : ''}">${(!isCredit && !isDiscount) ? amtDisplay : '-'}</td>
-                            <td class="txn-bal" style="text-align:right;">Rs. ${t.runningBalance.toLocaleString()}</td>
+                            <td class="txn-desc">
+                                <span class="txn-badge ${badgeType}">${badgeIcon}</span>
+                                ${escapeHtml(t.description || '-')}
+                            </td>
+                            <td class="txn-amt" style="text-align:right;${isCredit ? 'color:var(--green);font-weight:700;' : ''}">
+                                ${creditAmt > 0 ? 'Rs. '+creditAmt.toLocaleString() : '-'}
+                            </td>
+                            <td class="txn-amt" style="text-align:right;${isDebit ? 'color:var(--red);font-weight:700;' : ''}">
+                                ${debitAmt > 0 ? 'Rs. '+debitAmt.toLocaleString() : '-'}
+                            </td>
+                            <td class="txn-bal" style="text-align:right;font-weight:700;color:${bal > 0 ? 'var(--red)' : 'var(--green)'};">
+                                ${bal > 0 ? 'Rs. '+bal.toLocaleString() : '✅ Clear'}
+                            </td>
                             <td><button class="txn-del" onclick="deleteLedgerEntry('${client.id}','${t.entryId}')">✕</button></td>
                         </tr>
                     `;
@@ -4260,18 +4412,80 @@
         window.toggleCustomDesc = function() {
             const sel = document.getElementById('ledgerDescSelect');
             const customContainer = document.getElementById('customDescContainer');
-            if (sel.value === 'Other (write your own)') { customContainer.classList.add('show'); } else { customContainer
-                    .classList.remove('show'); }
+            if (!sel || !customContainer) return;
+            if (sel.value === 'Other (Apna likho)') {
+                customContainer.classList.add('show');
+            } else {
+                customContainer.classList.remove('show');
+            }
+            const creditOptions = ['Payment', 'Advance Payment', 'Partial Payment', 'Discount', 'Waiver'];
+            const debitOptions = ['Monthly Bill', 'Opening Balance', 'Extra Charge', 'Late Fee', 'Connection Fee', 'Equipment Charge'];
+            if (creditOptions.includes(sel.value)) {
+                setEntryType('credit');
+            } else if (debitOptions.includes(sel.value)) {
+                setEntryType('debit');
+            }
+        };
+
+        window.setEntryType = function(type) {
+            const toggle = document.getElementById('entryTypeToggle');
+            const debitBtn = document.getElementById('typeDebitBtn');
+            const creditBtn = document.getElementById('typeCreditBtn');
+            const hint = document.getElementById('entryHint');
+            if (!toggle) return;
+            toggle.value = type;
+            if (type === 'debit') {
+                if (debitBtn) {
+                    debitBtn.style.background = '#3d1e1e';
+                    debitBtn.style.color = '#e74c3c';
+                    debitBtn.style.borderColor = '#e74c3c';
+                }
+                if (creditBtn) {
+                    creditBtn.style.background = 'var(--card2)';
+                    creditBtn.style.color = 'var(--text2)';
+                    creditBtn.style.borderColor = 'var(--border)';
+                }
+                if (hint) {
+                    hint.style.background = '#2a1515';
+                    hint.style.borderLeftColor = '#e74c3c';
+                    hint.style.color = '#e74c3c';
+                    hint.innerHTML = '📄 <b>Debit Mode:</b> Ye client par pending badhayega (Bill/Charge)';
+                }
+            } else {
+                if (creditBtn) {
+                    creditBtn.style.background = '#1e3d2f';
+                    creditBtn.style.color = '#2ecc71';
+                    creditBtn.style.borderColor = '#2ecc71';
+                }
+                if (debitBtn) {
+                    debitBtn.style.background = 'var(--card2)';
+                    debitBtn.style.color = 'var(--text2)';
+                    debitBtn.style.borderColor = 'var(--border)';
+                }
+                if (hint) {
+                    hint.style.background = '#1a2a1a';
+                    hint.style.borderLeftColor = '#2ecc71';
+                    hint.style.color = '#2ecc71';
+                    hint.innerHTML = '💳 <b>Credit Mode:</b> Ye pending kam karega (Payment/Discount)';
+                }
+            }
         };
 
         window.addCustomEntry = function() {
             if (!currentLedgerId) { toast('No client selected', true); return; }
             const sel = document.getElementById('ledgerDescSelect');
             let desc = sel.value;
-            if (desc === 'Other (write your own)') { const customInput = document.getElementById('customDescInput');
-                desc = customInput.value.trim(); if (!desc) { toast('Please write a description', true); return; } }
+            if (desc === 'Other (Apna likho)') {
+                const customInput = document.getElementById('customDescInput');
+                desc = customInput.value.trim();
+                if (!desc) { toast('Apna description likho', true); return; }
+            }
             const amt = parseInt(document.getElementById('ledgerAmount').value);
-            if (!amt || amt <= 0) { toast('Enter a valid amount', true); return; }
+            if (!amt || amt <= 0) { toast('Sahi amount enter karo', true); return; }
+
+            const typeToggle = document.getElementById('entryTypeToggle');
+            const entryType = typeToggle ? typeToggle.value : 'auto';
+
             const clients = getClients();
             const c = clients.find(x => x.id === currentLedgerId);
             if (!c) return;
@@ -4279,13 +4493,37 @@
             const now = new Date();
             const monthKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
             const dateTimeStr = getDateTimeWithTime();
-            c.paymentHistory.push({ entryId, date: dateTimeStr, description: desc, credit: amt, debit: 0,
-                monthKey: monthKey, fullDateTime: dateTimeStr });
+
+            let isDebit;
+            if (entryType === 'debit') {
+                isDebit = true;
+            } else if (entryType === 'credit') {
+                isDebit = false;
+            } else {
+                isDebit = ['Monthly Bill', 'Opening Balance', 'Extra Charge', 'Late Fee', 'Connection Fee', 'Equipment Charge'].includes(desc);
+            }
+
+            // If this is a discount entry, also update the client's discount field
+            if (desc === 'Discount' && !isDebit) {
+                // Discount credit: add to discount field
+                c.discount = (c.discount || 0) + amt;
+            }
+
+            c.paymentHistory.push({
+                entryId,
+                date: dateTimeStr,
+                description: desc,
+                credit: isDebit ? 0 : amt,
+                debit: isDebit ? amt : 0,
+                monthKey: monthKey,
+                fullDateTime: dateTimeStr,
+                entryType: isDebit ? 'debit' : 'credit'
+            });
             saveClients(clients);
             if (currentUser) { pushClientToFirebase(c).catch(e => console.warn('Firebase update failed:', e)); }
             renderLedger(c);
             renderCurrentTab();
-            toast(`✅ "${desc}" Rs.${amt.toLocaleString()} added`);
+            toast(`${isDebit ? '📄 Bill' : '💳 Payment'} "${desc}" Rs.${amt.toLocaleString()} add kiya`);
         };
 
         window.addHalfPayment = function() {
@@ -4343,50 +4581,84 @@
             toast(`Rs.${halfAmount.toLocaleString()} half payment for ${monthKey}`);
         };
 
-        // ============================================================
-        // ✅ UPDATED applyDiscount() — Discount stored as positive credit
-        // ============================================================
         window.applyDiscount = function() {
             if (!currentLedgerId) return;
             const clients = getClients();
             const c = clients.find(x => x.id === currentLedgerId);
             if (!c) return;
+            const pending = Math.max(0, calculateBalance(c));
+            if (pending <= 0) { toast('Koi pending amount nahi hai — discount lagane ki zaroorat nahi', true); return; }
 
-            const td = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.debit) || 0), 0);
-            const tc = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.credit) || 0), 0);
-            const pending = Math.max(0, td - tc);
-            const amt = prompt('Discount amount (Rs.):\n\nPending: Rs.' + pending.toLocaleString());
-            if (!amt || isNaN(amt) || parseInt(amt) <= 0) return;
-            const discount = parseInt(amt);
-            if (discount > pending) {
-                toast('Discount cannot exceed pending amount (Rs.' + pending.toLocaleString() + ')', true);
-                return;
-            }
-            if (!confirm(`Apply Rs.${discount.toLocaleString()} discount to ${c.name}?`)) return;
+            const existingModal = document.getElementById('discountQuickModal');
+            if (existingModal) existingModal.remove();
+
+            const modal = document.createElement('div');
+            modal.id = 'discountQuickModal';
+            modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:99999;display:flex;align-items:center;justify-content:center;';
+            modal.innerHTML = `
+                <div style="background:var(--card);border-radius:18px;padding:22px;max-width:340px;width:90%;border:2px solid var(--gold);box-shadow:0 20px 60px rgba(0,0,0,0.5);">
+                    <div style="text-align:center;margin-bottom:16px;">
+                        <div style="font-size:2rem;">💸</div>
+                        <div style="font-size:1rem;font-weight:800;color:var(--gold);">Discount Apply Karo</div>
+                        <div style="font-size:0.7rem;color:var(--text2);margin-top:4px;">⚠️ Pending Balance: <b style="color:#e74c3c;">Rs. ${pending.toLocaleString()}</b></div>
+                        ${(c.discount && c.discount > 0) ? `<div style="font-size:0.6rem;color:var(--gold);margin-top:2px;">💸 Existing Discount: Rs.${c.discount.toLocaleString()}</div>` : ''}
+                    </div>
+                    <div style="font-size:0.7rem;color:var(--text2);margin-bottom:6px;">Discount Amount (Rs.):</div>
+                    <input id="discountAmtInput" type="number" min="1" max="${pending}" placeholder="e.g. 100"
+                        style="width:100%;padding:12px 16px;border-radius:30px;border:2px solid var(--gold);background:var(--card2);color:var(--text);font-size:1rem;font-weight:700;outline:none;margin-bottom:8px;">
+                    <div style="font-size:0.6rem;color:var(--text2);margin-bottom:12px;">Discount se pending amount kam ho jata hai — client ko maafi milti hai</div>
+                    <div style="display:flex;gap:8px;">
+                        <button onclick="document.getElementById('discountQuickModal').remove()"
+                            style="flex:1;padding:12px;border-radius:30px;border:1.5px solid var(--border);background:transparent;color:var(--text2);font-weight:700;cursor:pointer;font-size:0.8rem;">
+                            ❌ Nahi
+                        </button>
+                        <button onclick="confirmDiscountApply(${pending})"
+                            style="flex:2;padding:12px;border-radius:30px;border:none;background:linear-gradient(135deg,#f5a623,#e67e22);color:#000;font-weight:800;cursor:pointer;font-size:0.85rem;">
+                            ✅ Discount Lagao
+                        </button>
+                    </div>
+                </div>`;
+            document.body.appendChild(modal);
+            setTimeout(() => { const inp = document.getElementById('discountAmtInput'); if (inp) inp.focus(); }, 100);
+        };
+
+        window.confirmDiscountApply = function(pending) {
+            const inp = document.getElementById('discountAmtInput');
+            if (!inp) return;
+            const discount = parseInt(inp.value);
+            if (!discount || isNaN(discount) || discount <= 0) { toast('Sahi amount enter karo', true); return; }
+            if (discount > pending) { toast(`Discount (Rs.${discount.toLocaleString()}) pending (Rs.${pending.toLocaleString()}) se zyada nahi ho sakta!`, true); return; }
+
+            document.getElementById('discountQuickModal').remove();
+
+            const clients = getClients();
+            const c = clients.find(x => x.id === currentLedgerId);
+            if (!c) return;
 
             const entryId = uid();
             const now = new Date();
             const monthKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
             const dateTimeStr = getDateTimeWithTime();
 
-            // ✅ FIX: Discount as positive credit (not negative debit)
+            // Update discount field
+            c.discount = (c.discount || 0) + discount;
+
             c.paymentHistory.push({
                 entryId,
                 date: dateTimeStr,
                 description: 'Discount',
-                credit: discount,   // positive amount in credit column
-                debit: 0,           // no debit
+                credit: discount,
+                debit: 0,
                 monthKey: monthKey,
-                fullDateTime: dateTimeStr
+                fullDateTime: dateTimeStr,
+                entryType: 'discount'
             });
 
             saveClients(clients);
-            if (currentUser) {
-                pushClientToFirebase(c).catch(e => console.warn('Firebase update failed:', e));
-            }
+            if (currentUser) { pushClientToFirebase(c).catch(e => console.warn('Firebase update failed:', e)); }
             renderLedger(c);
             renderCurrentTab();
-            toast(`💸 Discount Rs.${discount.toLocaleString()} applied (shown in Credit column)`);
+            toast(`💸 Discount Rs.${discount.toLocaleString()} lagaya — New Pending: Rs.${Math.max(0, pending - discount).toLocaleString()}`);
         };
 
         window.markCleared = function() {
@@ -4394,9 +4666,7 @@
             const clients = getClients();
             const c = clients.find(x => x.id === currentLedgerId);
             if (!c) return;
-            const td = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.debit) || 0), 0);
-            const tc = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.credit) || 0), 0);
-            const pending = Math.max(0, td - tc);
+            const pending = Math.max(0, calculateBalance(c));
             if (pending <= 0) { toast('Already cleared'); return; }
             if (!confirm(`Mark Rs.${pending.toLocaleString()} as fully paid for ${c.name}?`)) return;
             const entryId = uid();
@@ -4434,18 +4704,21 @@
             toast('Transaction deleted', true);
         };
 
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        // RECEIPT FUNCTIONS
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        // =================================================================
+        // 17. RECEIPT FUNCTIONS
+        // =================================================================
         function populateReceipt1(client) {
             const wrap = document.getElementById('receipt1Wrap');
-            const expiryDate = getPackageExpiry(client.packageStartDate);
+            const expiryDate = getPackageExpiry(client);
             const daysLeft = daysUntilExpiry(client);
             const speed = extractSpeed(client.package);
             const filteredHistory = (client.paymentHistory || []).filter(t => (t.debit || 0) !== 0 || (t.credit || 0) !== 0);
-            const totalDue = (client.packageAmount || 0) + (client.oldBill || 0);
-            const totalCredit = filteredHistory.reduce((s, e) => s + (e.credit || 0), 0);
+            const totalDebitR1 = filteredHistory.reduce((s, e) => s + (Number(e.debit) || 0), 0);
+            const totalCredit = filteredHistory.reduce((s, e) => s + (Number(e.credit || 0)), 0);
             const pendingMonths = getPendingMonths(client);
+            const balance = calculateBalance(client);
+            const effectiveBill = Math.max(0, (client.packageAmount || 0) - (client.discount || 0));
+
             let statusLabel = 'Active',
                 statusClass = '';
             if (client.status === 'active') { statusLabel = '✅ Active';
@@ -4474,6 +4747,10 @@
             const genDate = formatDMY(now.toISOString()) + ' ' + String(now.getHours()).padStart(2, '0') + ':' + String(now
                 .getMinutes()).padStart(2, '0');
 
+            const discountDisplay = (client.discount && client.discount > 0) ?
+                `<div class="r-row"><span class="r-label">💸 Discount Applied</span><span class="r-value gold">Rs. ${client.discount.toLocaleString()}</span></div>` :
+                '';
+
             wrap.innerHTML = `
                     <div class="r-header">
                         <h2>👑 D3 CROWN FIBER</h2>
@@ -4492,9 +4769,11 @@
                     <div class="r-row"><span class="r-label">Package</span><span class="r-value">${escapeHtml(client.package)}</span></div>
                     <div class="r-row"><span class="r-label">Speed</span><span class="r-value">${speed}</span></div>
                     <div class="r-row"><span class="r-label">Monthly Fee</span><span class="r-value gold">Rs. ${(client.packageAmount || 0).toLocaleString()}</span></div>
-                    <div class="r-row"><span class="r-label">Old Balance</span><span class="r-value red">Rs. ${(client.oldBill || 0).toLocaleString()}</span></div>
-                    <div class="r-row"><span class="r-label">Total Due</span><span class="r-value gold" style="font-size:0.9rem;">Rs. ${totalDue.toLocaleString()}</span></div>
+                    ${discountDisplay}
+                    <div class="r-row"><span class="r-label">Effective Bill</span><span class="r-value gold">Rs. ${effectiveBill.toLocaleString()}</span></div>
+                    <div class="r-row"><span class="r-label">Total Billed</span><span class="r-value red">Rs. ${totalDebitR1.toLocaleString()}</span></div>
                     <div class="r-row"><span class="r-label">Total Paid</span><span class="r-value green">Rs. ${totalCredit.toLocaleString()}</span></div>
+                    <div class="r-row"><span class="r-label">Balance Due</span><span class="r-value gold" style="font-size:0.9rem;">Rs. ${Math.max(0, balance).toLocaleString()}</span></div>
                     <div class="r-divider"></div>
                     <div class="r-section-title">📅 Validity</div>
                     <div class="r-row"><span class="r-label">Start Date</span><span class="r-value">${formatDMY(client.packageStartDate)}</span></div>
@@ -4503,7 +4782,7 @@
                     <div class="r-row" style="margin-top:4px;"><span class="r-label">Status</span><span class="r-value"><span class="r-badge ${statusClass}">${statusLabel}</span></span></div>
                     ${pendingHtml}
                     <div class="r-total-box" style="margin-top:10px;">
-                        <div class="r-row"><span class="r-label" style="font-weight:800;">💰 GRAND TOTAL DUE</span><span class="r-value gold" style="font-size:1.1rem;">Rs. ${totalDue.toLocaleString()}</span></div>
+                        <div class="r-row"><span class="r-label" style="font-weight:800;">💰 GRAND TOTAL DUE</span><span class="r-value gold" style="font-size:1.1rem;">Rs. ${Math.max(0, balance).toLocaleString()}</span></div>
                     </div>
                     <div class="r-footer">
                         📞 0305-2848369 &nbsp;|&nbsp; 📧 aliabro104@gmail.com<br>
@@ -4521,7 +4800,7 @@
             const pendingMonths = getPendingMonths(client);
             const totalDebit = transactions.reduce((s, e) => s + (e.debit || 0), 0);
             const totalCredit = transactions.reduce((s, e) => s + (e.credit || 0), 0);
-            const balance = totalDebit - totalCredit;
+            const balance = calculateBalance(client);
             const receiptNo = generateReceiptNumber();
             const now = new Date();
             const genDate = formatDMY(now.toISOString()) + ' ' + String(now.getHours()).padStart(2, '0') + ':' + String(now
@@ -4554,6 +4833,10 @@
                     `<div style="font-size:0.7rem; color:#1e8e3e; margin:6px 0;">✅ No pending months — account is clear.</div>`;
             }
 
+            const discountDisplay = (client.discount && client.discount > 0) ?
+                `<div class="r-row"><span class="r-label">💸 Total Discount</span><span class="r-value gold">Rs. ${client.discount.toLocaleString()}</span></div>` :
+                '';
+
             wrap.innerHTML = `
                     <div class="r-header">
                         <h2>👑 D3 CROWN FIBER</h2>
@@ -4566,6 +4849,11 @@
                     <div class="r-divider"></div>
                     <div class="r-row"><span class="r-label">👤 Customer</span><span class="r-value">${escapeHtml(client.name)}</span></div>
                     <div class="r-row"><span class="r-label">📱 Phone</span><span class="r-value">${escapeHtml(client.phone)}</span></div>
+                    <div class="r-divider"></div>
+                    <div class="r-row"><span class="r-label">📦 Package</span><span class="r-value">${escapeHtml(client.package)}</span></div>
+                    <div class="r-row"><span class="r-label">Monthly Fee</span><span class="r-value gold">Rs. ${(client.packageAmount || 0).toLocaleString()}</span></div>
+                    ${discountDisplay}
+                    <div class="r-row"><span class="r-label">Effective Monthly</span><span class="r-value gold">Rs. ${Math.max(0, (client.packageAmount||0) - (client.discount||0)).toLocaleString()}</span></div>
                     <div class="r-divider"></div>
                     <div class="r-section-title">📜 Transaction History</div>
                     <table class="r-table">
@@ -4593,85 +4881,9 @@
                 `;
         }
 
-        function generateReceiptNumber() {
-            const now = new Date();
-            const d = String(now.getDate()).padStart(2, '0');
-            const m = String(now.getMonth() + 1).padStart(2, '0');
-            const y = String(now.getFullYear()).slice(2);
-            const h = String(now.getHours()).padStart(2, '0');
-            const min = String(now.getMinutes()).padStart(2, '0');
-            return `D3-${y}${m}${d}-${h}${min}${String(Math.floor(Math.random() * 100)).padStart(2, '0')}`;
-        }
-
         function showReceiptOverlay() { document.getElementById('receiptOverlay').classList.add('active'); }
 
         function hideReceiptOverlay() { document.getElementById('receiptOverlay').classList.remove('active'); }
-
-        async function downloadReceiptFile(elementId, fileNamePrefix, format = 'png') {
-            const container = document.getElementById(elementId);
-            const wrap = container.querySelector('.receipt-wrap');
-            if (!wrap) return;
-            showReceiptOverlay();
-            await new Promise(r => setTimeout(r, 300));
-            try {
-                container.style.position = 'fixed';
-                container.style.left = '0';
-                container.style.top = '0';
-                container.style.width = '500px';
-                container.style.zIndex = '99999';
-                container.style.opacity = '1';
-                container.style.pointerEvents = 'none';
-                container.style.transform = 'none';
-                container.style.maxHeight = 'none';
-                container.style.overflow = 'visible';
-                container.style.borderRadius = '0';
-                const canvas = await html2canvas(wrap, {
-                    scale: 2.5,
-                    useCORS: true,
-                    allowTaint: false,
-                    backgroundColor: '#ffffff',
-                    logging: false,
-                    width: 500,
-                    height: wrap.scrollHeight,
-                });
-                container.style.position = 'absolute';
-                container.style.left = '-9999px';
-                container.style.top = '0';
-                container.style.width = '500px';
-                container.style.zIndex = '-1';
-                container.style.opacity = '0';
-                container.style.pointerEvents = 'none';
-                container.style.transform = 'none';
-                container.style.maxHeight = 'none';
-                container.style.overflow = 'visible';
-                container.style.borderRadius = '0';
-                const link = document.createElement('a');
-                if (format === 'png') {
-                    link.download = `${fileNamePrefix}.png`;
-                    link.href = canvas.toDataURL('image/png');
-                } else {
-                    link.download = `${fileNamePrefix}.jpg`;
-                    link.href = canvas.toDataURL('image/jpeg', 0.95);
-                }
-                link.click();
-            } catch (err) {
-                console.error('Receipt capture error:', err);
-                toast('Failed to generate receipt. Please try again.', true);
-                container.style.position = 'absolute';
-                container.style.left = '-9999px';
-                container.style.top = '0';
-                container.style.width = '500px';
-                container.style.zIndex = '-1';
-                container.style.opacity = '0';
-                container.style.pointerEvents = 'none';
-                container.style.transform = 'none';
-                container.style.maxHeight = 'none';
-                container.style.overflow = 'visible';
-                container.style.borderRadius = '0';
-            } finally {
-                hideReceiptOverlay();
-            }
-        }
 
         window.generateReceipt = function(id) {
             const c = getClients().find(x => x.id === id);
@@ -4682,11 +4894,11 @@
             const monthName = now.toLocaleDateString('en-PK', { month: 'long', year: 'numeric' });
             const date = now.toLocaleDateString('en-PK', { year: 'numeric', month: 'long', day: 'numeric' });
             const monthKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
-            const totalDebit = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.debit) || 0), 0);
-            const totalCredit = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.credit) || 0), 0);
-            const pending = Math.max(0, totalDebit - totalCredit);
+            const balance = calculateBalance(c);
+            const pending = Math.max(0, balance);
             const isPaid = pending === 0 && c.status === 'active';
-            const displayAmount = isPaid ? c.packageAmount : pending;
+            const effectiveBill = Math.max(0, (c.packageAmount || 0) - (c.discount || 0));
+            const displayAmount = isPaid ? effectiveBill : pending;
             c._lastReceipt = { rno, date, total: displayAmount, totalAmount: displayAmount, monthName, monthKey,
                 clientId: id, generatedAt: new Date().toISOString(), isPaid: isPaid, paymentAmount: 0 };
             const clients = getClients();
@@ -4697,6 +4909,11 @@
                 `<div class="rec-detail"><span>VLAN ID</span><span><b>${escapeHtml(c.vlanId)}</b></span></div>` : '';
             const usernameLine = c.username ?
                 `<div class="rec-detail"><span>Username</span><span><b>${escapeHtml(c.username)}</b></span></div>` : '';
+            const discountLine = (c.discount && c.discount > 0) ?
+                `<div class="rec-detail"><span>💸 Discount</span><span><b style="color:var(--gold);">Rs. ${c.discount.toLocaleString()}</b></span></div>` :
+                '';
+            const effectiveLine =
+                `<div class="rec-detail"><span>Effective Monthly</span><span><b>Rs. ${effectiveBill.toLocaleString()}</b></span></div>`;
             let receiptClass = 'receipt-unpaid',
                 stampClass = 'receipt-unpaid-stamp',
                 stampText = 'UNPAID',
@@ -4740,6 +4957,8 @@
                         ${vlanLine}${usernameLine}
                         <div class="rec-detail"><span>Package</span><span>${escapeHtml(c.package)}</span></div>
                         <div class="rec-detail"><span>Monthly Fee</span><span>Rs. ${c.packageAmount.toLocaleString()}</span></div>
+                        ${discountLine}
+                        ${effectiveLine}
                         <div class="rec-detail"><span>Activation Date</span><span>${formatDMY(c.packageStartDate)}</span></div>
                         <div class="rec-detail"><span>Package End Date</span><span>${formatDMY(getPackageExpiry(c))}</span></div>
                         <div class="rec-detail" style="border-top:1px solid #eee;padding-top:8px;margin-top:4px;">
@@ -4828,32 +5047,39 @@
                 toast('Downloaded'); }).catch(() => toast('Download failed', true));
         };
 
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        // BILLING MODAL
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        // =================================================================
+        // 18. BILLING MODAL
+        // =================================================================
         window.openFullBilling = function(id) {
             const c = getClients().find(x => x.id === id);
             if (!c) { toast('Client not found', true); return; }
             document.getElementById('billingClientName').textContent = c.name;
             const totalDebit = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.debit) || 0), 0);
             const totalCredit = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.credit) || 0), 0);
-            const pending = Math.max(0, totalDebit - totalCredit);
+            const balance = calculateBalance(c);
+            const pending = Math.max(0, balance);
+            const effectiveBill = Math.max(0, (c.packageAmount || 0) - (c.discount || 0));
             let h =
-                `<div class="billing-summary"><div class="bs-row"><span class="bs-label">👤 Name</span><span class="bs-value">${escapeHtml(c.name)}</span></div><div class="bs-row"><span class="bs-label">📱 Phone</span><span class="bs-value">${escapeHtml(c.phone)}</span></div><div class="bs-row"><span class="bs-label">🔌 VLAN ID</span><span class="bs-value">${escapeHtml(c.vlanId || '—')}</span></div><div class="bs-row"><span class="bs-label">👤 Username</span><span class="bs-value">${escapeHtml(c.username || '—')}</span></div><div class="bs-row"><span class="bs-label">📦 Package</span><span class="bs-value">${escapeHtml(c.package)}</span></div><div class="bs-row"><span class="bs-label">📅 Start</span><span class="bs-value">${formatDMY(c.packageStartDate)}</span></div><div class="bs-row"><span class="bs-label">⏰ Status</span><span class="bs-value">${c.status.toUpperCase()}</span></div></div>`;
+                `<div class="billing-summary"><div class="bs-row"><span class="bs-label">👤 Name</span><span class="bs-value">${escapeHtml(c.name)}</span></div><div class="bs-row"><span class="bs-label">📱 Phone</span><span class="bs-value">${escapeHtml(c.phone)}</span></div><div class="bs-row"><span class="bs-label">🔌 VLAN ID</span><span class="bs-value">${escapeHtml(c.vlanId || '—')}</span></div><div class="bs-row"><span class="bs-label">👤 Username</span><span class="bs-value">${escapeHtml(c.username || '—')}</span></div><div class="bs-row"><span class="bs-label">📦 Package</span><span class="bs-value">${escapeHtml(c.package)}</span></div><div class="bs-row"><span class="bs-label">💸 Discount</span><span class="bs-value" style="color:var(--gold);">Rs. ${(c.discount||0).toLocaleString()}</span></div><div class="bs-row"><span class="bs-label">💰 Effective Monthly</span><span class="bs-value" style="color:var(--gold);">Rs. ${effectiveBill.toLocaleString()}</span></div><div class="bs-row"><span class="bs-label">📅 Start</span><span class="bs-value">${formatDMY(c.packageStartDate)}</span></div><div class="bs-row"><span class="bs-label">⏰ Status</span><span class="bs-value">${c.status.toUpperCase()}</span></div></div>`;
             h +=
-                `<div class="ledger-summary-cards"><div class="ledger-card"><div class="label">Total Billed</div><div class="value" style="color:#e74c3c;">Rs.${totalDebit.toLocaleString()}</div></div><div class="ledger-card"><div class="label">Total Paid</div><div class="value" style="color:#2ecc71;">Rs.${totalCredit.toLocaleString()}</div></div><div class="ledger-card"><div class="label">Balance Due</div><div class="value" style="color:#f5a623;">Rs.${pending.toLocaleString()}</div></div></div>`;
+                `<div class="ledger-summary-cards" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0;"><div class="ledger-card" style="background:var(--card2);border-radius:12px;padding:10px;text-align:center;border:1px solid var(--border);"><div style="font-size:0.55rem;color:var(--text2);">Total Billed</div><div style="font-size:1rem;font-weight:700;color:#e74c3c;">Rs.${totalDebit.toLocaleString()}</div></div><div class="ledger-card" style="background:var(--card2);border-radius:12px;padding:10px;text-align:center;border:1px solid var(--border);"><div style="font-size:0.55rem;color:var(--text2);">Total Paid</div><div style="font-size:1rem;font-weight:700;color:#2ecc71;">Rs.${totalCredit.toLocaleString()}</div></div><div class="ledger-card" style="background:var(--card2);border-radius:12px;padding:10px;text-align:center;border:1px solid var(--border);"><div style="font-size:0.55rem;color:var(--text2);">Balance Due</div><div style="font-size:1rem;font-weight:700;color:#f5a623;">Rs.${pending.toLocaleString()}</div></div></div>`;
             const txns = getSortedTransactions(c);
-            h += `<div style="font-size:0.7rem;font-weight:bold;margin:12px 0 6px;">📜 Complete Transaction History (A to Z)</div>`;
+            h += `<div style="font-size:0.7rem;font-weight:bold;margin:12px 0 6px;">📜 Complete Transaction History</div>`;
             h +=
-                `<div class="ledger-table-wrapper"><table class="ledger-table"><thead><tr><th>Date & Time</th><th>Description</th><th>Credit</th><th>Debit</th><th>Balance</th></tr></thead><tbody>`;
-            if (txns.length === 0) { h += '<tr><td colspan="5" class="no-data">No transactions yet</td></tr>'; } else {
+                `<div style="overflow-x:auto;"><table class="ledger-txn-table"><thead><tr><th>Date & Time</th><th>Description</th><th style="text-align:right;">Credit</th><th style="text-align:right;">Debit</th><th style="text-align:right;">Balance</th></tr></thead><tbody>`;
+            if (txns.length === 0) { h += '<tr><td colspan="5" class="no-data" style="text-align:center;padding:20px;color:var(--text2);">Koi transaction nahi</td></tr>'; } else {
                 for (const t of txns) { const displayDateTime = t.fullDateTime || formatDateTimeDisplay(t.date);
+                    const isDebit = (t.debit || 0) > 0;
+                    const isCredit = (t.credit || 0) > 0 && !isDebit;
+                    const bal = t.runningBalance;
                     h += `<tr>
                             <td style="font-size:0.55rem;">${displayDateTime}</td>
                             <td>${escapeHtml(t.description) || '-'}</td>
-                            <td class="credit-text">${t.credit > 0 ? 'Rs.' + t.credit.toLocaleString() : '-'}</td>
-                            <td class="debit-text">${t.debit > 0 ? 'Rs.' + t.debit.toLocaleString() : '-'}</td>
-                            <td>Rs.${t.runningBalance.toLocaleString()}</td>
+                            <td style="text-align:right;color:var(--green);font-weight:700;">${isCredit ? 'Rs.' + (t.credit||0).toLocaleString() : '-'}</td>
+                            <td style="text-align:right;color:var(--red);font-weight:700;">${isDebit ? 'Rs.' + (t.debit||0).toLocaleString() : '-'}</td>
+                            <td style="text-align:right;font-weight:700;color:${bal > 0 ? '#e74c3c' : '#2ecc71'};">
+                                ${bal > 0 ? 'Rs.'+bal.toLocaleString() : '✅ Clear'}
+                            </td>
                           </tr>`; }
             }
             h += '</tbody></table></div>';
@@ -4873,9 +5099,11 @@
             const dateStr = now.toLocaleDateString('en-PK', { year: 'numeric', month: 'long', day: 'numeric' });
             const totalDebit = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.debit) || 0), 0);
             const totalCredit = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.credit) || 0), 0);
-            const pending = Math.max(0, totalDebit - totalCredit);
+            const balance = calculateBalance(c);
+            const pending = Math.max(0, balance);
             const isPaid = pending === 0 && c.status === 'active';
-            const displayAmount = isPaid ? c.packageAmount : pending;
+            const effectiveBill = Math.max(0, (c.packageAmount || 0) - (c.discount || 0));
+            const displayAmount = isPaid ? effectiveBill : pending;
             let rows = '';
             txns.slice(0, 20).forEach(t => { const displayDateTime = t.fullDateTime || formatDateTimeDisplay(t
                     .date); const creditDisplay = t.credit > 0 ? `Rs.${t.credit.toLocaleString()}` :
@@ -4889,6 +5117,9 @@
             const stampText = isPaid ? 'PAID' : 'UNPAID';
             const stampSub = isPaid ? 'Crown Fiber ✓' : 'Crown Fiber ⚠';
             const totalLabel = isPaid ? '✅ PAID IN FULL' : '⛔ TOTAL DUE (PENDING)';
+            const discountDisplay = (c.discount && c.discount > 0) ?
+                `<div style="display:flex;justify-content:space-between;font-size:0.65rem;padding:2px 0;"><span>💸 Discount Applied</span><span style="color:var(--gold);font-weight:700;">Rs. ${c.discount.toLocaleString()}</span></div>` :
+                '';
             const receiptHtml =
                 `
                 <div class="premium-receipt receipt-base ${receiptClass}" style="position:relative;background:#fff;">
@@ -4907,6 +5138,7 @@
                             <div><b>${escapeHtml(c.name)}</b> | 📱 ${escapeHtml(c.phone)}</div>
                             <div>📦 ${escapeHtml(c.package)} | 👤 ${escapeHtml(c.username || '—')}</div>
                             <div>📅 Statement Date: ${dateStr}</div>
+                            <div style="font-size:0.6rem;color:var(--gold);">💰 Monthly Fee: Rs.${(c.packageAmount||0).toLocaleString()} ${(c.discount&&c.discount>0)?'| 💸 Discount: Rs.'+c.discount.toLocaleString():''}</div>
                         </div>
                         <div class="rec-total" style="background:${isPaid?'#e8f8ef':'#fef9e7'};border:2px solid ${isPaid?'#2ecc71':'#f5a623'};">
                             <div class="total-label">${totalLabel}</div>
@@ -4918,6 +5150,7 @@
                             <span style="background:#f5f5f5;padding:4px 12px;border-radius:10px;">💳 Total Paid: <b style="color:#2ecc71;">Rs.${totalCredit.toLocaleString()}</b></span>
                             <span style="background:#f5f5f5;padding:4px 12px;border-radius:10px;">Pending: <b style="color:#f5a623;">Rs.${pending.toLocaleString()}</b></span>
                         </div>
+                        ${discountDisplay}
                         <div style="font-size:0.65rem;font-weight:bold;margin:8px 0;border-top:1px solid #eee;padding-top:8px;">📜 Recent Transactions</div>
                         <div style="font-size:0.55rem;border-bottom:1px solid #eee;padding-bottom:4px;display:flex;justify-content:space-between;font-weight:bold;color:#888;">
                             <span>Date & Time</span><span>Description</span><span>Credit</span><span>Debit</span><span>Balance</span>
@@ -4957,17 +5190,15 @@
                 a.click();
                 toast('Downloaded'); }).catch(() => toast('Download failed', true)); };
 
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        // REMINDER FUNCTIONS
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        // =================================================================
+        // 19. REMINDER FUNCTIONS
+        // =================================================================
         window.openReminderOptions = function(id) {
             currentReminderId = id;
             const c = getClients().find(x => x.id === id);
             const infoDiv = document.getElementById('reminderClientInfo');
             if (c && infoDiv) {
-                const td = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.debit) || 0), 0);
-                const tc = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.credit) || 0), 0);
-                const total = Math.max(0, td - tc);
+                const total = Math.max(0, calculateBalance(c));
                 infoDiv.innerHTML =
                     `<b>${escapeHtml(c.name)}</b> &nbsp;|&nbsp; 📱 ${escapeHtml(c.phone)}<br>📦 ${escapeHtml(c.package)}<br>💰 Package: Rs.${c.packageAmount.toLocaleString()} &nbsp;|&nbsp; Total Due: <b style="color:var(--gold)">Rs.${total.toLocaleString()}</b><br>🔌 VLAN: ${escapeHtml(c.vlanId || '—')} &nbsp;|&nbsp; 👤 ${escapeHtml(c.username || '—')}`;
             }
@@ -4991,12 +5222,14 @@
             const now = new Date();
             const month = now.toLocaleDateString('en-PK', { month: 'long', year: 'numeric' });
             const rno = 'RCP-' + Date.now().toString().slice(-8);
-            const td = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.debit) || 0), 0);
-            const tc = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.credit) || 0), 0);
-            const total = Math.max(0, td - tc);
+            const total = Math.max(0, calculateBalance(c));
             const dateStr = now.toLocaleDateString('en-PK', { year: 'numeric', month: 'long', day: 'numeric' });
+            const effectiveBill = Math.max(0, (c.packageAmount || 0) - (c.discount || 0));
             const accountBox =
                 `<div class="accent-account-box" style="background:${method==='EasyPaisa'?'#1a7a3a':'#c0392b'}; color:#fff;"><div class="logo">${logo}</div><div style="font-size:1.2rem; font-weight:600;">${label}</div><div class="number">${accountNumber}</div><div class="name">Account: ${accountName}</div></div>`;
+            const discountDisplay = (c.discount && c.discount > 0) ?
+                `<div class="rec-detail"><span>💸 Discount</span><span>Rs. ${c.discount.toLocaleString()}</span></div>` :
+                '';
             const cautionHtml =
                 `
                 <div class="caution-receipt receipt-base receipt-reminder" style="position:relative;background:#fff;">
@@ -5027,6 +5260,8 @@
                         ${c.username ? `<div class="rec-detail"><span>Username</span><span><b>${escapeHtml(c.username)}</b></span></div>` : ''}
                         <div class="rec-detail"><span>Package</span><span>${escapeHtml(c.package)}</span></div>
                         <div class="rec-detail"><span>Monthly Fee</span><span>Rs. ${c.packageAmount.toLocaleString()}</span></div>
+                        ${discountDisplay}
+                        <div class="rec-detail"><span>Effective Bill</span><span>Rs. ${effectiveBill.toLocaleString()}</span></div>
                         ${total>0?`<div class="rec-detail" style="color:#c0392b;"><span>Pending Balance</span><span>Rs. ${total.toLocaleString()}</span></div>`:''}
                         <div class="rec-detail"><span>Activation</span><span>${formatDMY(c.packageStartDate)}</span></div>
                         <div class="rec-detail"><span>Expiry</span><span>${formatDMY(getPackageExpiry(c))}</span></div>
@@ -5076,7 +5311,7 @@
             const rno = window._cautionRno || 'RCP-' + Date.now().toString().slice(-8);
             const month = window._cautionMonth || new Date().toLocaleDateString('en-PK', { month: 'long',
                     year: 'numeric' });
-            const total = window._cautionTotal || c.packageAmount;
+            const total = window._cautionTotal || Math.max(0, calculateBalance(c));
             html2canvas(el, { scale: 2, backgroundColor: '#ffffff', useCORS: true })
                 .then(function(canvas) {
                     const link = document.createElement('a');
@@ -5086,7 +5321,7 @@
                     link.click();
                     if (statusEl) statusEl.textContent = '✅ Image downloaded! Opening WhatsApp...';
                     const msg =
-                        `⚠️ *BILL PAYMENT REMINDER* ⚠️\n\n📄 Receipt: ${rno}\n📅 Month: ${month}\n👤 Customer: ${c.name}\n📱 Phone: ${c.phone}\n📦 Package: ${c.package}\n💰 Monthly Fee: Rs. ${c.packageAmount.toLocaleString()}\n💳 *TOTAL DUE: Rs. ${total.toLocaleString()}*\n\n💰 Payment via ${label}: ${account}\n\n⚠️ CAUTION: Please clear your dues to avoid service suspension.\n\n${urduSlogans[Math.floor(Math.random() * urduSlogans.length)]}\n\nOwner: SHAHID ALI ABRO\nPhone: 03052848369`;
+                        `⚠️ *BILL PAYMENT REMINDER* ⚠️\n\n📄 Receipt: ${rno}\n📅 Month: ${month}\n👤 Customer: ${c.name}\n📱 Phone: ${c.phone}\n📦 Package: ${c.package}\n💰 Monthly Fee: Rs. ${c.packageAmount.toLocaleString()}${(c.discount&&c.discount>0)?'\n💸 Discount: Rs. '+c.discount.toLocaleString():''}\n💳 *TOTAL DUE: Rs. ${total.toLocaleString()}*\n\n💰 Payment via ${label}: ${account}\n\n⚠️ CAUTION: Please clear your dues to avoid service suspension.\n\n${urduSlogans[Math.floor(Math.random() * urduSlogans.length)]}\n\nOwner: SHAHID ALI ABRO\nPhone: 03052848369`;
                     const waUrl = 'https://wa.me/' + formatPhone(c.phone) + '?text=' + encodeURIComponent(msg);
                     window.open(waUrl, '_blank');
                     setTimeout(() => { const modal = document.getElementById('tempCautionModal'); if (modal)
@@ -5111,9 +5346,9 @@
             toast('Connection restored message sent');
         };
 
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        // RESOLVE COMPLAINT — ENHANCED WITH URDU SCRIPT
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        // =================================================================
+        // 20. RESOLVE COMPLAINT
+        // =================================================================
         window.openResolveModal = function(compId) {
             const modal = document.getElementById('resolveModal');
             if (!modal) return;
@@ -5231,9 +5466,9 @@
             }
         };
 
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        // BACKUP & IMPORT
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        // =================================================================
+        // 21. BACKUP & IMPORT
+        // =================================================================
         window.openBackup = function() {
             const toggle = document.getElementById('importLedgerToggle');
             const statusSpan = document.getElementById('ledgerToggleStatus');
@@ -5298,6 +5533,7 @@
                                 package: importedClient.package || 'Custom',
                                 packageAmount: packageAmount,
                                 packageCost: packageCost,
+                                discount: importedClient.discount || 0,
                                 status: 'active',
                                 packageStartDate: importedClient.packageStartDate || new Date().toISOString().slice(0, 10),
                                 joinDate: importedClient.joinDate || new Date().toISOString().slice(0, 10),
@@ -5309,13 +5545,13 @@
                             };
 
                             if (existing) {
-                                const oldHistory = existing.paymentHistory || [];
                                 existing.name = cleanClient.name;
                                 existing.phone = cleanClient.phone;
                                 existing.address = cleanClient.address || existing.address;
                                 existing.package = cleanClient.package;
                                 existing.packageAmount = cleanClient.packageAmount;
                                 existing.packageCost = cleanClient.packageCost;
+                                existing.discount = cleanClient.discount;
                                 existing.packageStartDate = cleanClient.packageStartDate;
                                 existing.joinDate = cleanClient.joinDate;
                                 existing.vlanId = cleanClient.vlanId || existing.vlanId;
@@ -5404,6 +5640,7 @@
                         package: pkg,
                         packageAmount: resolvedAmt,
                         packageCost: cost,
+                        discount: 0,
                         status: 'active',
                         packageStartDate: new Date().toISOString().slice(0, 10),
                         joinDate: new Date().toISOString().slice(0, 10),
@@ -5590,6 +5827,7 @@
                     package: packageName,
                     packageAmount: packageAmount,
                     packageCost: packageCost,
+                    discount: 0,
                     status: 'active',
                     packageStartDate: packageStartDate,
                     joinDate: joinDate,
@@ -5637,6 +5875,7 @@
                                 existing.package = newClient.package;
                                 existing.packageAmount = newClient.packageAmount;
                                 existing.packageCost = newClient.packageCost || existing.packageCost;
+                                existing.discount = newClient.discount || existing.discount || 0;
                                 existing.packageStartDate = newClient.packageStartDate;
                                 existing.joinDate = newClient.joinDate;
                                 existing.vlanId = newClient.vlanId || existing.vlanId;
@@ -5681,41 +5920,44 @@
             document.getElementById('excelFile').value = '';
         };
 
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        // FIREBASE SYNC
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        window.syncToFirebaseNow = function() { if (!currentUser) { toast('Not logged in', true); return; }
-            syncAllToFirebase(); };
-
-        function updateLastSyncDisplay(timestamp) {
-            const span = document.getElementById('lastSyncTime');
-            if (span) {
-                if (timestamp) {
-                    localStorage.setItem('lastFirebaseSync', String(timestamp));
-                    span.textContent = new Date(timestamp).toLocaleString();
-                } else {
-                    const last = localStorage.getItem('lastFirebaseSync');
-                    if (last) {
-                        span.textContent = new Date(parseInt(last)).toLocaleString();
-                    } else {
-                        span.textContent = 'Never';
-                    }
+        // =================================================================
+        // 22. DELETE ALL CLIENTS
+        // =================================================================
+        window.deleteAllClientsWithCaution = function() {
+            const clients = getClients();
+            if (clients.length === 0) { toast('📭 No clients to delete.', true); return; }
+            if (!confirm(
+                    `⚠️⚠️⚠️ CAUTION: You are about to DELETE ALL ${clients.length} CLIENTS permanently!\n\nThis action will:\n• Remove all clients from localStorage\n• Remove all clients from Firebase (if logged in)\n• Delete all payment history, ledgers, and data\n\nThis CANNOT be undone!\n\nClick OK to proceed to the next confirmation step.`
+                )) { return; }
+            const typed = prompt(
+                `⚠️ FINAL CONFIRMATION ⚠️\n\nType the word "DELETE" (all caps) in the box below to permanently delete ALL ${clients.length} clients.\n\nThis is your last chance to cancel.`
+                );
+            if (typed !== 'DELETE') { toast('❌ Deletion cancelled. You did not type DELETE correctly.', true); return; }
+            if (!confirm(
+                    `🔥 FINAL WARNING: Are you absolutely sure you want to delete ALL ${clients.length} clients FOREVER?\n\nThis will also wipe the Firebase database for your account.\n\nPress OK to permanently delete everything.`
+                )) { toast('❌ Deletion cancelled at final step.', true); return; }
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify([]));
+                if (currentUser) {
+                    db.ref(`${CLIENTS_PATH}/${currentUser.uid}`).set({ clients: [], lastUpdated: Date.now() })
+                        .then(() => { toast('✅ Firebase data cleared.'); })
+                        .catch((err) => { toast('⚠️ Firebase clear failed: ' + err.message, true); });
                 }
-            }
-        }
+                renderCurrentTab();
+                updateFirebaseIndicator();
+                toast(`💥 All ${clients.length} clients have been permanently deleted!`);
+                closeModal('backupModal');
+            } catch (e) { toast('❌ Deletion error: ' + e.message, true);
+                console.error(e); }
+        };
 
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        // COMPLAINTS (ISP)
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        function getComplaintsRef() {
-            if (!currentUser) throw new Error('Not authenticated');
-            return db.ref(`${COMPLAINTS_PATH}/${currentUser.uid}/complaints`);
-        }
-
+        // =================================================================
+        // 23. COMPLAINTS HELPER
+        // =================================================================
         async function deleteComplaint(compId) {
             if (!confirm('Delete this complaint?')) return;
             try {
-                const ref = getComplaintsRef();
+                const ref = getFirebaseComplaintsRef();
                 const snap = await ref.once('value');
                 let arr = snap.val() || [];
                 arr = arr.filter(c => c.id !== compId);
@@ -5725,9 +5967,9 @@
             } catch (e) { toast('Error: ' + e.message, true); }
         }
 
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        // THEME
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        // =================================================================
+        // 24. THEME
+        // =================================================================
         function applyTheme(theme) {
             document.body.classList.remove('light-theme', 'royal-theme');
             if (theme === 'light') {
@@ -5752,9 +5994,9 @@
             applyTheme(next);
         }
 
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        // PC MODE TOGGLE
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        // =================================================================
+        // 25. PC MODE
+        // =================================================================
         function togglePCMode() {
             document.body.classList.toggle('pc-mode');
             const btn = document.getElementById('pcToggleBtn');
@@ -5845,40 +6087,9 @@
             }
         }
 
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        // DELETE ALL CLIENTS
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        window.deleteAllClientsWithCaution = function() {
-            const clients = getClients();
-            if (clients.length === 0) { toast('📭 No clients to delete.', true); return; }
-            if (!confirm(
-                    `⚠️⚠️⚠️ CAUTION: You are about to DELETE ALL ${clients.length} CLIENTS permanently!\n\nThis action will:\n• Remove all clients from localStorage\n• Remove all clients from Firebase (if logged in)\n• Delete all payment history, ledgers, and data\n\nThis CANNOT be undone!\n\nClick OK to proceed to the next confirmation step.`
-                )) { return; }
-            const typed = prompt(
-                `⚠️ FINAL CONFIRMATION ⚠️\n\nType the word "DELETE" (all caps) in the box below to permanently delete ALL ${clients.length} clients.\n\nThis is your last chance to cancel.`
-                );
-            if (typed !== 'DELETE') { toast('❌ Deletion cancelled. You did not type DELETE correctly.', true); return; }
-            if (!confirm(
-                    `🔥 FINAL WARNING: Are you absolutely sure you want to delete ALL ${clients.length} clients FOREVER?\n\nThis will also wipe the Firebase database for your account.\n\nPress OK to permanently delete everything.`
-                )) { toast('❌ Deletion cancelled at final step.', true); return; }
-            try {
-                localStorage.setItem(STORAGE_KEY, JSON.stringify([]));
-                if (currentUser) {
-                    db.ref(`${CLIENTS_PATH}/${currentUser.uid}`).set({ clients: [], lastUpdated: Date.now() })
-                        .then(() => { toast('✅ Firebase data cleared.'); })
-                        .catch((err) => { toast('⚠️ Firebase clear failed: ' + err.message, true); });
-                }
-                renderCurrentTab();
-                updateFirebaseIndicator();
-                toast(`💥 All ${clients.length} clients have been permanently deleted!`);
-                closeModal('backupModal');
-            } catch (e) { toast('❌ Deletion error: ' + e.message, true);
-                console.error(e); }
-        };
-
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        // AUTH
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        // =================================================================
+        // 26. AUTH
+        // =================================================================
         document.getElementById('loginBtn').onclick = async () => {
             const email = document.getElementById('loginEmail').value.trim();
             const pass = document.getElementById('loginPassword').value;
@@ -5980,15 +6191,9 @@
 
         document.getElementById('logoutBtn').onclick = () => auth.signOut();
 
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        // INIT
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        function cleanupDemoClients() {
-            let clients = getClients();
-            let filtered = clients.filter(c => !isDemoClient(c));
-            if (filtered.length !== clients.length) { saveClients(filtered); }
-        }
-
+        // =================================================================
+        // 27. FIREBASE LISTENERS
+        // =================================================================
         let complaintsRedDotListener = null;
 
         function setupComplaintsRedDot() {
@@ -6033,9 +6238,14 @@
             });
         }
 
-        const savedTheme = localStorage.getItem('d3_theme') || 'royal';
-        applyTheme(savedTheme);
-        restorePCMode();
+        // =================================================================
+        // 28. INIT
+        // =================================================================
+        function cleanupDemoClients() {
+            let clients = getClients();
+            let filtered = clients.filter(c => !isDemoClient(c));
+            if (filtered.length !== clients.length) { saveClients(filtered); }
+        }
 
         window.renderCurrentTab = renderCurrentTab;
         window.getClients = getClients;
@@ -6044,23 +6254,16 @@
         window.isDemoClient = isDemoClient;
         window.renderComplaintsTab = renderComplaintsTab;
         window.toggleEmergencyMode = toggleEmergencyMode;
+        window.applyAllPackagePricesToClients = applyAllPackagePricesToClients;
 
         setTimeout(() => {
             updateFirebaseIndicator();
             buildPackageFilterBar();
         }, 500);
 
-        const originalSaveClients = saveClients;
-        saveClients = function(arr, skipCloudSync = true) {
-            originalSaveClients(arr, skipCloudSync);
-            buildPackageFilterBar();
-        };
-
-        console.log("👑 D3 Crown Fiber — ISP Admin Panel (URDU SCRIPT)");
-        console.log("✅ Complaint Resolution messages now use actual Urdu script (نستعلیق)");
-        console.log("✅ Red Light, Slow Internet, Disconnecting, Package End — all in Urdu");
-        console.log("✅ Resolve complaint → Pre-filled Urdu message + WhatsApp auto-open");
-        console.log("✅ Discount fix applied — Discount stored as positive Credit, displayed in Credit column");
+        console.log("👑 D3 Crown Fiber — ISP Admin Panel");
+        console.log("✅ v2.0 — Bug Fixed Build by Claude (Khalid Ali Pechuho)");
+        console.log("✅ calculateBalance() integrated into Ledger System");
     </script>
 </body>
 </html>
