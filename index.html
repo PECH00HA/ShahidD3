@@ -74,11 +74,13 @@
             padding: 0;
             box-sizing: border-box;
         }
+
         html {
             font-size: 16px;
             scroll-behavior: smooth;
             -webkit-tap-highlight-color: transparent;
         }
+
         body {
             font-family: var(--font);
             background: var(--bg);
@@ -91,10 +93,12 @@
             transition: max-width 0.4s ease, padding 0.4s ease, background 0.6s ease;
             position: relative;
         }
+
         body.light-theme {
             background: #f0f2f5;
             color: #1a1a1a;
         }
+
         body.royal-theme {
             background: radial-gradient(ellipse at top, #0d1833 0%, #060a13 60%);
             color: #f0f4ff;
@@ -105,6 +109,7 @@
             max-width: 1400px !important;
             padding: 20px 30px 90px 30px !important;
         }
+
         body.pc-mode .client-list {
             display: grid !important;
             grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)) !important;
@@ -164,6 +169,7 @@
         body.pc-mode .dragon-header-wrapper {
             display: flex !important;
         }
+
         body.pc-mode .client-card .payment-status-toggle .btn-green {
             padding: 6px 10px !important;
             font-size: 0.65rem !important;
@@ -205,6 +211,7 @@
                 min-width: 45px !important;
             }
         }
+
         @media (min-width: 601px) {
             body.pc-mode .dragon-header-wrapper {
                 display: flex !important;
@@ -218,6 +225,8 @@
         }
 
         /* ===== 4. COMPONENT STYLES ===== */
+
+        /* Header */
         .header {
             background: linear-gradient(135deg, #0f172a 0%, #1a2332 40%, #2a1f0e 100%);
             padding: 14px 16px;
@@ -238,6 +247,7 @@
         .header:hover {
             box-shadow: 0 0 80px rgba(245, 166, 35, 0.25), 0 0 160px rgba(245, 166, 35, 0.12);
         }
+
         .logo-svg {
             width: 46px;
             height: 46px;
@@ -254,6 +264,7 @@
                 filter: drop-shadow(0 0 25px rgba(245, 166, 35, 1));
             }
         }
+
         .d3-flip-wrapper {
             display: inline-block;
             position: relative;
@@ -282,6 +293,7 @@
                 background-position: 300% 50%;
             }
         }
+
         .header-center {
             display: flex;
             flex-direction: column;
@@ -311,6 +323,7 @@
             text-shadow: none;
             animation: none;
         }
+
         .header-right {
             text-align: right;
             flex-shrink: 0;
@@ -319,6 +332,7 @@
             align-items: flex-end;
             gap: 2px;
         }
+
         .owner-glow {
             display: inline-block;
             font-weight: 700;
@@ -339,6 +353,7 @@
                 background-position: 200% center;
             }
         }
+
         .logo-text {
             display: flex;
             align-items: baseline;
@@ -354,6 +369,7 @@
             font-weight: 600;
             text-shadow: 0 0 10px rgba(245, 166, 35, 0.3);
         }
+
         .dragon-header-wrapper {
             display: none;
             align-items: center;
@@ -363,6 +379,7 @@
         body.pc-mode .dragon-header-wrapper {
             display: flex;
         }
+
         .dragon-svg-container {
             width: 100px;
             height: 90px;
@@ -742,6 +759,7 @@
             color: var(--gold);
             font-weight: 600;
         }
+
         .status-dot {
             width: 7px;
             height: 7px;
@@ -764,6 +782,7 @@
             background: #ff8c42;
             box-shadow: 0 0 6px #ff8c42;
         }
+
         .payment-label {
             font-size: 0.6rem;
             font-weight: 600;
@@ -788,6 +807,7 @@
             background: #3d1e1e;
             color: #e74c3c;
         }
+
         .expiry-badge {
             font-size: 0.6rem;
             color: #ff8c42;
@@ -822,6 +842,7 @@
             background: #e74c3c;
             color: #fff;
         }
+
         .vlan-badge {
             background: #2c3e50;
             color: #f1c40f;
@@ -939,16 +960,6 @@
         .btn-renew-active:hover {
             background: #555;
             color: #aaa;
-        }
-        .btn-discount {
-            background: linear-gradient(135deg, #f39c12, #e67e22);
-            color: #fff;
-            border: none;
-            font-weight: 700;
-        }
-        .btn-discount:hover {
-            transform: scale(0.95);
-            box-shadow: 0 4px 15px rgba(243, 156, 18, 0.4);
         }
 
         /* FAB */
@@ -1200,9 +1211,11 @@
         .login-btn:active {
             transform: scale(0.97);
         }
+
         #mainAppContainer {
             display: none;
         }
+
         .logout-btn {
             position: fixed;
             bottom: 20px;
@@ -1218,6 +1231,7 @@
             cursor: pointer;
             backdrop-filter: blur(4px);
         }
+
         .theme-toggle {
             position: fixed;
             top: 12px;
@@ -1307,6 +1321,7 @@
             text-align: center;
             padding: 8px;
         }
+
         .receipt-paid .rec-header {
             background: linear-gradient(135deg, #1a7a3a, #2ecc71);
             color: #fff;
@@ -1319,6 +1334,7 @@
             background: linear-gradient(135deg, #c0392b, #e74c3c);
             color: #fff;
         }
+
         .stamp-overlay {
             position: absolute;
             top: 50%;
@@ -1449,6 +1465,7 @@
         .lh-value.gold {
             color: var(--gold);
         }
+
         .ledger-progress {
             background: var(--card2);
             border-radius: 12px;
@@ -1494,6 +1511,7 @@
             min-width: 40px;
             text-align: right;
         }
+
         .ledger-month-card {
             background: var(--card);
             border-radius: 14px;
@@ -1584,6 +1602,7 @@
             font-size: 0.6rem;
             min-width: 60px;
         }
+
         .ledger-entry-form {
             background: var(--card2);
             border-radius: 14px;
@@ -1655,6 +1674,7 @@
             padding: 6px 4px;
             font-size: 0.6rem;
         }
+
         .ledger-txn-table {
             width: 100%;
             border-collapse: collapse;
@@ -1741,6 +1761,7 @@
             color: var(--text2);
             font-size: 0.7rem;
         }
+
         .billing-summary {
             background: var(--card2);
             border-radius: 12px;
@@ -1765,6 +1786,7 @@
             font-weight: 700;
             color: var(--text);
         }
+
         .complaint-item {
             background: var(--card2);
             border-radius: 14px;
@@ -1841,6 +1863,7 @@
         .complaint-stats .resolved-count {
             color: #2ecc71;
         }
+
         .accent-account-box {
             margin-top: 12px;
             padding: 14px;
@@ -1869,6 +1892,7 @@
             font-size: 1.2rem;
             font-weight: 600;
         }
+
         .reminder-options {
             display: flex;
             gap: 10px;
@@ -1891,6 +1915,7 @@
         .btn-jazzcash {
             background: linear-gradient(135deg, #c0392b, #e74c3c);
         }
+
         .package-manager-table-wrapper {
             overflow-x: auto;
         }
@@ -1935,6 +1960,7 @@
             display: inline-block;
             animation: pulseRed 1.5s infinite;
         }
+
         .status-pill {
             display: inline-block;
             padding: 6px 18px;
@@ -1953,6 +1979,7 @@
             background: #3d1e1e;
             color: #e74c3c;
         }
+
         .payment-status-toggle {
             display: inline-flex;
             gap: 8px;
@@ -1967,6 +1994,7 @@
             min-width: 100px;
             justify-content: center;
         }
+
         .receipt-actions {
             display: flex;
             flex-wrap: wrap;
@@ -2046,6 +2074,7 @@
             flex-wrap: wrap;
             gap: 8px;
         }
+
         .receipt-overlay {
             display: none;
             position: fixed;
@@ -2074,6 +2103,7 @@
                 transform: rotate(360deg);
             }
         }
+
         .receipt-hidden {
             position: absolute;
             left: -9999px;
@@ -2255,134 +2285,14 @@
             font-weight: 700;
             color: #c0392b;
         }
+
+        /* Misc */
         .flex-between {
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
             gap: 8px;
-        }
-
-        /* Discount Quick Modal (standalone) */
-        .discount-quick-modal {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.78);
-            z-index: 99999;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            backdrop-filter: blur(6px);
-            animation: fadeInUp 0.3s ease;
-        }
-        .discount-quick-modal .dq-box {
-            background: var(--card);
-            border-radius: 24px;
-            padding: 24px 28px;
-            max-width: 360px;
-            width: 90%;
-            border: 2px solid var(--gold);
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
-            position: relative;
-        }
-        .discount-quick-modal .dq-box .dq-icon {
-            font-size: 2.8rem;
-            text-align: center;
-            margin-bottom: 6px;
-        }
-        .discount-quick-modal .dq-box .dq-title {
-            font-size: 1.1rem;
-            font-weight: 800;
-            color: var(--gold);
-            text-align: center;
-            margin-bottom: 4px;
-        }
-        .discount-quick-modal .dq-box .dq-sub {
-            font-size: 0.7rem;
-            color: var(--text2);
-            text-align: center;
-            margin-bottom: 14px;
-            line-height: 1.5;
-        }
-        .discount-quick-modal .dq-box .dq-pending {
-            background: var(--card2);
-            border-radius: 12px;
-            padding: 8px 12px;
-            font-size: 0.75rem;
-            text-align: center;
-            margin-bottom: 14px;
-            border: 1px solid var(--border);
-        }
-        .discount-quick-modal .dq-box .dq-pending .dq-pending-label {
-            color: var(--text2);
-            font-weight: 600;
-        }
-        .discount-quick-modal .dq-box .dq-pending .dq-pending-amount {
-            font-weight: 800;
-            color: var(--red);
-            font-size: 1.1rem;
-        }
-        .discount-quick-modal .dq-box .dq-input-wrap {
-            margin-bottom: 14px;
-        }
-        .discount-quick-modal .dq-box .dq-input-wrap input {
-            width: 100%;
-            padding: 14px 16px;
-            border-radius: 30px;
-            border: 2px solid var(--gold);
-            background: var(--card2);
-            color: var(--text);
-            font-size: 1.1rem;
-            font-weight: 700;
-            outline: none;
-            text-align: center;
-        }
-        .discount-quick-modal .dq-box .dq-input-wrap input:focus {
-            border-color: #ffd700;
-            box-shadow: 0 0 20px rgba(245, 166, 35, 0.25);
-        }
-        .discount-quick-modal .dq-box .dq-actions {
-            display: flex;
-            gap: 10px;
-        }
-        .discount-quick-modal .dq-box .dq-actions button {
-            flex: 1;
-            padding: 12px 8px;
-            border-radius: 30px;
-            font-weight: 700;
-            font-size: 0.8rem;
-            border: none;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .discount-quick-modal .dq-box .dq-actions .dq-cancel {
-            background: var(--card2);
-            color: var(--text2);
-            border: 1.5px solid var(--border);
-        }
-        .discount-quick-modal .dq-box .dq-actions .dq-cancel:hover {
-            background: var(--border);
-        }
-        .discount-quick-modal .dq-box .dq-actions .dq-apply {
-            background: linear-gradient(135deg, #f5a623, #e67e22);
-            color: #000;
-            border: none;
-            flex: 2;
-        }
-        .discount-quick-modal .dq-box .dq-actions .dq-apply:hover {
-            transform: scale(0.96);
-            box-shadow: 0 6px 20px rgba(245, 166, 35, 0.4);
-        }
-        .discount-quick-modal .dq-box .dq-existing {
-            font-size: 0.55rem;
-            color: var(--gold);
-            text-align: center;
-            margin-top: 8px;
-            background: var(--card2);
-            padding: 4px 10px;
-            border-radius: 20px;
-            display: inline-block;
-            width: 100%;
         }
 
         /* Dragon particles */
@@ -2576,10 +2486,6 @@
                         <div class="form-row">
                             <div class="form-group"><label>📅 Package Start (DD/MM/YYYY)</label><input type="text" id="cStartDate" placeholder="DD/MM/YYYY" pattern="\d{2}/\d{2}/\d{4}" required></div>
                             <div class="form-group"><label>📌 Old Balance</label><input type="number" id="cOldBill" value="0" style="font-weight:700;"></div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group"><label>💸 Discount (Rs.)</label><input type="number" id="cDiscount" value="0" min="0" style="font-weight:700;color:var(--gold);" oninput="updateProfitDisplay()"></div>
-                            <div class="form-group"><label style="font-size:0.55rem;color:var(--text2);">After Discount</label><input type="text" id="cAfterDiscountDisplay" value="Rs. 800" readonly style="background:var(--card2);color:var(--gold);font-weight:700;"></div>
                         </div>
                         <div class="form-row">
                             <div class="form-group"><label>🔌 VLAN ID</label><input type="text" id="cVlanId" placeholder="e.g., 101"></div>
@@ -2867,23 +2773,6 @@
         }
 
         // =================================================================
-        // 2.5 — CALCULATE BALANCE (USER REQUESTED FUNCTION)
-        // =================================================================
-        function calculateBalance(client) {
-            const effectiveBill = (client.packageAmount || 0) - (client.discount || 0);
-            const totalPaid = (client.paymentHistory || []).reduce((sum, entry) => sum + (entry.credit || 0), 0);
-            return effectiveBill - totalPaid;
-        }
-        window.calculateBalance = calculateBalance;
-
-        function formatBalance(client) {
-            const bal = calculateBalance(client);
-            const sign = bal > 0 ? '+' : (bal < 0 ? '' : '');
-            const color = bal > 0 ? 'var(--red)' : (bal < 0 ? 'var(--green)' : 'var(--text2)');
-            return `<span style="color:${color};font-weight:700;">${sign}Rs. ${Math.abs(bal).toLocaleString()}</span>`;
-        }
-
-        // =================================================================
         // 3. TOAST
         // =================================================================
         function toast(msg, err) { const t = document.createElement('div');
@@ -2924,9 +2813,6 @@
             c.package = c.package || 'Custom';
             c.username = c.username || '';
             c.vlanId = c.vlanId || '';
-            if (typeof c.discount !== 'number' || isNaN(c.discount)) {
-                c.discount = 0;
-            }
             if (c.paymentHistory && Array.isArray(c.paymentHistory)) {
                 c.paymentHistory = c.paymentHistory.filter(e =>
                     !(e.description && e.description.includes('Registration') && e.debit === 0 && e.credit === 0)
@@ -2977,6 +2863,7 @@
             renderCurrentTab();
             updateFirebaseIndicator();
             buildPackageFilterBar();
+
             if (!skipCloudSync && currentUser) {
                 syncAllToFirebase().catch(e => console.warn('Auto-sync failed:', e));
             }
@@ -3048,6 +2935,7 @@
         async function saveMasterPackages(pkgs) {
             let saveData = pkgs.map(p => ({ name: p.name, amount: p.amount, cost: p.cost }));
             localStorage.setItem(MASTER_PACKAGES_KEY, JSON.stringify(saveData));
+
             if (currentUser) {
                 try {
                     await savePackagesToFirebase(saveData);
@@ -3056,6 +2944,7 @@
                     toast('⚠️ Packages saved locally but Firebase sync failed: ' + e.message, true);
                 }
             }
+
             syncPackagePricesToClients(pkgs);
             refreshPackageDropdown();
             const pm = document.getElementById('packageManagerModal');
@@ -3168,17 +3057,10 @@
         function updateProfitDisplay() {
             let amt = parseInt(document.getElementById('cAmount').value) || 0;
             let cost = parseInt(document.getElementById('cCost').value) || 0;
-            let discount = parseInt(document.getElementById('cDiscount').value) || 0;
             let profit = amt - cost;
             const displayEl = document.getElementById('cProfitDisplay');
             if (displayEl) { displayEl.value = 'Rs. ' + profit.toLocaleString();
                 displayEl.style.color = profit >= 0 ? '#2ecc71' : '#e74c3c'; }
-            const afterDiscEl = document.getElementById('cAfterDiscountDisplay');
-            if (afterDiscEl) {
-                let effective = Math.max(0, amt - discount);
-                afterDiscEl.value = 'Rs. ' + effective.toLocaleString();
-                afterDiscEl.style.color = effective > 0 ? 'var(--gold)' : 'var(--text2)';
-            }
         }
 
         function openPackageManager() { renderPackageList();
@@ -3338,9 +3220,12 @@
             try {
                 let clients = getClients().filter(c => !isDemoClient(c));
                 let packages = getMasterPackages();
+
                 await db.ref(`${CLIENTS_PATH}/${currentUser.uid}`).set({ clients, lastUpdated: Date.now() });
+
                 let pkgData = packages.map(p => ({ name: p.name, amount: p.amount, cost: p.cost }));
                 await db.ref(`${PACKAGES_PATH}/${currentUser.uid}`).set({ packages: pkgData, lastUpdated: Date.now() });
+
                 updateLastSyncDisplay(Date.now());
                 updateFirebaseIndicator();
                 toast('✅ All data synced to Firebase (Clients + Packages)');
@@ -3403,13 +3288,16 @@
             emergencyMode = !emergencyMode;
             const btn = document.getElementById('emergencyBtn');
             if (!btn) { toast('Emergency button not found', true); return; }
+
             if (emergencyMode) {
                 if (!confirm('🚨 Mark ALL Clients as UNPAID?\n\nYeh action sab clients ke payments clear kar dega!\nFresh slate se start hoga.')) {
                     emergencyMode = false;
                     return;
                 }
+
                 const clients = getClients();
                 let updated = 0;
+
                 clients.forEach(c => {
                     if (!c.paymentHistory) c.paymentHistory = [];
                     c.paymentHistory = c.paymentHistory.filter(e => e.credit === 0 || !e.credit);
@@ -3430,6 +3318,7 @@
                     c.status = 'active';
                     updated++;
                 });
+
                 saveClients(clients, false);
                 btn.classList.add('active');
                 btn.textContent = '✅ ALL RESET';
@@ -3553,6 +3442,17 @@
         // =================================================================
         // 11. RENDERING
         // =================================================================
+
+        // Helper to get total discount from paymentHistory
+        function getTotalDiscount(client) {
+            return (client.paymentHistory || []).reduce((sum, e) => {
+                if (e.credit > 0 && e.description && e.description.toLowerCase().includes('discount')) {
+                    return sum + e.credit;
+                }
+                return sum;
+            }, 0);
+        }
+
         function clientCardHTML(c) {
             const totalDebit = (c.paymentHistory || []).reduce((s, e) => s + Math.max(0, Number(e.debit) || 0), 0);
             const totalCredit = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.credit) || 0), 0);
@@ -3588,16 +3488,29 @@
             const renewBtnHtml = showRenew ?
                 `<button class="btn btn-green" onclick="renewPackage('${c.id}')">🔄 Renew</button>` :
                 `<button class="btn btn-renew-active" disabled style="background:#555;color:#aaa;cursor:not-allowed;opacity:0.6;">✅ Active</button>`;
+
+            // ---- Discount tag logic ----
+            let discountTag = '';
+            // Get default amount for this package from master
+            const masterPkgs = getMasterPackages();
+            const defaultPkg = masterPkgs.find(p => p.name === c.package);
+            if (defaultPkg && c.packageAmount < defaultPkg.amount && c.package !== 'Custom') {
+                const saved = defaultPkg.amount - c.packageAmount;
+                discountTag = `<span style="background:#2ecc71;color:#000;font-size:0.5rem;padding:1px 6px;border-radius:10px;font-weight:700;margin-left:4px;">Discounted - Rs.${saved.toLocaleString()}</span>`;
+            } else if (c.package === 'Custom') {
+                // For custom, we can check if any discount entries exist (total discount > 0)
+                const totalDisc = getTotalDiscount(c);
+                if (totalDisc > 0) {
+                    discountTag =
+                    `<span style="background:#2ecc71;color:#000;font-size:0.5rem;padding:1px 6px;border-radius:10px;font-weight:700;margin-left:4px;">Discounted - Rs.${totalDisc.toLocaleString()}</span>`;
+                }
+            }
+
             const pkgDisplay =
-                `${c.package} <span style="color:var(--gold);font-weight:700;">— Rs. ${packageAmount.toLocaleString()}</span>`;
-
-            const balance = calculateBalance(c);
-            const pendingDisplay = balance > 0 ? `Pending: Rs. ${balance.toLocaleString()}` : (balance < 0 ?
-                `Overpaid: Rs. ${Math.abs(balance).toLocaleString()}` : '✅ Fully Paid');
-            const pendingColor = balance > 0 ? 'var(--gold)' : (balance < 0 ? 'var(--green)' : 'var(--green)');
-
-            const pendingLine =
-                `<div class="pending-sub"><span style="color:${pendingColor};font-weight:600;">${pendingDisplay}</span></div>`;
+                `${c.package} <span style="color:var(--gold);font-weight:700;">— Rs. ${packageAmount.toLocaleString()}</span> ${discountTag}`;
+            const pendingLine = pending === 0 ?
+                `<div class="pending-sub"><span class="paid-text">✅ Fully Paid</span></div>` :
+                `<div class="pending-sub"><span class="pending-text">Pending: Rs. ${pending.toLocaleString()}</span></div>`;
 
             const profitBadge = profit >= 0 ?
                 `<span class="profit-badge">📈 +Rs.${profit.toLocaleString()}/mo</span>` :
@@ -3605,10 +3518,6 @@
 
             const clearLedgerBtn =
                 `<button class="btn-clear-ledger" onclick="clearLedger('${c.id}')" title="Delete ALL ledger entries for this client">🧹 Clear Ledger</button>`;
-
-            const discountDisplay = (c.discount && c.discount > 0) ?
-                `<div style="font-size:0.55rem;color:var(--gold);">💸 Discount: Rs.${c.discount.toLocaleString()}</div>` :
-                '';
 
             return `
                 <div class="client-card">
@@ -3621,7 +3530,6 @@
                             <div style="font-size:0.6rem;color:#888;margin-top:2px;">📅 Start: ${startDateStr} ${expiryCountdownHtml}</div>
                             ${expiryText?`<div class="expiry-badge" style="color:#e74c3c;font-weight:700;">${expiryText}</div>`:''}
                             ${profitBadge}
-                            ${discountDisplay}
                         </div>
                         <div>
                             <div class="amount-due">Rs. ${packageAmount.toLocaleString()}</div>
@@ -3658,7 +3566,11 @@
             });
             return keys.map(k => {
                 const totalDue = groups[k].reduce((s, c) => {
-                    return s + calculateBalance(c);
+                    const td = (c.paymentHistory || []).reduce((ss, e) => ss + (Number(e.debit) || 0),
+                        0);
+                    const tc = (c.paymentHistory || []).reduce((ss, e) => ss + (Number(e.credit) || 0),
+                        0);
+                    return s + Math.max(0, td - tc);
                 }, 0);
                 const label = k === 'Other' ? '📌 Other / Custom' : `⚡ ${k}`;
                 return `<div class="package-section">
@@ -3712,30 +3624,38 @@
             const clients = getClients();
             const searchEl = document.getElementById('searchInput');
             const q = searchEl ? searchEl.value.toLowerCase() : '';
+
             let filtered = clients.filter(c => {
-                const bal = calculateBalance(c);
-                return bal <= 0 && c.status === 'active';
+                const totalDebit = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.debit) || 0), 0);
+                const totalCredit = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.credit) || 0), 0);
+                const pending = Math.max(0, totalDebit - totalCredit);
+                return pending === 0 && c.status === 'active';
             });
+
             filtered = filtered.filter(c =>
                 !q ||
                 (c.name && String(c.name).toLowerCase().includes(q)) ||
                 (c.phone && String(c.phone).includes(q)) ||
                 (c.package && String(c.package).toLowerCase().includes(q))
             );
+
             if (activePkgFilter !== 'all') {
                 filtered = filtered.filter(c => {
                     const speed = extractSpeed(c.package) || 'Other';
                     return speed === activePkgFilter;
                 });
             }
+
             const totalPaid = filtered.length;
             const totalCollected = filtered.reduce((s, c) => {
                 return s + (c.paymentHistory || []).reduce((ss, e) => ss + (Number(e.credit) || 0), 0);
             }, 0);
+
             const totalProfit = filtered.reduce((s, c) => {
                 const profit = (c.packageAmount || 0) - (c.packageCost || 0);
                 return s + profit;
             }, 0);
+
             let html = `
                 <div style="display:flex;gap:10px;margin-bottom:12px;padding:10px 14px;background:var(--card2);border-radius:12px;flex-wrap:wrap;border:1px solid var(--green);">
                     <span style="font-size:0.8rem;font-weight:700;color:var(--green);">✅ PAID CLIENTS</span>
@@ -3744,25 +3664,91 @@
                     <span style="font-size:0.75rem;color:#2ecc71;">📈 Profit: Rs.${totalProfit.toLocaleString()}</span>
                 </div>
             `;
+
             if (filtered.length === 0) {
                 html += '<div style="text-align:center;padding:30px;color:#666;">No paid clients yet</div>';
             } else {
                 html += renderGroupedHTML(filtered);
             }
+
             document.getElementById('clientList').innerHTML = html;
         }
 
-        // =================================================================
-        // 11b. RENDER UNPAID CLIENTS (with Discount Button)
-        // =================================================================
+        // ===== DISCOUNT BUTTON — Now cuts from package price =====
+        window.applyDiscountFromUnpaid = function(clientId) {
+            const clients = getClients();
+            const c = clients.find(x => x.id === clientId);
+            if (!c) { toast('Client not found', true); return; }
+
+            const currentPkgAmount = c.packageAmount || 0;
+            if (currentPkgAmount <= 0) {
+                toast(`${c.name} — پیکیج کی قیمت صفر ہے، ڈسکاؤنٹ ممکن نہیں۔`, true);
+                return;
+            }
+
+            const discountStr = prompt(
+                `💸 ${c.name} — ڈسکاؤنٹ رقم درج کریں:\n\n💰 موجودہ پیکیج قیمت: Rs. ${currentPkgAmount.toLocaleString()}\n📌 زیادہ سے زیادہ ڈسکاؤنٹ: Rs. ${currentPkgAmount.toLocaleString()}`
+                );
+            if (discountStr === null) return;
+            const discount = parseInt(discountStr);
+            if (isNaN(discount) || discount <= 0) {
+                toast('❌ براہ کرم ایک درست رقم درج کریں۔', true);
+                return;
+            }
+            if (discount > currentPkgAmount) {
+                toast(`❌ ڈسکاؤنٹ پیکیج قیمت (Rs. ${currentPkgAmount.toLocaleString()}) سے زیادہ نہیں ہو سکتا۔`, true);
+                return;
+            }
+
+            if (!confirm(`💸 ${c.name} کی پیکیج قیمت میں Rs. ${discount.toLocaleString()} کی کمی کی جائے؟\n\nموجودہ قیمت: Rs. ${currentPkgAmount.toLocaleString()}\nنئی قیمت: Rs. ${(currentPkgAmount - discount).toLocaleString()}`)) {
+                return;
+            }
+
+            c.packageAmount = currentPkgAmount - discount;
+
+            const dateTimeStr = getDateTimeWithTime();
+            const now = new Date();
+            const monthKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+            c.paymentHistory.push({
+                entryId: uid(),
+                date: dateTimeStr,
+                description: `💸 Discount applied to package price — Rs. ${discount.toLocaleString()}`,
+                credit: discount,
+                debit: 0,
+                monthKey: monthKey,
+                fullDateTime: dateTimeStr
+            });
+
+            const newTd = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.debit) || 0), 0);
+            const newTc = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.credit) || 0), 0);
+            const newPending = Math.max(0, newTd - newTc);
+
+            if (newPending === 0) {
+                c.status = 'active';
+                toast(`✅ ${c.name} — نئی پیکیج قیمت: Rs. ${c.packageAmount.toLocaleString()}، بقایا صفر ہو گیا۔`);
+            } else {
+                toast(`✅ ${c.name} — نئی پیکیج قیمت: Rs. ${c.packageAmount.toLocaleString()}، اب بقایا: Rs. ${newPending.toLocaleString()}`);
+            }
+
+            saveClients(clients);
+            if (currentUser) {
+                pushClientToFirebase(c).catch(e => console.warn('Firebase update failed:', e));
+            }
+
+            renderCurrentTab();
+        };
+
+        // ===== renderUnpaidClients =====
         function renderUnpaidClients() {
             const clients = getClients();
             const searchEl = document.getElementById('searchInput');
             const q = searchEl ? searchEl.value.toLowerCase() : '';
 
             let filtered = clients.filter(c => {
-                const bal = calculateBalance(c);
-                return bal > 0 || c.status === 'overdue' || c.status === 'inactive';
+                const totalDebit = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.debit) || 0), 0);
+                const totalCredit = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.credit) || 0), 0);
+                const pending = Math.max(0, totalDebit - totalCredit);
+                return pending > 0 || c.status === 'overdue' || c.status === 'inactive';
             });
 
             filtered = filtered.filter(c =>
@@ -3781,7 +3767,9 @@
 
             const totalUnpaid = filtered.length;
             const totalPending = filtered.reduce((s, c) => {
-                return s + Math.max(0, calculateBalance(c));
+                const td = (c.paymentHistory || []).reduce((ss, e) => ss + (Number(e.debit) || 0), 0);
+                const tc = (c.paymentHistory || []).reduce((ss, e) => ss + (Number(e.credit) || 0), 0);
+                return s + Math.max(0, td - tc);
             }, 0);
 
             let html = `
@@ -3797,17 +3785,18 @@
                 html += '<div style="text-align:center;padding:30px;color:var(--green);">✨ All clients are paid! ✨</div>';
             } else {
                 const sorted = filtered.sort((a, b) => {
-                    return calculateBalance(b) - calculateBalance(a);
+                    const pendingA = (a.paymentHistory || []).reduce((s, e) => s + (Number(e.debit) || 0) - (Number(e.credit) || 0), 0);
+                    const pendingB = (b.paymentHistory || []).reduce((s, e) => s + (Number(e.debit) || 0) - (Number(e.credit) || 0), 0);
+                    return pendingB - pendingA;
                 });
 
                 html += sorted.map(c => {
-                    const pending = Math.max(0, calculateBalance(c));
+                    const td = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.debit) || 0), 0);
+                    const tc = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.credit) || 0), 0);
+                    const pending = Math.max(0, td - tc);
                     const packageAmount = c.packageAmount || 0;
                     const days = daysUntilExpiry(c);
                     const isExpired = days <= 0;
-                    const discountDisplay = (c.discount && c.discount > 0) ?
-                        `<div style="font-size:0.55rem;color:var(--gold);">💸 Discount: Rs.${c.discount.toLocaleString()}</div>` :
-                        '';
 
                     return `
                         <div class="client-card" style="border:2px solid var(--red);">
@@ -3819,8 +3808,6 @@
                                     ${c.vlanId ? `<span class="vlan-badge">🔌 VLAN: ${c.vlanId}</span>` : ''}
                                     ${c.username ? `<span class="vlan-badge" style="background:#1a3a5c;">👤 ${c.username}</span>` : ''}
                                     ${isExpired ? `<div class="expiry-badge" style="color:#e74c3c;font-weight:700;">⚠️ EXPIRED</div>` : ''}
-                                    ${discountDisplay}
-                                    <div style="font-size:0.55rem;color:var(--text2);margin-top:2px;">💰 Cost: Rs.${(c.packageCost||0).toLocaleString()}</div>
                                 </div>
                                 <div style="text-align:right;">
                                     <div class="amount-due" style="font-size:1.2rem;color:#e74c3c;">Rs. ${pending.toLocaleString()}</div>
@@ -3829,11 +3816,10 @@
                             </div>
                             <div class="payment-status-toggle" style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;">
                                 <button class="btn btn-green" style="flex:2;padding:12px;font-size:0.85rem;border-radius:30px;" onclick="markPaidFromUnpaid('${c.id}')">✅ Mark Paid — Collect Rs. ${pending.toLocaleString()}</button>
-                                <button class="btn btn-discount" style="flex:1;padding:12px;font-size:0.75rem;border-radius:30px;" onclick="applyDiscountFromUnpaid('${c.id}')">💸 Discount</button>
+                                <button class="btn btn-purple" style="flex:1;padding:12px;font-size:0.8rem;border-radius:30px;" onclick="applyDiscountFromUnpaid('${c.id}')">💸 Discount</button>
                                 <button class="btn btn-wa" onclick="openReminderOptions('${c.id}')">📨 Reminder</button>
                                 <button class="btn btn-outline" onclick="openEditClient('${c.id}')">✏️ Edit</button>
                             </div>
-                            <div style="font-size:0.55rem;color:var(--text2);margin-top:6px;text-align:center;">💡 Discount button: Enter amount to cut from pending balance</div>
                         </div>
                     `;
                 }).join('');
@@ -3849,7 +3835,11 @@
             const clients = getClients();
             const c = clients.find(x => x.id === clientId);
             if (!c) { toast('Client not found', true); return; }
-            const pending = Math.max(0, calculateBalance(c));
+
+            const td = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.debit) || 0), 0);
+            const tc = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.credit) || 0), 0);
+            const pending = Math.max(0, td - tc);
+
             if (pending <= 0) {
                 c.status = 'active';
                 saveClients(clients);
@@ -3858,11 +3848,14 @@
                 toast(`✅ ${c.name} marked as PAID`);
                 return;
             }
+
             if (!confirm(`Collect Rs. ${pending.toLocaleString()} from ${c.name}?\n\nThis will:\n✅ Mark as PAID\n💰 Add to Collected`)) { return; }
+
             const dateTimeStr = getDateTimeWithTime();
             const now = new Date();
             const monthKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
             const monthName = now.toLocaleDateString('en-PK', { month: 'long', year: 'numeric' });
+
             c.paymentHistory.push({
                 entryId: uid(),
                 date: dateTimeStr,
@@ -3872,126 +3865,18 @@
                 monthKey: monthKey,
                 fullDateTime: dateTimeStr
             });
+
             c.status = 'active';
             c.updatedAt = new Date().toISOString();
+
             saveClients(clients);
             if (currentUser) { pushClientToFirebase(c).catch(e => console.warn('Firebase update failed:', e)); }
+
             updateStats();
             switchTab('paid');
+
             const profit = (c.packageAmount || 0) - (c.packageCost || 0);
             toast(`✅ Collected Rs. ${pending.toLocaleString()} from ${c.name} | Profit: Rs. ${profit.toLocaleString()}`);
-        };
-
-        // =================================================================
-        // 12b. DISCOUNT FROM UNPAID TAB (FIXED — always works)
-        // =================================================================
-        window.applyDiscountFromUnpaid = function(clientId) {
-            // Remove any leftover modal to avoid duplicate IDs
-            const existingModal = document.getElementById('discountQuickModalUnpaid');
-            if (existingModal) existingModal.remove();
-
-            const clients = getClients();
-            const c = clients.find(x => x.id === clientId);
-            if (!c) {
-                toast('Client not found', true);
-                return;
-            }
-
-            const pending = Math.max(0, calculateBalance(c));
-            if (pending <= 0) {
-                toast('✅ No pending balance to discount — client is already paid.', true);
-                return;
-            }
-
-            const modal = document.createElement('div');
-            modal.className = 'discount-quick-modal';
-            modal.id = 'discountQuickModalUnpaid';
-            modal.innerHTML = `
-                <div class="dq-box">
-                    <div class="dq-icon">💸</div>
-                    <div class="dq-title">Discount Lagao</div>
-                    <div class="dq-sub">Pending balance me se katna hai — amount enter karo</div>
-                    <div class="dq-pending">
-                        <div class="dq-pending-label">Current Pending</div>
-                        <div class="dq-pending-amount">Rs. ${pending.toLocaleString()}</div>
-                    </div>
-                    <div class="dq-input-wrap">
-                        <input type="number" id="discountAmountUnpaid" placeholder="Enter Rs. amount" min="1" max="${pending}" step="1" autofocus>
-                    </div>
-                    <div class="dq-actions">
-                        <button class="dq-cancel" onclick="document.getElementById('discountQuickModalUnpaid').remove()">❌ Cancel</button>
-                        <button class="dq-apply" onclick="confirmDiscountFromUnpaid('${clientId}', ${pending})">✅ Apply Discount</button>
-                    </div>
-                    <div class="dq-existing">${(c.discount && c.discount > 0) ? '💸 Existing monthly discount: Rs.' + c.discount.toLocaleString() : ''}</div>
-                </div>
-            `;
-            document.body.appendChild(modal);
-
-            setTimeout(() => {
-                const inp = document.getElementById('discountAmountUnpaid');
-                if (inp) inp.focus();
-            }, 150);
-        };
-
-        window.confirmDiscountFromUnpaid = function(clientId, pending) {
-            const inp = document.getElementById('discountAmountUnpaid');
-            if (!inp) {
-                toast('❌ Discount modal not found. Please try again.', true);
-                return;
-            }
-
-            const discount = parseInt(inp.value);
-            if (!discount || isNaN(discount) || discount <= 0) {
-                toast('❌ Sahi amount enter karo (positive number)', true);
-                return;
-            }
-            if (discount > pending) {
-                toast(`❌ Discount (Rs. ${discount.toLocaleString()}) pending (Rs. ${pending.toLocaleString()}) se zyada nahi ho sakta!`, true);
-                return;
-            }
-
-            // Remove the modal immediately to prevent double‑click issues
-            const modal = document.getElementById('discountQuickModalUnpaid');
-            if (modal) modal.remove();
-
-            // Confirm with user
-            const clients = getClients();
-            const c = clients.find(x => x.id === clientId);
-            if (!c) {
-                toast('Client not found', true);
-                return;
-            }
-
-            if (!confirm(`💸 Rs. ${discount.toLocaleString()} discount apply kar rahe ho ${c.name} ke pending balance par?\n\nNew pending: Rs. ${(pending - discount).toLocaleString()}`)) {
-                return;
-            }
-
-            const entryId = uid();
-            const now = new Date();
-            const monthKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
-            const dateTimeStr = getDateTimeWithTime();
-
-            // Record the discount as a credit entry in the ledger
-            c.paymentHistory.push({
-                entryId: entryId,
-                date: dateTimeStr,
-                description: 'Discount — One Time',
-                credit: discount,
-                debit: 0,
-                monthKey: monthKey,
-                fullDateTime: dateTimeStr,
-                entryType: 'discount'
-            });
-
-            c.updatedAt = new Date().toISOString();
-
-            saveClients(clients);
-            if (currentUser) {
-                pushClientToFirebase(c).catch(e => console.warn('Firebase update failed:', e));
-            }
-
-            renderCurrentTab();
-            toast(`💸 Rs. ${discount.toLocaleString()} discount applied to ${c.name}. New pending: Rs. ${(pending - discount).toLocaleString()}`);
         };
 
         // =================================================================
@@ -4074,7 +3959,11 @@
 
         function updateStats() {
             const clients = getClients();
-            const outstanding = clients.reduce((s, c) => s + Math.max(0, calculateBalance(c)), 0);
+            const outstanding = clients.reduce((s, c) => {
+                const td = (c.paymentHistory || []).reduce((ss, e) => ss + (Number(e.debit) || 0), 0);
+                const tc = (c.paymentHistory || []).reduce((ss, e) => ss + (Number(e.credit) || 0), 0);
+                return s + Math.max(0, td - tc);
+            }, 0);
             const collected = clients.reduce((s, c) => s + (c.paymentHistory || []).reduce((ss, e) => ss + (Number(e.credit) || 0),
                 0), 0);
             const totalProfit = clients.reduce((s, c) => {
@@ -4137,7 +4026,7 @@
         };
 
         // =================================================================
-        // 15. CLIENT ADD/EDIT (FIXED: Package dropdown shows correct package)
+        // 15. CLIENT ADD/EDIT
         // =================================================================
         window.openAddClient = function() {
             document.getElementById('clientModalTitle').textContent = '➕ Add New Client';
@@ -4145,7 +4034,6 @@
             document.getElementById('cName').value = '';
             document.getElementById('cPhone').value = '';
             document.getElementById('cAddress').value = '';
-            refreshPackageDropdown();
             document.getElementById('cPackage').value = 'DHCP-4Mbps';
             document.getElementById('cAmount').value = '800';
             document.getElementById('cOldBill').value = '0';
@@ -4154,44 +4042,39 @@
             document.getElementById('cStartDate').value = formatDMY(new Date().toISOString());
             document.getElementById('cVlanId').value = '';
             document.getElementById('cUsername').value = '';
-            document.getElementById('cDiscount').value = '0';
+            refreshPackageDropdown();
             autoSetPackagePrice();
-            updateProfitDisplay();
             openModal('clientModal');
         };
 
         window.openEditClient = function(id) {
             const c = getClients().find(x => x.id === id);
             if (!c) return;
+
+            refreshPackageDropdown();
+
+            const pkgSelect = document.getElementById('cPackage');
+            if (pkgSelect) {
+                let optionExists = false;
+                for (let opt of pkgSelect.options) {
+                    if (opt.value === c.package) {
+                        pkgSelect.value = c.package;
+                        optionExists = true;
+                        break;
+                    }
+                }
+                if (!optionExists) {
+                    if (pkgSelect.options.length > 0) {
+                        pkgSelect.selectedIndex = 0;
+                    }
+                }
+            }
+
             document.getElementById('clientModalTitle').textContent = '✏️ Edit Client';
             document.getElementById('clientId').value = c.id;
             document.getElementById('cName').value = c.name;
             document.getElementById('cPhone').value = c.phone;
             document.getElementById('cAddress').value = c.address || '';
-
-            // FIX: Refresh dropdown FIRST, then set the value
-            refreshPackageDropdown();
-
-            const pkgSelect = document.getElementById('cPackage');
-            if (pkgSelect) {
-                const options = pkgSelect.options;
-                let found = false;
-                for (let i = 0; i < options.length; i++) {
-                    if (options[i].value === c.package) {
-                        pkgSelect.selectedIndex = i;
-                        found = true;
-                        break;
-                    }
-                }
-                if (!found) {
-                    const opt = document.createElement('option');
-                    opt.value = c.package;
-                    opt.textContent = c.package + ' (Custom)';
-                    pkgSelect.appendChild(opt);
-                    pkgSelect.value = c.package;
-                }
-            }
-
             document.getElementById('cAmount').value = c.packageAmount;
             document.getElementById('cOldBill').value = c.oldBill || 0;
             document.getElementById('cCost').value = (c.packageCost != null ? c.packageCost : 500);
@@ -4199,10 +4082,8 @@
             document.getElementById('cStartDate').value = formatDMY(c.packageStartDate);
             document.getElementById('cVlanId').value = c.vlanId || '';
             document.getElementById('cUsername').value = c.username || '';
-            document.getElementById('cDiscount').value = c.discount || 0;
 
             autoSetPackagePrice();
-            updateProfitDisplay();
             openModal('clientModal');
         };
 
@@ -4233,7 +4114,6 @@
             }
 
             const oldBill = parseFloat(document.getElementById('cOldBill').value) || 0;
-            const discount = parseInt(document.getElementById('cDiscount').value) || 0;
 
             const data = {
                 id: id || uid(),
@@ -4243,7 +4123,6 @@
                 package: document.getElementById('cPackage').value,
                 packageAmount: parseInt(document.getElementById('cAmount').value) || 0,
                 packageCost: parseInt(document.getElementById('cCost').value) || 0,
-                discount: discount,
                 status: document.getElementById('cStatus').value,
                 packageStartDate: isoDate,
                 joinDate: id ? (clients.find(c => c.id === id)?.joinDate || new Date().toISOString().slice(0, 10)) : new Date().toISOString().slice(0, 10),
@@ -4313,8 +4192,7 @@
                 }
             } else {
                 clients.push(data);
-                toast('Client added' + (oldBill > 0 ? ' + Old Balance Rs.' + oldBill.toLocaleString() : '') +
-                    (discount > 0 ? ' + Discount Rs.' + discount.toLocaleString() : ''));
+                toast('Client added' + (oldBill > 0 ? ' + Old Balance Rs.' + oldBill.toLocaleString() : ''));
             }
 
             saveClients(clients);
@@ -4370,10 +4248,9 @@
             let bal = 0;
             const result = sorted.map(entry => {
                 const debit = Math.max(0, Number(entry.debit) || 0);
-                const credit = Math.max(0, Number(entry.credit) || 0);
-                bal = bal + debit - credit;
-                const displayBal = Math.max(0, bal);
-                return { ...entry, runningBalance: displayBal, _rawBalance: bal };
+                const credit = Number(entry.credit) || 0;
+                bal = bal + credit - debit;
+                return { ...entry, runningBalance: bal };
             });
             return result.reverse();
         }
@@ -4382,39 +4259,17 @@
             if (client.paymentHistory) { client.paymentHistory = client.paymentHistory.filter(e => !(e.description && e
                     .description.includes('Registration') && e.debit === 0 && e.credit === 0)); }
 
-            const balance = calculateBalance(client);
             const totalDebit = client.paymentHistory.reduce((s, e) => s + Math.max(0, Number(e.debit) || 0), 0);
-            const totalCredit = client.paymentHistory.reduce((s, e) => s + Math.max(0, Number(e.credit) || 0), 0);
-            const pendingTotal = Math.max(0, balance);
+            const totalCredit = client.paymentHistory.reduce((s, e) => s + (Number(e.credit) || 0), 0);
+            const pendingTotal = Math.max(0, totalDebit - totalCredit);
             const pctPaid = totalDebit > 0 ? Math.min(100, Math.round((totalCredit / totalDebit) * 100)) : 0;
-            const collectionRate = pctPaid;
-
-            const discountDisplay = (client.discount && client.discount > 0) ?
-                `<div style="font-size:0.6rem;color:var(--gold);background:var(--card2);padding:2px 12px;border-radius:20px;display:inline-block;margin-left:6px;">💸 Discount: Rs.${client.discount.toLocaleString()}</div>` :
-                '';
+            const collectionRate = totalDebit > 0 ? Math.min(100, Math.round((totalCredit / totalDebit) * 100)) : 0;
 
             let heroHtml = `
                 <div class="ledger-hero">
-                    <div class="lh-item">
-                        <div class="lh-label">📄 Total Billed</div>
-                        <div class="lh-value red">Rs. ${totalDebit.toLocaleString()}</div>
-                        <div style="font-size:0.5rem;color:var(--text2);">Kul Debit</div>
-                    </div>
-                    <div class="lh-item">
-                        <div class="lh-label">💳 Total Paid</div>
-                        <div class="lh-value green">Rs. ${totalCredit.toLocaleString()}</div>
-                        <div style="font-size:0.5rem;color:var(--text2);">Kul Credit</div>
-                    </div>
-                    <div class="lh-item" style="border:2px solid ${pendingTotal > 0 ? '#e74c3c' : '#2ecc71'};border-radius:10px;padding:6px;">
-                        <div class="lh-label">⚖️ Baqi (Pending)</div>
-                        <div class="lh-value ${pendingTotal > 0 ? 'red' : 'green'}">${pendingTotal > 0 ? 'Rs. '+pendingTotal.toLocaleString() : '✅ Clear'}</div>
-                        <div style="font-size:0.5rem;color:var(--text2);">${pendingTotal > 0 ? 'Debit - Credit' : 'Sab ada ho gaya'}</div>
-                    </div>
-                </div>
-                <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px;">
-                    <span style="font-size:0.7rem;font-weight:600;color:var(--text2);">💵 Monthly Fee: Rs.${(client.packageAmount||0).toLocaleString()}</span>
-                    ${discountDisplay}
-                    <span style="font-size:0.7rem;font-weight:600;color:var(--gold);">🧾 Effective: Rs.${Math.max(0,(client.packageAmount||0)-(client.discount||0)).toLocaleString()}</span>
+                    <div class="lh-item"><div class="lh-label">💰 Total Billed</div><div class="lh-value red">Rs. ${totalDebit.toLocaleString()}</div></div>
+                    <div class="lh-item"><div class="lh-label">✅ Total Paid</div><div class="lh-value green">Rs. ${totalCredit.toLocaleString()}</div></div>
+                    <div class="lh-item"><div class="lh-label">📊 Pending</div><div class="lh-value gold">Rs. ${pendingTotal.toLocaleString()}</div></div>
                 </div>
             `;
 
@@ -4470,58 +4325,25 @@
 
             const entryForm = `
                 <div class="ledger-entry-form">
-                    <div class="ef-title">✏️ New Entry Dalo</div>
-                    <div style="display:flex;gap:6px;margin-bottom:10px;">
-                        <button onclick="setEntryType('debit')" id="typeDebitBtn"
-                            style="flex:1;padding:8px;border-radius:30px;border:2px solid #e74c3c;background:#3d1e1e;color:#e74c3c;font-weight:700;font-size:0.7rem;cursor:pointer;transition:all 0.2s;"
-                            class="entry-type-btn active-debit">
-                            📄 Bill / Charge (Debit)
-                        </button>
-                        <button onclick="setEntryType('credit')" id="typeCreditBtn"
-                            style="flex:1;padding:8px;border-radius:30px;border:2px solid var(--border);background:var(--card2);color:var(--text2);font-weight:700;font-size:0.7rem;cursor:pointer;transition:all 0.2s;"
-                            class="entry-type-btn">
-                            💳 Payment / Credit
-                        </button>
-                    </div>
-                    <input type="hidden" id="entryTypeToggle" value="debit">
+                    <div class="ef-title">✏️ Add New Entry</div>
                     <div class="ef-row">
-                        <div class="ef-group" id="descGroupDebit">
-                            <select id="ledgerDescSelect" onchange="toggleCustomDesc()" style="font-size:0.7rem;">
-                                <optgroup label="📄 Bill / Charges (Debit)">
-                                    <option value="Monthly Bill">📅 Monthly Bill</option>
-                                    <option value="Opening Balance">📂 Opening Balance</option>
-                                    <option value="Extra Charge">⚡ Extra Charge</option>
-                                    <option value="Late Fee">⏰ Late Fee</option>
-                                    <option value="Connection Fee">🔌 Connection Fee</option>
-                                    <option value="Equipment Charge">📡 Equipment Charge</option>
-                                    <option value="Other (Apna likho)">✍️ Apna likho...</option>
-                                </optgroup>
-                                <optgroup label="💳 Payment / Credit">
-                                    <option value="Payment">💳 Payment Received</option>
-                                    <option value="Advance Payment">💰 Advance Payment</option>
-                                    <option value="Partial Payment">🪙 Partial Payment</option>
-                                    <option value="Discount">💸 Discount</option>
-                                    <option value="Waiver">🎁 Waiver (Maafi)</option>
-                                </optgroup>
+                        <div class="ef-group">
+                            <select id="ledgerDescSelect" onchange="toggleCustomDesc()">
+                                ${DESCRIPTION_ITEMS.map(item => `<option value="${item}">${item}</option>`).join('')}
                             </select>
                         </div>
                         <div class="ef-group">
-                            <input type="number" id="ledgerAmount" placeholder="Rs. Amount"
-                                value="${client.packageAmount || 0}" min="1" step="1"
-                                style="font-weight:700;font-size:0.85rem;">
+                            <input type="number" id="ledgerAmount" placeholder="Amount" value="${client.packageAmount || 0}" min="0" step="1">
                         </div>
-                        <button class="btn btn-green" onclick="addCustomEntry()" style="white-space:nowrap;">✅ Add</button>
+                        <button class="btn btn-green" onclick="addCustomEntry()">✅ Add</button>
                     </div>
                     <div class="ef-custom" id="customDescContainer">
-                        <input type="text" id="customDescInput" placeholder="Apna description likho...">
+                        <input type="text" id="customDescInput" placeholder="Write your own description">
                     </div>
-                    <div id="entryHint" style="font-size:0.6rem;color:#e74c3c;margin-top:6px;padding:6px 10px;background:#2a1515;border-radius:8px;border-left:3px solid #e74c3c;">
-                        📄 <b>Debit Mode:</b> Ye client par pending badhayega (Bill/Charge)
-                    </div>
-                    <div class="ef-quick" style="margin-top:10px;">
-                        <button class="btn btn-blue" onclick="addHalfPayment()">💰 Adha Payment</button>
+                    <div class="ef-quick">
+                        <button class="btn btn-blue" onclick="addHalfPayment()">💰 Half Payment</button>
                         <button class="btn btn-gold" onclick="applyDiscount()">💸 Discount</button>
-                        <button class="btn btn-green" onclick="markCleared()">✅ Sab Clear</button>
+                        <button class="btn btn-green" onclick="markCleared()">✅ Clear All</button>
                     </div>
                 </div>
             `;
@@ -4541,45 +4363,28 @@
                 `<div style="overflow-x:auto;"><table class="ledger-txn-table">
                     <thead><tr>
                         <th style="min-width:70px;">Date</th>
-                        <th style="min-width:120px;">Tafseel</th>
-                        <th style="text-align:right;min-width:70px;color:#2ecc71;">💳 Credit<br><small style="font-weight:400;font-size:0.5rem;">(Paid/Discount)</small></th>
-                        <th style="text-align:right;min-width:70px;color:#e74c3c;">📄 Debit<br><small style="font-weight:400;font-size:0.5rem;">(Bill/Charge)</small></th>
-                        <th style="text-align:right;min-width:70px;color:#f5a623;">⚖️ Baqi<br><small style="font-weight:400;font-size:0.5rem;">(Pending)</small></th>
+                        <th style="min-width:120px;">Description</th>
+                        <th style="text-align:right;min-width:70px;">Credit</th>
+                        <th style="text-align:right;min-width:70px;">Debit</th>
+                        <th style="text-align:right;min-width:70px;">Balance</th>
                         <th style="width:30px;"></th>
                     </tr></thead><tbody>`;
             if (transactions.length === 0) {
-                txnHtml += `<tr><td colspan="6" class="ledger-no-txn">Koi transaction nahi mili.</td></tr>`;
+                txnHtml += `<tr><td colspan="6" class="ledger-no-txn">No transactions yet.</td></tr>`;
             } else {
                 transactions.forEach(t => {
                     const displayDateTime = t.fullDateTime || formatDateTimeDisplay(t.date);
-                    const isCredit = (t.credit || 0) > 0 && (t.debit || 0) === 0;
-                    const isDebit = (t.debit || 0) > 0;
-                    const isDiscount = t.description && (t.description.toLowerCase() === 'discount' || t.description.toLowerCase() === 'waiver');
+                    const isCredit = (t.credit || 0) > 0;
+                    const isDiscount = t.description && t.description.toLowerCase().includes('discount');
                     const creditAmt = t.credit || 0;
                     const debitAmt = t.debit || 0;
-                    const bal = t.runningBalance;
-
-                    let badgeType, badgeIcon;
-                    if (isDiscount) { badgeType = 'discount'; badgeIcon = '💸'; }
-                    else if (isDebit) { badgeType = 'bill'; badgeIcon = '📄'; }
-                    else { badgeType = 'payment'; badgeIcon = '💳'; }
-
                     txnHtml += `
                         <tr>
                             <td style="font-size:0.55rem;">${displayDateTime}</td>
-                            <td class="txn-desc">
-                                <span class="txn-badge ${badgeType}">${badgeIcon}</span>
-                                ${escapeHtml(t.description || '-')}
-                            </td>
-                            <td class="txn-amt" style="text-align:right;${isCredit ? 'color:var(--green);font-weight:700;' : ''}">
-                                ${creditAmt > 0 ? 'Rs. '+creditAmt.toLocaleString() : '-'}
-                            </td>
-                            <td class="txn-amt" style="text-align:right;${isDebit ? 'color:var(--red);font-weight:700;' : ''}">
-                                ${debitAmt > 0 ? 'Rs. '+debitAmt.toLocaleString() : '-'}
-                            </td>
-                            <td class="txn-bal" style="text-align:right;font-weight:700;color:${bal > 0 ? 'var(--red)' : 'var(--green)'};">
-                                ${bal > 0 ? 'Rs. '+bal.toLocaleString() : '✅ Clear'}
-                            </td>
+                            <td class="txn-desc"><span class="txn-badge ${isDiscount ? 'discount' : (isCredit ? 'payment' : 'bill')}">${isDiscount ? '💸' : (isCredit ? '💳' : '📄')}</span> ${escapeHtml(t.description || '-')}</td>
+                            <td class="txn-amt" style="text-align:right;${isCredit ? 'color:var(--green);font-weight:700;' : ''}">${isCredit ? 'Rs. '+creditAmt.toLocaleString() : '-'}</td>
+                            <td class="txn-amt" style="text-align:right;${debitAmt > 0 ? 'color:var(--red);font-weight:700;' : ''}">${debitAmt > 0 ? 'Rs. '+debitAmt.toLocaleString() : '-'}</td>
+                            <td class="txn-bal" style="text-align:right;">Rs. ${t.runningBalance.toLocaleString()}</td>
                             <td><button class="txn-del" onclick="deleteLedgerEntry('${client.id}','${t.entryId}')">✕</button></td>
                         </tr>
                     `;
@@ -4593,80 +4398,18 @@
         window.toggleCustomDesc = function() {
             const sel = document.getElementById('ledgerDescSelect');
             const customContainer = document.getElementById('customDescContainer');
-            if (!sel || !customContainer) return;
-            if (sel.value === 'Other (Apna likho)') {
-                customContainer.classList.add('show');
-            } else {
-                customContainer.classList.remove('show');
-            }
-            const creditOptions = ['Payment', 'Advance Payment', 'Partial Payment', 'Discount', 'Waiver'];
-            const debitOptions = ['Monthly Bill', 'Opening Balance', 'Extra Charge', 'Late Fee', 'Connection Fee', 'Equipment Charge'];
-            if (creditOptions.includes(sel.value)) {
-                setEntryType('credit');
-            } else if (debitOptions.includes(sel.value)) {
-                setEntryType('debit');
-            }
-        };
-
-        window.setEntryType = function(type) {
-            const toggle = document.getElementById('entryTypeToggle');
-            const debitBtn = document.getElementById('typeDebitBtn');
-            const creditBtn = document.getElementById('typeCreditBtn');
-            const hint = document.getElementById('entryHint');
-            if (!toggle) return;
-            toggle.value = type;
-            if (type === 'debit') {
-                if (debitBtn) {
-                    debitBtn.style.background = '#3d1e1e';
-                    debitBtn.style.color = '#e74c3c';
-                    debitBtn.style.borderColor = '#e74c3c';
-                }
-                if (creditBtn) {
-                    creditBtn.style.background = 'var(--card2)';
-                    creditBtn.style.color = 'var(--text2)';
-                    creditBtn.style.borderColor = 'var(--border)';
-                }
-                if (hint) {
-                    hint.style.background = '#2a1515';
-                    hint.style.borderLeftColor = '#e74c3c';
-                    hint.style.color = '#e74c3c';
-                    hint.innerHTML = '📄 <b>Debit Mode:</b> Ye client par pending badhayega (Bill/Charge)';
-                }
-            } else {
-                if (creditBtn) {
-                    creditBtn.style.background = '#1e3d2f';
-                    creditBtn.style.color = '#2ecc71';
-                    creditBtn.style.borderColor = '#2ecc71';
-                }
-                if (debitBtn) {
-                    debitBtn.style.background = 'var(--card2)';
-                    debitBtn.style.color = 'var(--text2)';
-                    debitBtn.style.borderColor = 'var(--border)';
-                }
-                if (hint) {
-                    hint.style.background = '#1a2a1a';
-                    hint.style.borderLeftColor = '#2ecc71';
-                    hint.style.color = '#2ecc71';
-                    hint.innerHTML = '💳 <b>Credit Mode:</b> Ye pending kam karega (Payment/Discount)';
-                }
-            }
+            if (sel.value === 'Other (write your own)') { customContainer.classList.add('show'); } else { customContainer
+                    .classList.remove('show'); }
         };
 
         window.addCustomEntry = function() {
             if (!currentLedgerId) { toast('No client selected', true); return; }
             const sel = document.getElementById('ledgerDescSelect');
             let desc = sel.value;
-            if (desc === 'Other (Apna likho)') {
-                const customInput = document.getElementById('customDescInput');
-                desc = customInput.value.trim();
-                if (!desc) { toast('Apna description likho', true); return; }
-            }
+            if (desc === 'Other (write your own)') { const customInput = document.getElementById('customDescInput');
+                desc = customInput.value.trim(); if (!desc) { toast('Please write a description', true); return; } }
             const amt = parseInt(document.getElementById('ledgerAmount').value);
-            if (!amt || amt <= 0) { toast('Sahi amount enter karo', true); return; }
-
-            const typeToggle = document.getElementById('entryTypeToggle');
-            const entryType = typeToggle ? typeToggle.value : 'auto';
-
+            if (!amt || amt <= 0) { toast('Enter a valid amount', true); return; }
             const clients = getClients();
             const c = clients.find(x => x.id === currentLedgerId);
             if (!c) return;
@@ -4674,35 +4417,18 @@
             const now = new Date();
             const monthKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
             const dateTimeStr = getDateTimeWithTime();
-
-            let isDebit;
-            if (entryType === 'debit') {
-                isDebit = true;
-            } else if (entryType === 'credit') {
-                isDebit = false;
-            } else {
-                isDebit = ['Monthly Bill', 'Opening Balance', 'Extra Charge', 'Late Fee', 'Connection Fee', 'Equipment Charge'].includes(desc);
-            }
-
-            if (desc === 'Discount' && !isDebit) {
-                c.discount = (c.discount || 0) + amt;
-            }
-
+            const isDebitEntry = ['Monthly Bill', 'Opening Balance'].includes(desc);
             c.paymentHistory.push({
-                entryId,
-                date: dateTimeStr,
-                description: desc,
-                credit: isDebit ? 0 : amt,
-                debit: isDebit ? amt : 0,
-                monthKey: monthKey,
-                fullDateTime: dateTimeStr,
-                entryType: isDebit ? 'debit' : 'credit'
+                entryId, date: dateTimeStr, description: desc,
+                credit: isDebitEntry ? 0 : amt,
+                debit: isDebitEntry ? amt : 0,
+                monthKey: monthKey, fullDateTime: dateTimeStr
             });
             saveClients(clients);
             if (currentUser) { pushClientToFirebase(c).catch(e => console.warn('Firebase update failed:', e)); }
             renderLedger(c);
             renderCurrentTab();
-            toast(`${isDebit ? '📄 Bill' : '💳 Payment'} "${desc}" Rs.${amt.toLocaleString()} add kiya`);
+            toast(`✅ "${desc}" Rs.${amt.toLocaleString()} added`);
         };
 
         window.addHalfPayment = function() {
@@ -4765,62 +4491,19 @@
             const clients = getClients();
             const c = clients.find(x => x.id === currentLedgerId);
             if (!c) return;
-            const pending = Math.max(0, calculateBalance(c));
-            if (pending <= 0) { toast('Koi pending amount nahi hai — discount lagane ki zaroorat nahi', true); return; }
-
-            const existingModal = document.getElementById('discountQuickModal');
-            if (existingModal) existingModal.remove();
-
-            const modal = document.createElement('div');
-            modal.id = 'discountQuickModal';
-            modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:99999;display:flex;align-items:center;justify-content:center;';
-            modal.innerHTML = `
-                <div style="background:var(--card);border-radius:18px;padding:22px;max-width:340px;width:90%;border:2px solid var(--gold);box-shadow:0 20px 60px rgba(0,0,0,0.5);">
-                    <div style="text-align:center;margin-bottom:16px;">
-                        <div style="font-size:2rem;">💸</div>
-                        <div style="font-size:1rem;font-weight:800;color:var(--gold);">Discount Apply Karo</div>
-                        <div style="font-size:0.7rem;color:var(--text2);margin-top:4px;">⚠️ Pending Balance: <b style="color:#e74c3c;">Rs. ${pending.toLocaleString()}</b></div>
-                        ${(c.discount && c.discount > 0) ? `<div style="font-size:0.6rem;color:var(--gold);margin-top:2px;">💸 Existing Discount: Rs.${c.discount.toLocaleString()}</div>` : ''}
-                    </div>
-                    <div style="font-size:0.7rem;color:var(--text2);margin-bottom:6px;">Discount Amount (Rs.):</div>
-                    <input id="discountAmtInput" type="number" min="1" max="${pending}" placeholder="e.g. 100"
-                        style="width:100%;padding:12px 16px;border-radius:30px;border:2px solid var(--gold);background:var(--card2);color:var(--text);font-size:1rem;font-weight:700;outline:none;margin-bottom:8px;">
-                    <div style="font-size:0.6rem;color:var(--text2);margin-bottom:12px;">Discount se pending amount kam ho jata hai — client ko maafi milti hai</div>
-                    <div style="display:flex;gap:8px;">
-                        <button onclick="document.getElementById('discountQuickModal').remove()"
-                            style="flex:1;padding:12px;border-radius:30px;border:1.5px solid var(--border);background:transparent;color:var(--text2);font-weight:700;cursor:pointer;font-size:0.8rem;">
-                            ❌ Nahi
-                        </button>
-                        <button onclick="confirmDiscountApply(${pending})"
-                            style="flex:2;padding:12px;border-radius:30px;border:none;background:linear-gradient(135deg,#f5a623,#e67e22);color:#000;font-weight:800;cursor:pointer;font-size:0.85rem;">
-                            ✅ Discount Lagao
-                        </button>
-                    </div>
-                </div>`;
-            document.body.appendChild(modal);
-            setTimeout(() => { const inp = document.getElementById('discountAmtInput'); if (inp) inp.focus(); }, 100);
-        };
-
-        window.confirmDiscountApply = function(pending) {
-            const inp = document.getElementById('discountAmtInput');
-            if (!inp) return;
-            const discount = parseInt(inp.value);
-            if (!discount || isNaN(discount) || discount <= 0) { toast('Sahi amount enter karo', true); return; }
-            if (discount > pending) { toast(`Discount (Rs.${discount.toLocaleString()}) pending (Rs.${pending.toLocaleString()}) se zyada nahi ho sakta!`, true); return; }
-
-            document.getElementById('discountQuickModal').remove();
-
-            const clients = getClients();
-            const c = clients.find(x => x.id === currentLedgerId);
-            if (!c) return;
-
+            const td = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.debit) || 0), 0);
+            const tc = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.credit) || 0), 0);
+            const pending = Math.max(0, td - tc);
+            const amt = prompt('Discount amount (Rs.):\n\nPending: Rs.' + pending.toLocaleString());
+            if (!amt || isNaN(amt) || parseInt(amt) <= 0) return;
+            const discount = parseInt(amt);
+            if (discount > pending) { toast('Discount cannot exceed pending amount (Rs.' + pending.toLocaleString() +
+                    ')', true); return; }
+            if (!confirm(`Apply Rs.${discount.toLocaleString()} discount to ${c.name}?`)) return;
             const entryId = uid();
             const now = new Date();
             const monthKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
             const dateTimeStr = getDateTimeWithTime();
-
-            c.discount = (c.discount || 0) + discount;
-
             c.paymentHistory.push({
                 entryId,
                 date: dateTimeStr,
@@ -4828,15 +4511,13 @@
                 credit: discount,
                 debit: 0,
                 monthKey: monthKey,
-                fullDateTime: dateTimeStr,
-                entryType: 'discount'
+                fullDateTime: dateTimeStr
             });
-
             saveClients(clients);
             if (currentUser) { pushClientToFirebase(c).catch(e => console.warn('Firebase update failed:', e)); }
             renderLedger(c);
             renderCurrentTab();
-            toast(`💸 Discount Rs.${discount.toLocaleString()} lagaya — New Pending: Rs.${Math.max(0, pending - discount).toLocaleString()}`);
+            toast(`💸 Discount Rs.${discount.toLocaleString()} applied (credit entry added to ledger)`);
         };
 
         window.markCleared = function() {
@@ -4844,7 +4525,9 @@
             const clients = getClients();
             const c = clients.find(x => x.id === currentLedgerId);
             if (!c) return;
-            const pending = Math.max(0, calculateBalance(c));
+            const td = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.debit) || 0), 0);
+            const tc = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.credit) || 0), 0);
+            const pending = Math.max(0, td - tc);
             if (pending <= 0) { toast('Already cleared'); return; }
             if (!confirm(`Mark Rs.${pending.toLocaleString()} as fully paid for ${c.name}?`)) return;
             const entryId = uid();
@@ -4885,6 +4568,12 @@
         // =================================================================
         // 17. RECEIPT FUNCTIONS
         // =================================================================
+
+        // Helper to compute total discount for receipt display
+        function getReceiptDiscount(client) {
+            return getTotalDiscount(client);
+        }
+
         function populateReceipt1(client) {
             const wrap = document.getElementById('receipt1Wrap');
             const expiryDate = getPackageExpiry(client);
@@ -4894,8 +4583,7 @@
             const totalDebitR1 = filteredHistory.reduce((s, e) => s + (Number(e.debit) || 0), 0);
             const totalCredit = filteredHistory.reduce((s, e) => s + (Number(e.credit || 0)), 0);
             const pendingMonths = getPendingMonths(client);
-            const balance = calculateBalance(client);
-            const effectiveBill = Math.max(0, (client.packageAmount || 0) - (client.discount || 0));
+            const discountTotal = getReceiptDiscount(client);
 
             let statusLabel = 'Active',
                 statusClass = '';
@@ -4925,9 +4613,12 @@
             const genDate = formatDMY(now.toISOString()) + ' ' + String(now.getHours()).padStart(2, '0') + ':' + String(now
                 .getMinutes()).padStart(2, '0');
 
-            const discountDisplay = (client.discount && client.discount > 0) ?
-                `<div class="r-row"><span class="r-label">💸 Discount Applied</span><span class="r-value gold">Rs. ${client.discount.toLocaleString()}</span></div>` :
-                '';
+            // Build discount line if any
+            let discountLine = '';
+            if (discountTotal > 0) {
+                discountLine =
+                    `<div class="r-row"><span class="r-label">💸 Discount Applied</span><span class="r-value green">- Rs. ${discountTotal.toLocaleString()}</span></div>`;
+            }
 
             wrap.innerHTML = `
                     <div class="r-header">
@@ -4947,11 +4638,10 @@
                     <div class="r-row"><span class="r-label">Package</span><span class="r-value">${escapeHtml(client.package)}</span></div>
                     <div class="r-row"><span class="r-label">Speed</span><span class="r-value">${speed}</span></div>
                     <div class="r-row"><span class="r-label">Monthly Fee</span><span class="r-value gold">Rs. ${(client.packageAmount || 0).toLocaleString()}</span></div>
-                    ${discountDisplay}
-                    <div class="r-row"><span class="r-label">Effective Bill</span><span class="r-value gold">Rs. ${effectiveBill.toLocaleString()}</span></div>
-                    <div class="r-row"><span class="r-label">Total Billed</span><span class="r-value red">Rs. ${totalDebitR1.toLocaleString()}</span></div>
+                    <div class="r-row"><span class="r-label">Total Billed</span><span class="r-value red">Rs. ${((client.paymentHistory||[]).reduce((s,e)=>s+(Number(e.debit)||0),0)).toLocaleString()}</span></div>
                     <div class="r-row"><span class="r-label">Total Paid</span><span class="r-value green">Rs. ${totalCredit.toLocaleString()}</span></div>
-                    <div class="r-row"><span class="r-label">Balance Due</span><span class="r-value gold" style="font-size:0.9rem;">Rs. ${Math.max(0, balance).toLocaleString()}</span></div>
+                    ${discountLine}
+                    <div class="r-row"><span class="r-label">Balance Due</span><span class="r-value gold" style="font-size:0.9rem;">Rs. ${Math.max(0,totalDebitR1-totalCredit).toLocaleString()}</span></div>
                     <div class="r-divider"></div>
                     <div class="r-section-title">📅 Validity</div>
                     <div class="r-row"><span class="r-label">Start Date</span><span class="r-value">${formatDMY(client.packageStartDate)}</span></div>
@@ -4960,7 +4650,7 @@
                     <div class="r-row" style="margin-top:4px;"><span class="r-label">Status</span><span class="r-value"><span class="r-badge ${statusClass}">${statusLabel}</span></span></div>
                     ${pendingHtml}
                     <div class="r-total-box" style="margin-top:10px;">
-                        <div class="r-row"><span class="r-label" style="font-weight:800;">💰 GRAND TOTAL DUE</span><span class="r-value gold" style="font-size:1.1rem;">Rs. ${Math.max(0, balance).toLocaleString()}</span></div>
+                        <div class="r-row"><span class="r-label" style="font-weight:800;">💰 GRAND TOTAL DUE</span><span class="r-value gold" style="font-size:1.1rem;">Rs. ${Math.max(0,totalDebitR1-totalCredit).toLocaleString()}</span></div>
                     </div>
                     <div class="r-footer">
                         📞 0305-2848369 &nbsp;|&nbsp; 📧 aliabro104@gmail.com<br>
@@ -4978,7 +4668,8 @@
             const pendingMonths = getPendingMonths(client);
             const totalDebit = transactions.reduce((s, e) => s + (e.debit || 0), 0);
             const totalCredit = transactions.reduce((s, e) => s + (e.credit || 0), 0);
-            const balance = calculateBalance(client);
+            const balance = totalDebit - totalCredit;
+            const discountTotal = getReceiptDiscount(client);
             const receiptNo = generateReceiptNumber();
             const now = new Date();
             const genDate = formatDMY(now.toISOString()) + ' ' + String(now.getHours()).padStart(2, '0') + ':' + String(now
@@ -5011,9 +4702,11 @@
                     `<div style="font-size:0.7rem; color:#1e8e3e; margin:6px 0;">✅ No pending months — account is clear.</div>`;
             }
 
-            const discountDisplay = (client.discount && client.discount > 0) ?
-                `<div class="r-row"><span class="r-label">💸 Total Discount</span><span class="r-value gold">Rs. ${client.discount.toLocaleString()}</span></div>` :
-                '';
+            let discountLine = '';
+            if (discountTotal > 0) {
+                discountLine =
+                    `<div class="r-row"><span class="r-label">💸 Total Discount</span><span class="r-value green">- Rs. ${discountTotal.toLocaleString()}</span></div>`;
+            }
 
             wrap.innerHTML = `
                     <div class="r-header">
@@ -5028,11 +4721,6 @@
                     <div class="r-row"><span class="r-label">👤 Customer</span><span class="r-value">${escapeHtml(client.name)}</span></div>
                     <div class="r-row"><span class="r-label">📱 Phone</span><span class="r-value">${escapeHtml(client.phone)}</span></div>
                     <div class="r-divider"></div>
-                    <div class="r-row"><span class="r-label">📦 Package</span><span class="r-value">${escapeHtml(client.package)}</span></div>
-                    <div class="r-row"><span class="r-label">Monthly Fee</span><span class="r-value gold">Rs. ${(client.packageAmount || 0).toLocaleString()}</span></div>
-                    ${discountDisplay}
-                    <div class="r-row"><span class="r-label">Effective Monthly</span><span class="r-value gold">Rs. ${Math.max(0, (client.packageAmount||0) - (client.discount||0)).toLocaleString()}</span></div>
-                    <div class="r-divider"></div>
                     <div class="r-section-title">📜 Transaction History</div>
                     <table class="r-table">
                         <thead><tr><th>Date</th><th>Description</th><th style="text-align:right;">Credit</th><th style="text-align:right;">Debit</th></tr></thead>
@@ -5043,6 +4731,7 @@
                     <div class="r-total-box">
                         <div class="r-row"><span class="r-label">💰 Total Debit (Billed)</span><span class="r-value red">Rs. ${totalDebit.toLocaleString()}</span></div>
                         <div class="r-row"><span class="r-label">✅ Total Credit (Paid)</span><span class="r-value green">Rs. ${totalCredit.toLocaleString()}</span></div>
+                        ${discountLine}
                         <div class="r-row" style="border-top:2px solid #d4891a; padding-top:6px; margin-top:4px;">
                             <span class="r-label" style="font-weight:800;">📊 NET BALANCE</span>
                             <span class="r-value gold" style="font-size:1.1rem;">Rs. ${balance.toLocaleString()}</span>
@@ -5072,11 +4761,11 @@
             const monthName = now.toLocaleDateString('en-PK', { month: 'long', year: 'numeric' });
             const date = now.toLocaleDateString('en-PK', { year: 'numeric', month: 'long', day: 'numeric' });
             const monthKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
-            const balance = calculateBalance(c);
-            const pending = Math.max(0, balance);
+            const totalDebit = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.debit) || 0), 0);
+            const totalCredit = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.credit) || 0), 0);
+            const pending = Math.max(0, totalDebit - totalCredit);
             const isPaid = pending === 0 && c.status === 'active';
-            const effectiveBill = Math.max(0, (c.packageAmount || 0) - (c.discount || 0));
-            const displayAmount = isPaid ? effectiveBill : pending;
+            const displayAmount = isPaid ? c.packageAmount : pending;
             c._lastReceipt = { rno, date, total: displayAmount, totalAmount: displayAmount, monthName, monthKey,
                 clientId: id, generatedAt: new Date().toISOString(), isPaid: isPaid, paymentAmount: 0 };
             const clients = getClients();
@@ -5087,11 +4776,6 @@
                 `<div class="rec-detail"><span>VLAN ID</span><span><b>${escapeHtml(c.vlanId)}</b></span></div>` : '';
             const usernameLine = c.username ?
                 `<div class="rec-detail"><span>Username</span><span><b>${escapeHtml(c.username)}</b></span></div>` : '';
-            const discountLine = (c.discount && c.discount > 0) ?
-                `<div class="rec-detail"><span>💸 Discount</span><span><b style="color:var(--gold);">Rs. ${c.discount.toLocaleString()}</b></span></div>` :
-                '';
-            const effectiveLine =
-                `<div class="rec-detail"><span>Effective Monthly</span><span><b>Rs. ${effectiveBill.toLocaleString()}</b></span></div>`;
             let receiptClass = 'receipt-unpaid',
                 stampClass = 'receipt-unpaid-stamp',
                 stampText = 'UNPAID',
@@ -5108,6 +4792,15 @@
                 headerBg = 'linear-gradient(135deg,#1a7a3a,#2ecc71)';
                 headerColor = '#fff';
                 totalColor = '#1a7a3a'; }
+
+            // Build discount line for modal receipt
+            const discountTotal = getReceiptDiscount(c);
+            let discountLine = '';
+            if (discountTotal > 0) {
+                discountLine =
+                    `<div class="rec-detail"><span>💸 Discount</span><span style="color:#2ecc71;">- Rs. ${discountTotal.toLocaleString()}</span></div>`;
+            }
+
             const receiptHtml =
                 `
                 <div class="premium-receipt receipt-base ${receiptClass}" style="position:relative;background:#fff;">
@@ -5136,7 +4829,6 @@
                         <div class="rec-detail"><span>Package</span><span>${escapeHtml(c.package)}</span></div>
                         <div class="rec-detail"><span>Monthly Fee</span><span>Rs. ${c.packageAmount.toLocaleString()}</span></div>
                         ${discountLine}
-                        ${effectiveLine}
                         <div class="rec-detail"><span>Activation Date</span><span>${formatDMY(c.packageStartDate)}</span></div>
                         <div class="rec-detail"><span>Package End Date</span><span>${formatDMY(getPackageExpiry(c))}</span></div>
                         <div class="rec-detail" style="border-top:1px solid #eee;padding-top:8px;margin-top:4px;">
@@ -5234,30 +4926,23 @@
             document.getElementById('billingClientName').textContent = c.name;
             const totalDebit = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.debit) || 0), 0);
             const totalCredit = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.credit) || 0), 0);
-            const balance = calculateBalance(c);
-            const pending = Math.max(0, balance);
-            const effectiveBill = Math.max(0, (c.packageAmount || 0) - (c.discount || 0));
+            const pending = Math.max(0, totalDebit - totalCredit);
             let h =
-                `<div class="billing-summary"><div class="bs-row"><span class="bs-label">👤 Name</span><span class="bs-value">${escapeHtml(c.name)}</span></div><div class="bs-row"><span class="bs-label">📱 Phone</span><span class="bs-value">${escapeHtml(c.phone)}</span></div><div class="bs-row"><span class="bs-label">🔌 VLAN ID</span><span class="bs-value">${escapeHtml(c.vlanId || '—')}</span></div><div class="bs-row"><span class="bs-label">👤 Username</span><span class="bs-value">${escapeHtml(c.username || '—')}</span></div><div class="bs-row"><span class="bs-label">📦 Package</span><span class="bs-value">${escapeHtml(c.package)}</span></div><div class="bs-row"><span class="bs-label">💸 Discount</span><span class="bs-value" style="color:var(--gold);">Rs. ${(c.discount||0).toLocaleString()}</span></div><div class="bs-row"><span class="bs-label">💰 Effective Monthly</span><span class="bs-value" style="color:var(--gold);">Rs. ${effectiveBill.toLocaleString()}</span></div><div class="bs-row"><span class="bs-label">📅 Start</span><span class="bs-value">${formatDMY(c.packageStartDate)}</span></div><div class="bs-row"><span class="bs-label">⏰ Status</span><span class="bs-value">${c.status.toUpperCase()}</span></div></div>`;
+                `<div class="billing-summary"><div class="bs-row"><span class="bs-label">👤 Name</span><span class="bs-value">${escapeHtml(c.name)}</span></div><div class="bs-row"><span class="bs-label">📱 Phone</span><span class="bs-value">${escapeHtml(c.phone)}</span></div><div class="bs-row"><span class="bs-label">🔌 VLAN ID</span><span class="bs-value">${escapeHtml(c.vlanId || '—')}</span></div><div class="bs-row"><span class="bs-label">👤 Username</span><span class="bs-value">${escapeHtml(c.username || '—')}</span></div><div class="bs-row"><span class="bs-label">📦 Package</span><span class="bs-value">${escapeHtml(c.package)}</span></div><div class="bs-row"><span class="bs-label">📅 Start</span><span class="bs-value">${formatDMY(c.packageStartDate)}</span></div><div class="bs-row"><span class="bs-label">⏰ Status</span><span class="bs-value">${c.status.toUpperCase()}</span></div></div>`;
             h +=
                 `<div class="ledger-summary-cards" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0;"><div class="ledger-card" style="background:var(--card2);border-radius:12px;padding:10px;text-align:center;border:1px solid var(--border);"><div style="font-size:0.55rem;color:var(--text2);">Total Billed</div><div style="font-size:1rem;font-weight:700;color:#e74c3c;">Rs.${totalDebit.toLocaleString()}</div></div><div class="ledger-card" style="background:var(--card2);border-radius:12px;padding:10px;text-align:center;border:1px solid var(--border);"><div style="font-size:0.55rem;color:var(--text2);">Total Paid</div><div style="font-size:1rem;font-weight:700;color:#2ecc71;">Rs.${totalCredit.toLocaleString()}</div></div><div class="ledger-card" style="background:var(--card2);border-radius:12px;padding:10px;text-align:center;border:1px solid var(--border);"><div style="font-size:0.55rem;color:var(--text2);">Balance Due</div><div style="font-size:1rem;font-weight:700;color:#f5a623;">Rs.${pending.toLocaleString()}</div></div></div>`;
             const txns = getSortedTransactions(c);
             h += `<div style="font-size:0.7rem;font-weight:bold;margin:12px 0 6px;">📜 Complete Transaction History</div>`;
             h +=
                 `<div style="overflow-x:auto;"><table class="ledger-txn-table"><thead><tr><th>Date & Time</th><th>Description</th><th style="text-align:right;">Credit</th><th style="text-align:right;">Debit</th><th style="text-align:right;">Balance</th></tr></thead><tbody>`;
-            if (txns.length === 0) { h += '<tr><td colspan="5" class="no-data" style="text-align:center;padding:20px;color:var(--text2);">Koi transaction nahi</td></tr>'; } else {
+            if (txns.length === 0) { h += '<tr><td colspan="5" class="no-data" style="text-align:center;padding:20px;color:var(--text2);">No transactions yet</td></tr>'; } else {
                 for (const t of txns) { const displayDateTime = t.fullDateTime || formatDateTimeDisplay(t.date);
-                    const isDebit = (t.debit || 0) > 0;
-                    const isCredit = (t.credit || 0) > 0 && !isDebit;
-                    const bal = t.runningBalance;
                     h += `<tr>
                             <td style="font-size:0.55rem;">${displayDateTime}</td>
                             <td>${escapeHtml(t.description) || '-'}</td>
-                            <td style="text-align:right;color:var(--green);font-weight:700;">${isCredit ? 'Rs.' + (t.credit||0).toLocaleString() : '-'}</td>
-                            <td style="text-align:right;color:var(--red);font-weight:700;">${isDebit ? 'Rs.' + (t.debit||0).toLocaleString() : '-'}</td>
-                            <td style="text-align:right;font-weight:700;color:${bal > 0 ? '#e74c3c' : '#2ecc71'};">
-                                ${bal > 0 ? 'Rs.'+bal.toLocaleString() : '✅ Clear'}
-                            </td>
+                            <td style="text-align:right;color:var(--green);font-weight:700;">${t.credit > 0 ? 'Rs.' + t.credit.toLocaleString() : '-'}</td>
+                            <td style="text-align:right;color:var(--red);font-weight:700;">${t.debit > 0 ? 'Rs.' + t.debit.toLocaleString() : '-'}</td>
+                            <td style="text-align:right;font-weight:600;">Rs.${t.runningBalance.toLocaleString()}</td>
                           </tr>`; }
             }
             h += '</tbody></table></div>';
@@ -5277,11 +4962,9 @@
             const dateStr = now.toLocaleDateString('en-PK', { year: 'numeric', month: 'long', day: 'numeric' });
             const totalDebit = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.debit) || 0), 0);
             const totalCredit = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.credit) || 0), 0);
-            const balance = calculateBalance(c);
-            const pending = Math.max(0, balance);
+            const pending = Math.max(0, totalDebit - totalCredit);
             const isPaid = pending === 0 && c.status === 'active';
-            const effectiveBill = Math.max(0, (c.packageAmount || 0) - (c.discount || 0));
-            const displayAmount = isPaid ? effectiveBill : pending;
+            const displayAmount = isPaid ? c.packageAmount : pending;
             let rows = '';
             txns.slice(0, 20).forEach(t => { const displayDateTime = t.fullDateTime || formatDateTimeDisplay(t
                     .date); const creditDisplay = t.credit > 0 ? `Rs.${t.credit.toLocaleString()}` :
@@ -5295,9 +4978,6 @@
             const stampText = isPaid ? 'PAID' : 'UNPAID';
             const stampSub = isPaid ? 'Crown Fiber ✓' : 'Crown Fiber ⚠';
             const totalLabel = isPaid ? '✅ PAID IN FULL' : '⛔ TOTAL DUE (PENDING)';
-            const discountDisplay = (c.discount && c.discount > 0) ?
-                `<div style="display:flex;justify-content:space-between;font-size:0.65rem;padding:2px 0;"><span>💸 Discount Applied</span><span style="color:var(--gold);font-weight:700;">Rs. ${c.discount.toLocaleString()}</span></div>` :
-                '';
             const receiptHtml =
                 `
                 <div class="premium-receipt receipt-base ${receiptClass}" style="position:relative;background:#fff;">
@@ -5316,7 +4996,6 @@
                             <div><b>${escapeHtml(c.name)}</b> | 📱 ${escapeHtml(c.phone)}</div>
                             <div>📦 ${escapeHtml(c.package)} | 👤 ${escapeHtml(c.username || '—')}</div>
                             <div>📅 Statement Date: ${dateStr}</div>
-                            <div style="font-size:0.6rem;color:var(--gold);">💰 Monthly Fee: Rs.${(c.packageAmount||0).toLocaleString()} ${(c.discount&&c.discount>0)?'| 💸 Discount: Rs.'+c.discount.toLocaleString():''}</div>
                         </div>
                         <div class="rec-total" style="background:${isPaid?'#e8f8ef':'#fef9e7'};border:2px solid ${isPaid?'#2ecc71':'#f5a623'};">
                             <div class="total-label">${totalLabel}</div>
@@ -5328,7 +5007,6 @@
                             <span style="background:#f5f5f5;padding:4px 12px;border-radius:10px;">💳 Total Paid: <b style="color:#2ecc71;">Rs.${totalCredit.toLocaleString()}</b></span>
                             <span style="background:#f5f5f5;padding:4px 12px;border-radius:10px;">Pending: <b style="color:#f5a623;">Rs.${pending.toLocaleString()}</b></span>
                         </div>
-                        ${discountDisplay}
                         <div style="font-size:0.65rem;font-weight:bold;margin:8px 0;border-top:1px solid #eee;padding-top:8px;">📜 Recent Transactions</div>
                         <div style="font-size:0.55rem;border-bottom:1px solid #eee;padding-bottom:4px;display:flex;justify-content:space-between;font-weight:bold;color:#888;">
                             <span>Date & Time</span><span>Description</span><span>Credit</span><span>Debit</span><span>Balance</span>
@@ -5376,7 +5054,9 @@
             const c = getClients().find(x => x.id === id);
             const infoDiv = document.getElementById('reminderClientInfo');
             if (c && infoDiv) {
-                const total = Math.max(0, calculateBalance(c));
+                const td = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.debit) || 0), 0);
+                const tc = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.credit) || 0), 0);
+                const total = Math.max(0, td - tc);
                 infoDiv.innerHTML =
                     `<b>${escapeHtml(c.name)}</b> &nbsp;|&nbsp; 📱 ${escapeHtml(c.phone)}<br>📦 ${escapeHtml(c.package)}<br>💰 Package: Rs.${c.packageAmount.toLocaleString()} &nbsp;|&nbsp; Total Due: <b style="color:var(--gold)">Rs.${total.toLocaleString()}</b><br>🔌 VLAN: ${escapeHtml(c.vlanId || '—')} &nbsp;|&nbsp; 👤 ${escapeHtml(c.username || '—')}`;
             }
@@ -5400,14 +5080,12 @@
             const now = new Date();
             const month = now.toLocaleDateString('en-PK', { month: 'long', year: 'numeric' });
             const rno = 'RCP-' + Date.now().toString().slice(-8);
-            const total = Math.max(0, calculateBalance(c));
+            const td = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.debit) || 0), 0);
+            const tc = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.credit) || 0), 0);
+            const total = Math.max(0, td - tc);
             const dateStr = now.toLocaleDateString('en-PK', { year: 'numeric', month: 'long', day: 'numeric' });
-            const effectiveBill = Math.max(0, (c.packageAmount || 0) - (c.discount || 0));
             const accountBox =
                 `<div class="accent-account-box" style="background:${method==='EasyPaisa'?'#1a7a3a':'#c0392b'}; color:#fff;"><div class="logo">${logo}</div><div style="font-size:1.2rem; font-weight:600;">${label}</div><div class="number">${accountNumber}</div><div class="name">Account: ${accountName}</div></div>`;
-            const discountDisplay = (c.discount && c.discount > 0) ?
-                `<div class="rec-detail"><span>💸 Discount</span><span>Rs. ${c.discount.toLocaleString()}</span></div>` :
-                '';
             const cautionHtml =
                 `
                 <div class="caution-receipt receipt-base receipt-reminder" style="position:relative;background:#fff;">
@@ -5438,8 +5116,6 @@
                         ${c.username ? `<div class="rec-detail"><span>Username</span><span><b>${escapeHtml(c.username)}</b></span></div>` : ''}
                         <div class="rec-detail"><span>Package</span><span>${escapeHtml(c.package)}</span></div>
                         <div class="rec-detail"><span>Monthly Fee</span><span>Rs. ${c.packageAmount.toLocaleString()}</span></div>
-                        ${discountDisplay}
-                        <div class="rec-detail"><span>Effective Bill</span><span>Rs. ${effectiveBill.toLocaleString()}</span></div>
                         ${total>0?`<div class="rec-detail" style="color:#c0392b;"><span>Pending Balance</span><span>Rs. ${total.toLocaleString()}</span></div>`:''}
                         <div class="rec-detail"><span>Activation</span><span>${formatDMY(c.packageStartDate)}</span></div>
                         <div class="rec-detail"><span>Expiry</span><span>${formatDMY(getPackageExpiry(c))}</span></div>
@@ -5489,7 +5165,7 @@
             const rno = window._cautionRno || 'RCP-' + Date.now().toString().slice(-8);
             const month = window._cautionMonth || new Date().toLocaleDateString('en-PK', { month: 'long',
                     year: 'numeric' });
-            const total = window._cautionTotal || Math.max(0, calculateBalance(c));
+            const total = window._cautionTotal || c.packageAmount;
             html2canvas(el, { scale: 2, backgroundColor: '#ffffff', useCORS: true })
                 .then(function(canvas) {
                     const link = document.createElement('a');
@@ -5499,7 +5175,7 @@
                     link.click();
                     if (statusEl) statusEl.textContent = '✅ Image downloaded! Opening WhatsApp...';
                     const msg =
-                        `⚠️ *BILL PAYMENT REMINDER* ⚠️\n\n📄 Receipt: ${rno}\n📅 Month: ${month}\n👤 Customer: ${c.name}\n📱 Phone: ${c.phone}\n📦 Package: ${c.package}\n💰 Monthly Fee: Rs. ${c.packageAmount.toLocaleString()}${(c.discount&&c.discount>0)?'\n💸 Discount: Rs. '+c.discount.toLocaleString():''}\n💳 *TOTAL DUE: Rs. ${total.toLocaleString()}*\n\n💰 Payment via ${label}: ${account}\n\n⚠️ CAUTION: Please clear your dues to avoid service suspension.\n\n${urduSlogans[Math.floor(Math.random() * urduSlogans.length)]}\n\nOwner: SHAHID ALI ABRO\nPhone: 03052848369`;
+                        `⚠️ *BILL PAYMENT REMINDER* ⚠️\n\n📄 Receipt: ${rno}\n📅 Month: ${month}\n👤 Customer: ${c.name}\n📱 Phone: ${c.phone}\n📦 Package: ${c.package}\n💰 Monthly Fee: Rs. ${c.packageAmount.toLocaleString()}\n💳 *TOTAL DUE: Rs. ${total.toLocaleString()}*\n\n💰 Payment via ${label}: ${account}\n\n⚠️ CAUTION: Please clear your dues to avoid service suspension.\n\n${urduSlogans[Math.floor(Math.random() * urduSlogans.length)]}\n\nOwner: SHAHID ALI ABRO\nPhone: 03052848369`;
                     const waUrl = 'https://wa.me/' + formatPhone(c.phone) + '?text=' + encodeURIComponent(msg);
                     window.open(waUrl, '_blank');
                     setTimeout(() => { const modal = document.getElementById('tempCautionModal'); if (modal)
@@ -5711,7 +5387,6 @@
                                 package: importedClient.package || 'Custom',
                                 packageAmount: packageAmount,
                                 packageCost: packageCost,
-                                discount: importedClient.discount || 0,
                                 status: 'active',
                                 packageStartDate: importedClient.packageStartDate || new Date().toISOString().slice(0, 10),
                                 joinDate: importedClient.joinDate || new Date().toISOString().slice(0, 10),
@@ -5729,7 +5404,6 @@
                                 existing.package = cleanClient.package;
                                 existing.packageAmount = cleanClient.packageAmount;
                                 existing.packageCost = cleanClient.packageCost;
-                                existing.discount = cleanClient.discount;
                                 existing.packageStartDate = cleanClient.packageStartDate;
                                 existing.joinDate = cleanClient.joinDate;
                                 existing.vlanId = cleanClient.vlanId || existing.vlanId;
@@ -5818,7 +5492,6 @@
                         package: pkg,
                         packageAmount: resolvedAmt,
                         packageCost: cost,
-                        discount: 0,
                         status: 'active',
                         packageStartDate: new Date().toISOString().slice(0, 10),
                         joinDate: new Date().toISOString().slice(0, 10),
@@ -6005,7 +5678,6 @@
                     package: packageName,
                     packageAmount: packageAmount,
                     packageCost: packageCost,
-                    discount: 0,
                     status: 'active',
                     packageStartDate: packageStartDate,
                     joinDate: joinDate,
@@ -6053,7 +5725,6 @@
                                 existing.package = newClient.package;
                                 existing.packageAmount = newClient.packageAmount;
                                 existing.packageCost = newClient.packageCost || existing.packageCost;
-                                existing.discount = newClient.discount || existing.discount || 0;
                                 existing.packageStartDate = newClient.packageStartDate;
                                 existing.joinDate = newClient.joinDate;
                                 existing.vlanId = newClient.vlanId || existing.vlanId;
@@ -6425,6 +6096,7 @@
             if (filtered.length !== clients.length) { saveClients(filtered); }
         }
 
+        // package filter bar is called inside saveClients directly — no override needed
         window.renderCurrentTab = renderCurrentTab;
         window.getClients = getClients;
         window.openFullBilling = openFullBilling;
@@ -6440,10 +6112,7 @@
         }, 500);
 
         console.log("👑 D3 Crown Fiber — ISP Admin Panel");
-        console.log("✅ v3.0 — Fully Renewed & Perfection Build");
-        console.log("✅ Discount button always works (modal cleanup fixed)");
-        console.log("✅ Edit package selection fixed (preserves client's package)");
-        console.log("✅ All features polished and production-ready");
+        console.log("✅ v2.0 — Discount tag & receipt discount line added.");
     </script>
 </body>
 </html>
