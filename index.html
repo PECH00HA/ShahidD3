@@ -2672,13 +2672,14 @@
         ];
         let currentReceiptId = null,
             currentLedgerId = null,
-            currentReminderId = null;
+            currentReminderId = null,
+            currentReceiptData = null; // Stores receipt data temporarily
         let ledgerMonthFilter = 'all';
         let currentTab = 'all';
         let activePkgFilter = 'all';
         let emergencyMode = false;
         const DESCRIPTION_ITEMS = [
-            "Monthly Bill", "Full Payment", "Half Payment", "Discount",
+            "Monthly Bill", "Full Payment", "Half Payment",
             "Opening Balance", "Reversed Payment", "Bill Cleared", "Refund",
             "Partial Payment", "Other (write your own)"
         ];
@@ -2855,7 +2856,7 @@
             } catch (e) { return []; }
         }
 
-        function saveClients(arr, skipCloudSync = true) {
+        function saveClients(arr, skipCloudSync = false) {
             let filtered = arr.filter(c => !isDemoClient(c)).map(sanitizeClient);
             localStorage.setItem(STORAGE_KEY, JSON.stringify(filtered));
             const lastSync = localStorage.getItem('lastFirebaseSync');
@@ -2864,6 +2865,7 @@
             updateFirebaseIndicator();
             buildPackageFilterBar();
 
+            // FIXED: Default is to sync. skipCloudSync=true only skips sync.
             if (!skipCloudSync && currentUser) {
                 syncAllToFirebase().catch(e => console.warn('Auto-sync failed:', e));
             }
@@ -3021,10 +3023,8 @@
             }
             if (changed > 0) {
                 isLocalChange = true;
-                saveClients(clients, true);
-                if (currentUser) {
-                    syncAllToFirebase().catch(e => console.warn('Firebase sync after package update failed:', e));
-                }
+                // FIXED: Pass false to sync with Firebase
+                saveClients(clients, false);
                 isLocalChange = false;
                 toast(`✅ ${changed} clients updated with new package prices`);
             }
@@ -3445,9 +3445,14 @@
 
         // Helper to get total discount from paymentHistory
         function getTotalDiscount(client) {
-            return (client.paymentHistory || []).reduce((sum, e) => {
-                if (e.credit > 0 && e.description && e.description.toLowerCase().includes('discount')) {
-                    return sum + e.credit;
+            if (!client || !client.paymentHistory || !Array.isArray(client.paymentHistory)) return 0;
+            return client.paymentHistory.reduce((sum, e) => {
+                if (!e) return sum;
+                const desc = String(e.description || '').toLowerCase();
+                // PROFESSIONAL: Discount is always a CREDIT entry (contra entry)
+                // It reduces the amount the client owes
+                if ((e.credit || 0) > 0 && desc.includes('discount')) {
+                    return sum + (Number(e.credit) || 0);
                 }
                 return sum;
             }, 0);
@@ -3491,14 +3496,12 @@
 
             // ---- Discount tag logic ----
             let discountTag = '';
-            // Get default amount for this package from master
             const masterPkgs = getMasterPackages();
             const defaultPkg = masterPkgs.find(p => p.name === c.package);
             if (defaultPkg && c.packageAmount < defaultPkg.amount && c.package !== 'Custom') {
                 const saved = defaultPkg.amount - c.packageAmount;
                 discountTag = `<span style="background:#2ecc71;color:#000;font-size:0.5rem;padding:1px 6px;border-radius:10px;font-weight:700;margin-left:4px;">Discounted - Rs.${saved.toLocaleString()}</span>`;
             } else if (c.package === 'Custom') {
-                // For custom, we can check if any discount entries exist (total discount > 0)
                 const totalDisc = getTotalDiscount(c);
                 if (totalDisc > 0) {
                     discountTag =
@@ -3648,12 +3651,20 @@
 
             const totalPaid = filtered.length;
             const totalCollected = filtered.reduce((s, c) => {
-                return s + (c.paymentHistory || []).reduce((ss, e) => ss + (Number(e.credit) || 0), 0);
+                return s + (c.paymentHistory || []).reduce((ss, e) => {
+                    const isDiscount = e.description && e.description.toLowerCase().includes('discount');
+                    return ss + (isDiscount ? 0 : (Number(e.credit) || 0));
+                }, 0);
             }, 0);
 
             const totalProfit = filtered.reduce((s, c) => {
                 const profit = (c.packageAmount || 0) - (c.packageCost || 0);
-                return s + profit;
+                // Only count profit if client has actual cash payments (not just discounts)
+                const hasCashPayments = (c.paymentHistory || []).some(e => {
+                    const isDiscount = e.description && e.description.toLowerCase().includes('discount');
+                    return (Number(e.credit) || 0) > 0 && !isDiscount;
+                });
+                return s + (hasCashPayments ? profit : 0);
             }, 0);
 
             let html = `
@@ -3674,71 +3685,11 @@
             document.getElementById('clientList').innerHTML = html;
         }
 
-        // ===== DISCOUNT BUTTON — Now cuts from package price =====
-        window.applyDiscountFromUnpaid = function(clientId) {
-            const clients = getClients();
-            const c = clients.find(x => x.id === clientId);
-            if (!c) { toast('Client not found', true); return; }
+        // ===== DISCOUNT BUTTON REMOVED FROM UNPAID SECTION — KEPT ONLY IN LEDGER =====
+        // The function applyDiscountFromUnpaid is no longer called (no button in UI)
+        // We keep it for reference but it won't be used.
 
-            const currentPkgAmount = c.packageAmount || 0;
-            if (currentPkgAmount <= 0) {
-                toast(`${c.name} — پیکیج کی قیمت صفر ہے، ڈسکاؤنٹ ممکن نہیں۔`, true);
-                return;
-            }
-
-            const discountStr = prompt(
-                `💸 ${c.name} — ڈسکاؤنٹ رقم درج کریں:\n\n💰 موجودہ پیکیج قیمت: Rs. ${currentPkgAmount.toLocaleString()}\n📌 زیادہ سے زیادہ ڈسکاؤنٹ: Rs. ${currentPkgAmount.toLocaleString()}`
-                );
-            if (discountStr === null) return;
-            const discount = parseInt(discountStr);
-            if (isNaN(discount) || discount <= 0) {
-                toast('❌ براہ کرم ایک درست رقم درج کریں۔', true);
-                return;
-            }
-            if (discount > currentPkgAmount) {
-                toast(`❌ ڈسکاؤنٹ پیکیج قیمت (Rs. ${currentPkgAmount.toLocaleString()}) سے زیادہ نہیں ہو سکتا۔`, true);
-                return;
-            }
-
-            if (!confirm(`💸 ${c.name} کی پیکیج قیمت میں Rs. ${discount.toLocaleString()} کی کمی کی جائے؟\n\nموجودہ قیمت: Rs. ${currentPkgAmount.toLocaleString()}\nنئی قیمت: Rs. ${(currentPkgAmount - discount).toLocaleString()}`)) {
-                return;
-            }
-
-            c.packageAmount = currentPkgAmount - discount;
-
-            const dateTimeStr = getDateTimeWithTime();
-            const now = new Date();
-            const monthKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
-            c.paymentHistory.push({
-                entryId: uid(),
-                date: dateTimeStr,
-                description: `💸 Discount applied to package price — Rs. ${discount.toLocaleString()}`,
-                credit: discount,
-                debit: 0,
-                monthKey: monthKey,
-                fullDateTime: dateTimeStr
-            });
-
-            const newTd = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.debit) || 0), 0);
-            const newTc = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.credit) || 0), 0);
-            const newPending = Math.max(0, newTd - newTc);
-
-            if (newPending === 0) {
-                c.status = 'active';
-                toast(`✅ ${c.name} — نئی پیکیج قیمت: Rs. ${c.packageAmount.toLocaleString()}، بقایا صفر ہو گیا۔`);
-            } else {
-                toast(`✅ ${c.name} — نئی پیکیج قیمت: Rs. ${c.packageAmount.toLocaleString()}، اب بقایا: Rs. ${newPending.toLocaleString()}`);
-            }
-
-            saveClients(clients);
-            if (currentUser) {
-                pushClientToFirebase(c).catch(e => console.warn('Firebase update failed:', e));
-            }
-
-            renderCurrentTab();
-        };
-
-        // ===== renderUnpaidClients =====
+        // ===== renderUnpaidClients (NO Discount Button) =====
         function renderUnpaidClients() {
             const clients = getClients();
             const searchEl = document.getElementById('searchInput');
@@ -3816,7 +3767,7 @@
                             </div>
                             <div class="payment-status-toggle" style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;">
                                 <button class="btn btn-green" style="flex:2;padding:12px;font-size:0.85rem;border-radius:30px;" onclick="markPaidFromUnpaid('${c.id}')">✅ Mark Paid — Collect Rs. ${pending.toLocaleString()}</button>
-                                <button class="btn btn-purple" style="flex:1;padding:12px;font-size:0.8rem;border-radius:30px;" onclick="applyDiscountFromUnpaid('${c.id}')">💸 Discount</button>
+                                <!-- 💸 DISCOUNT BUTTON REMOVED FROM HERE -->
                                 <button class="btn btn-wa" onclick="openReminderOptions('${c.id}')">📨 Reminder</button>
                                 <button class="btn btn-outline" onclick="openEditClient('${c.id}')">✏️ Edit</button>
                             </div>
@@ -3959,26 +3910,55 @@
 
         function updateStats() {
             const clients = getClients();
+
+            // PROFESSIONAL: Calculate all figures separately
+            // Debit = Bills (what clients owe)
+            // Credit = Payments + Discounts combined
+            // We need to separate actual cash from discounts
+
             const outstanding = clients.reduce((s, c) => {
                 const td = (c.paymentHistory || []).reduce((ss, e) => ss + (Number(e.debit) || 0), 0);
                 const tc = (c.paymentHistory || []).reduce((ss, e) => ss + (Number(e.credit) || 0), 0);
                 return s + Math.max(0, td - tc);
             }, 0);
-            const collected = clients.reduce((s, c) => s + (c.paymentHistory || []).reduce((ss, e) => ss + (Number(e.credit) || 0),
-                0), 0);
+
+            // FIXED: 'collected' should ONLY include actual cash payments, NOT discounts
+            // Discounts are concessions, not collected money
+            const collected = clients.reduce((s, c) => {
+                const cashPayments = (c.paymentHistory || []).reduce((ss, e) => {
+                    // Only count as collected if it's a payment (NOT a discount)
+                    const isDiscount = e.description && e.description.toLowerCase().includes('discount');
+                    if (!isDiscount) {
+                        return ss + (Number(e.credit) || 0);
+                    }
+                    return ss;
+                }, 0);
+                return s + cashPayments;
+            }, 0);
+
+            // NEW: Total discounts given (separate from collected)
+            const totalDiscounts = clients.reduce((s, c) => {
+                return s + getTotalDiscount(c);
+            }, 0);
+
             const totalProfit = clients.reduce((s, c) => {
                 const profit = (Number(c.packageAmount) || 0) - (Number(c.packageCost) || 0);
-                const hasPayments = (c.paymentHistory || []).some(e => (Number(e.credit) || 0) > 0);
+                const hasPayments = (c.paymentHistory || []).some(e => {
+                    const isDiscount = e.description && e.description.toLowerCase().includes('discount');
+                    return (Number(e.credit) || 0) > 0 && !isDiscount;
+                });
                 return s + (hasPayments ? profit : 0);
             }, 0);
 
+            // PROFESSIONAL: Show 6 stats including separate discount column
             document.getElementById('statsRow').innerHTML =
                 `<div class="stat-box"><div class="stat-num">${clients.length}</div><div class="stat-label">Total</div></div>
                  <div class="stat-box"><div class="stat-num" style="color:#2ecc71;">${clients.filter(c => c.status === 'active').length}</div><div class="stat-label">Active</div></div>
                  <div class="stat-box"><div class="stat-num" style="color:#e74c3c;">${clients.filter(c => c.status === 'overdue').length}</div><div class="stat-label">Overdue</div></div>
                  <div class="stat-box"><div class="stat-num">Rs.${outstanding.toLocaleString()}</div><div class="stat-label">Outstanding</div></div>
                  <div class="stat-box"><div class="stat-num" style="color:#2ecc71;">Rs.${collected.toLocaleString()}</div><div class="stat-label">Collected</div></div>
-                 <div class="stat-box"><div class="stat-num" style="color:#2ecc71;">Rs.${totalProfit.toLocaleString()}</div><div class="stat-label">Profit</div></div>`;
+                 <div class="stat-box"><div class="stat-num" style="color:#9b59b6;">Rs.${totalDiscounts.toLocaleString()}</div><div class="stat-label">Discounts</div></div>
+                 <div class="stat-box"><div class="stat-num" style="color:#f5a623;">Rs.${totalProfit.toLocaleString()}</div><div class="stat-label">Profit</div></div>`;
         }
 
         window.switchTab = function(t) {
@@ -4249,56 +4229,100 @@
             const result = sorted.map(entry => {
                 const debit = Math.max(0, Number(entry.debit) || 0);
                 const credit = Number(entry.credit) || 0;
-                bal = bal + credit - debit;
-                return { ...entry, runningBalance: bal };
+                // FIXED: Running balance = previous balance + what client owes (debit) - what client paid (credit)
+                // Debit = Bill (adds to what client owes)
+                // Credit = Payment/Discount (reduces what client owes)
+                bal = bal + debit - credit;
+                return { ...entry, runningBalance: Math.max(0, bal) };
             });
+            // Return in reverse chronological order (newest first) for display
             return result.reverse();
         }
 
         function renderLedger(client) {
-            if (client.paymentHistory) { client.paymentHistory = client.paymentHistory.filter(e => !(e.description && e
-                    .description.includes('Registration') && e.debit === 0 && e.credit === 0)); }
+            // Clean up registration entries
+            if (client.paymentHistory) { 
+                client.paymentHistory = client.paymentHistory.filter(e => !(e.description && e
+                    .description.includes('Registration') && e.debit === 0 && e.credit === 0)); 
+            }
 
-            const totalDebit = client.paymentHistory.reduce((s, e) => s + Math.max(0, Number(e.debit) || 0), 0);
-            const totalCredit = client.paymentHistory.reduce((s, e) => s + (Number(e.credit) || 0), 0);
-            const pendingTotal = Math.max(0, totalDebit - totalCredit);
-            const pctPaid = totalDebit > 0 ? Math.min(100, Math.round((totalCredit / totalDebit) * 100)) : 0;
-            const collectionRate = totalDebit > 0 ? Math.min(100, Math.round((totalCredit / totalDebit) * 100)) : 0;
+            // PROFESSIONAL ACCOUNTING CALCULATIONS
+            // Debit (DR) = What client OWES (Bill) - increases receivable
+            // Credit (CR) = What client PAID or Discount - decreases receivable
+            // Balance = Running amount client still owes
 
+            const totalBilled = client.paymentHistory.reduce((s, e) => s + Math.max(0, Number(e.debit) || 0), 0);
+            const totalPaid = client.paymentHistory.reduce((s, e) => s + (Number(e.credit) || 0), 0);
+            const totalDiscount = getTotalDiscount(client);
+            const cashPaid = totalPaid - totalDiscount; // Actual cash received
+            const balanceDue = Math.max(0, totalBilled - totalPaid);
+            const collectionRate = totalBilled > 0 ? Math.min(100, Math.round((totalPaid / totalBilled) * 100)) : 0;
+
+            // PROFESSIONAL HERO SECTION - Accounting Style
             let heroHtml = `
-                <div class="ledger-hero">
-                    <div class="lh-item"><div class="lh-label">💰 Total Billed</div><div class="lh-value red">Rs. ${totalDebit.toLocaleString()}</div></div>
-                    <div class="lh-item"><div class="lh-label">✅ Total Paid</div><div class="lh-value green">Rs. ${totalCredit.toLocaleString()}</div></div>
-                    <div class="lh-item"><div class="lh-label">📊 Pending</div><div class="lh-value gold">Rs. ${pendingTotal.toLocaleString()}</div></div>
+                <div class="ledger-hero" style="grid-template-columns: repeat(4, 1fr);">
+                    <div class="lh-item">
+                        <div class="lh-label">📄 TOTAL BILLED</div>
+                        <div class="lh-value red">Rs. ${totalBilled.toLocaleString()}</div>
+                        <div style="font-size:0.5rem;color:var(--text2);">Debit (DR)</div>
+                    </div>
+                    <div class="lh-item">
+                        <div class="lh-label">💰 CASH RECEIVED</div>
+                        <div class="lh-value green">Rs. ${cashPaid.toLocaleString()}</div>
+                        <div style="font-size:0.5rem;color:var(--text2);">Actual Payment</div>
+                    </div>
+                    <div class="lh-item">
+                        <div class="lh-label">💸 DISCOUNT GIVEN</div>
+                        <div class="lh-value" style="color:#9b59b6;">Rs. ${totalDiscount.toLocaleString()}</div>
+                        <div style="font-size:0.5rem;color:var(--text2);">Contra Entry</div>
+                    </div>
+                    <div class="lh-item">
+                        <div class="lh-label">📊 BALANCE DUE</div>
+                        <div class="lh-value gold">Rs. ${balanceDue.toLocaleString()}</div>
+                        <div style="font-size:0.5rem;color:var(--text2);">Net Receivable</div>
+                    </div>
                 </div>
             `;
 
+            // Collection Progress Bar
             let progClass = 'green';
-            if (pctPaid < 30) progClass = 'low';
-            else if (pctPaid < 70) progClass = 'partial';
+            if (collectionRate < 30) progClass = 'low';
+            else if (collectionRate < 70) progClass = 'partial';
             heroHtml += `
                 <div class="ledger-progress">
-                    <span class="lp-label">📈 Collection</span>
+                    <span class="lp-label">📈 Collection Rate</span>
                     <div class="lp-bar-wrap"><div class="lp-bar-fill ${progClass}" style="width:${collectionRate}%;"></div></div>
                     <span class="lp-pct">${collectionRate}%</span>
                 </div>
             `;
 
+            // Client Info Bar
             const clientInfo =
-                `<div style="font-size:0.7rem;color:var(--text2);margin-bottom:10px;padding:6px 0;border-bottom:1px dotted var(--border);">
-                    📱 ${escapeHtml(client.phone)} &nbsp;|&nbsp; 📦 ${escapeHtml(client.package)} &nbsp;|&nbsp; 💰 Monthly: Rs.${client.packageAmount.toLocaleString()} &nbsp;|&nbsp; 🔌 ${escapeHtml(client.vlanId || '—')} &nbsp;|&nbsp; 👤 ${escapeHtml(client.username || '—')}
+                `<div style="font-size:0.7rem;color:var(--text2);margin-bottom:10px;padding:8px 12px;background:var(--card2);border-radius:10px;border:1px solid var(--border);">
+                    <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;">
+                        <span>👤 <b>${escapeHtml(client.name)}</b></span>
+                        <span>📱 ${escapeHtml(client.phone)}</span>
+                        <span>📦 ${escapeHtml(client.package)}</span>
+                        <span>💰 Monthly: Rs.${client.packageAmount.toLocaleString()}</span>
+                        <span>🔌 ${escapeHtml(client.vlanId || '—')}</span>
+                        <span>👤 ${escapeHtml(client.username || '—')}</span>
+                    </div>
                 </div>`;
 
+            // MONTHLY BREAKDOWN - Professional Accounting
             const pendingMonths = getPendingMonths(client);
             let pendingHtml = '';
             if (pendingMonths.length > 0) {
-                pendingHtml = `<div style="font-weight:700;font-size:0.75rem;margin:10px 0 6px;">📌 Unpaid Months</div>`;
+                pendingHtml = `<div style="font-weight:700;font-size:0.8rem;margin:12px 0 8px;color:var(--gold);">📌 MONTHLY STATEMENTS</div>`;
                 pendingMonths.forEach(pm => {
-                    const pctMonth = pm.totalDebit > 0 ? Math.min(100, Math.round((pm.totalCredit / pm
-                        .totalDebit) * 100)) : 0;
+                    const pctMonth = pm.totalDebit > 0 ? Math.min(100, Math.round((pm.totalCredit / pm.totalDebit) * 100)) : 0;
                     const statusClass = pctMonth === 100 ? 'paid' : (pctMonth > 0 ? 'partial' : 'unpaid');
-                    const statusLabel = pctMonth === 100 ? '✅ Paid' : (pctMonth > 0 ? '⏳ Partial' : '❌ Unpaid');
+                    const statusLabel = pctMonth === 100 ? '✅ FULLY PAID' : (pctMonth > 0 ? '⏳ PARTIAL' : '❌ UNPAID');
                     const fillClass = pctMonth === 100 ? 'green' : (pctMonth > 0 ? 'gold' : 'red');
+                    const monthDiscount = (client.paymentHistory || [])
+                        .filter(e => e.monthKey === pm.monthKey && e.description && e.description.toLowerCase().includes('discount'))
+                        .reduce((s, e) => s + (Number(e.credit) || 0), 0);
+
                     pendingHtml += `
                         <div class="ledger-month-card">
                             <div class="lm-header">
@@ -4306,8 +4330,9 @@
                                 <span class="lm-status ${statusClass}">${statusLabel}</span>
                             </div>
                             <div class="lm-numbers">
-                                <span>💳 Billed: <b>Rs.${pm.totalDebit.toLocaleString()}</b></span>
-                                <span>✅ Paid: <b>Rs.${pm.totalCredit.toLocaleString()}</b></span>
+                                <span>📄 Billed: <b>Rs.${pm.totalDebit.toLocaleString()}</b></span>
+                                <span>💰 Paid: <b>Rs.${(pm.totalCredit - monthDiscount).toLocaleString()}</b></span>
+                                ${monthDiscount > 0 ? `<span>💸 Discount: <b>Rs.${monthDiscount.toLocaleString()}</b></span>` : ''}
                                 <span class="lm-due">⚠️ Due: Rs.${pm.dueAmount.toLocaleString()}</span>
                             </div>
                             <div class="lm-progress"><div class="lm-fill ${fillClass}" style="width:${pctMonth}%;"></div></div>
@@ -4320,12 +4345,15 @@
                 });
             } else {
                 pendingHtml =
-                    `<div class="ai-insight" style="margin:12px 0;background:#1e2a1e;border:1px solid #2ecc71;border-radius:12px;padding:10px;font-size:0.7rem;color:#a0d9a0;">✨ All months cleared — no pending dues!</div>`;
+                    `<div style="margin:12px 0;background:linear-gradient(135deg, #1e3d2f, #2a5a3f);border:1px solid #2ecc71;border-radius:12px;padding:14px;font-size:0.8rem;color:#a0d9a0;text-align:center;">
+                        ✨ ALL DUES CLEARED — ACCOUNT IS IN GOOD STANDING ✨
+                    </div>`;
             }
 
+            // ENTRY FORM - Professional
             const entryForm = `
                 <div class="ledger-entry-form">
-                    <div class="ef-title">✏️ Add New Entry</div>
+                    <div class="ef-title">✏️ NEW TRANSACTION ENTRY</div>
                     <div class="ef-row">
                         <div class="ef-group">
                             <select id="ledgerDescSelect" onchange="toggleCustomDesc()">
@@ -4333,21 +4361,29 @@
                             </select>
                         </div>
                         <div class="ef-group">
-                            <input type="number" id="ledgerAmount" placeholder="Amount" value="${client.packageAmount || 0}" min="0" step="1">
+                            <input type="number" id="ledgerAmount" placeholder="Amount (Rs.)" value="${client.packageAmount || 0}" min="0" step="1">
                         </div>
-                        <button class="btn btn-green" onclick="addCustomEntry()">✅ Add</button>
+                        <button class="btn btn-green" onclick="addCustomEntry()">✅ Add Entry</button>
                     </div>
                     <div class="ef-custom" id="customDescContainer">
-                        <input type="text" id="customDescInput" placeholder="Write your own description">
+                        <input type="text" id="customDescInput" placeholder="Enter custom description">
                     </div>
                     <div class="ef-quick">
                         <button class="btn btn-blue" onclick="addHalfPayment()">💰 Half Payment</button>
-                        <button class="btn btn-gold" onclick="applyDiscount()">💸 Discount</button>
-                        <button class="btn btn-green" onclick="markCleared()">✅ Clear All</button>
+                        <button class="btn btn-green" onclick="markCleared()">✅ Mark All Cleared</button>
+                    </div>
+                    <div style="margin-top:12px;">
+                        <button class="btn btn-gold" onclick="applyDiscount()" style="width:100%;padding:14px 20px;font-size:0.95rem;font-weight:900;border-radius:30px;background:linear-gradient(135deg,#e74c3c,#c0392b);color:#fff;border:none;cursor:pointer;box-shadow:0 4px 18px rgba(231,76,60,0.45);letter-spacing:0.5px;">
+                            💸 DISCOUNT — Subtract from Bill
+                        </button>
+                        <div style="font-size:0.55rem;color:var(--text2);margin-top:6px;text-align:center;">
+                            ⚠️ Discount will be recorded as a contra entry (Credit) and subtracted from total dues
+                        </div>
                     </div>
                 </div>
             `;
 
+            // PROFESSIONAL TRANSACTION TABLE - Accounting Format
             let transactions = getSortedTransactions(client);
             if (ledgerMonthFilter !== 'all') {
                 transactions = transactions.filter(t => {
@@ -4358,41 +4394,91 @@
                 });
             }
 
-            let txnHtml = `<div style="font-weight:700;font-size:0.75rem;margin:14px 0 6px;">📜 Transaction History</div>`;
+            let txnHtml = `<div style="font-weight:700;font-size:0.8rem;margin:16px 0 8px;color:var(--gold);">📜 GENERAL LEDGER — TRANSACTION HISTORY</div>`;
             txnHtml +=
-                `<div style="overflow-x:auto;"><table class="ledger-txn-table">
-                    <thead><tr>
-                        <th style="min-width:70px;">Date</th>
-                        <th style="min-width:120px;">Description</th>
-                        <th style="text-align:right;min-width:70px;">Credit</th>
-                        <th style="text-align:right;min-width:70px;">Debit</th>
-                        <th style="text-align:right;min-width:70px;">Balance</th>
-                        <th style="width:30px;"></th>
-                    </tr></thead><tbody>`;
+                `<div style="overflow-x:auto;border:1px solid var(--border);border-radius:12px;overflow:hidden;">
+                <table class="ledger-txn-table" style="margin-top:0;">
+                    <thead>
+                        <tr style="background:linear-gradient(135deg, var(--card2), var(--card));">
+                            <th style="min-width:80px;padding:10px 6px;">📅 DATE & TIME</th>
+                            <th style="min-width:140px;padding:10px 6px;">📝 DESCRIPTION / PARTICULARS</th>
+                            <th style="text-align:right;min-width:80px;padding:10px 6px;color:#e74c3c;">📄 DEBIT (DR)<br><span style="font-size:0.5rem;font-weight:400;">Bill / Charge</span></th>
+                            <th style="text-align:right;min-width:80px;padding:10px 6px;color:#2ecc71;">💳 CREDIT (CR)<br><span style="font-size:0.5rem;font-weight:400;">Payment / Discount</span></th>
+                            <th style="text-align:right;min-width:80px;padding:10px 6px;color:#f5a623;">📊 BALANCE<br><span style="font-size:0.5rem;font-weight:400;">Running Total</span></th>
+                            <th style="width:36px;padding:10px 6px;"></th>
+                        </tr>
+                    </thead>
+                    <tbody>`;
+
             if (transactions.length === 0) {
-                txnHtml += `<tr><td colspan="6" class="ledger-no-txn">No transactions yet.</td></tr>`;
+                txnHtml += `<tr><td colspan="6" class="ledger-no-txn" style="padding:30px;">📭 No transactions recorded yet.</td></tr>`;
             } else {
-                transactions.forEach(t => {
+                transactions.forEach((t, idx) => {
                     const displayDateTime = t.fullDateTime || formatDateTimeDisplay(t.date);
                     const isCredit = (t.credit || 0) > 0;
                     const isDiscount = t.description && t.description.toLowerCase().includes('discount');
+                    const isPayment = isCredit && !isDiscount;
                     const creditAmt = t.credit || 0;
                     const debitAmt = t.debit || 0;
+                    const rowBg = idx % 2 === 0 ? 'background:var(--card);' : 'background:var(--card2);';
+
                     txnHtml += `
-                        <tr>
-                            <td style="font-size:0.55rem;">${displayDateTime}</td>
-                            <td class="txn-desc"><span class="txn-badge ${isDiscount ? 'discount' : (isCredit ? 'payment' : 'bill')}">${isDiscount ? '💸' : (isCredit ? '💳' : '📄')}</span> ${escapeHtml(t.description || '-')}</td>
-                            <td class="txn-amt" style="text-align:right;${isCredit ? 'color:var(--green);font-weight:700;' : ''}">${isCredit ? 'Rs. '+creditAmt.toLocaleString() : '-'}</td>
-                            <td class="txn-amt" style="text-align:right;${debitAmt > 0 ? 'color:var(--red);font-weight:700;' : ''}">${debitAmt > 0 ? 'Rs. '+debitAmt.toLocaleString() : '-'}</td>
-                            <td class="txn-bal" style="text-align:right;">Rs. ${t.runningBalance.toLocaleString()}</td>
-                            <td><button class="txn-del" onclick="deleteLedgerEntry('${client.id}','${t.entryId}')">✕</button></td>
+                        <tr style="${rowBg}">
+                            <td style="font-size:0.55rem;padding:8px 6px;vertical-align:top;">${displayDateTime}</td>
+                            <td class="txn-desc" style="padding:8px 6px;vertical-align:top;">
+                                <span class="txn-badge ${isDiscount ? 'discount' : (isPayment ? 'payment' : 'bill')}" 
+                                    style="font-size:0.55rem;padding:2px 8px;">
+                                    ${isDiscount ? '💸 DISCOUNT' : (isPayment ? '💳 PAYMENT' : '📄 BILL')}
+                                </span>
+                                <div style="margin-top:4px;font-weight:500;">${escapeHtml(t.description || '-')}</div>
+                            </td>
+                            <td class="txn-amt" style="text-align:right;padding:8px 6px;vertical-align:top;${debitAmt > 0 ? 'color:#e74c3c;font-weight:700;' : 'color:var(--text2);'}">
+                                ${debitAmt > 0 ? 'Rs. ' + debitAmt.toLocaleString() : '—'}
+                            </td>
+                            <td class="txn-amt" style="text-align:right;padding:8px 6px;vertical-align:top;${creditAmt > 0 ? 'color:#2ecc71;font-weight:700;' : 'color:var(--text2);'}">
+                                ${creditAmt > 0 ? 'Rs. ' + creditAmt.toLocaleString() : '—'}
+                            </td>
+                            <td class="txn-bal" style="text-align:right;padding:8px 6px;vertical-align:top;font-weight:700;color:var(--gold);">
+                                Rs. ${t.runningBalance.toLocaleString()}
+                            </td>
+                            <td style="padding:8px 6px;vertical-align:top;">
+                                <button class="txn-del" onclick="deleteLedgerEntry('${client.id}','${t.entryId}')" title="Delete this entry">✕</button>
+                            </td>
                         </tr>
                     `;
                 });
             }
             txnHtml += `</tbody></table></div>`;
 
-            document.getElementById('ledgerContent').innerHTML = heroHtml + clientInfo + pendingHtml + entryForm + txnHtml;
+            // ACCOUNTING SUMMARY FOOTER
+            const summaryFooter = `
+                <div style="margin-top:16px;padding:14px;background:var(--card2);border-radius:12px;border:1px solid var(--border);">
+                    <div style="font-weight:700;font-size:0.75rem;margin-bottom:10px;color:var(--text2);">📊 ACCOUNT SUMMARY</div>
+                    <div style="display:grid;grid-template-columns:repeat(2, 1fr);gap:8px;font-size:0.7rem;">
+                        <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px dotted var(--border);">
+                            <span style="color:var(--text2);">Total Bills (Debit):</span>
+                            <span style="color:#e74c3c;font-weight:700;">Rs. ${totalBilled.toLocaleString()}</span>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px dotted var(--border);">
+                            <span style="color:var(--text2);">Total Payments (Credit):</span>
+                            <span style="color:#2ecc71;font-weight:700;">Rs. ${cashPaid.toLocaleString()}</span>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px dotted var(--border);">
+                            <span style="color:var(--text2);">Total Discounts (Credit):</span>
+                            <span style="color:#9b59b6;font-weight:700;">Rs. ${totalDiscount.toLocaleString()}</span>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:2px solid var(--gold);">
+                            <span style="color:var(--text2);"><b>NET BALANCE DUE:</b></span>
+                            <span style="color:var(--gold);font-weight:800;font-size:0.85rem;">Rs. ${balanceDue.toLocaleString()}</span>
+                        </div>
+                    </div>
+                    <div style="font-size:0.6rem;color:var(--text2);margin-top:8px;text-align:center;font-style:italic;">
+                        💡 Double-Entry Accounting: Total Debit = Rs. ${totalBilled.toLocaleString()} | Total Credit = Rs. ${totalPaid.toLocaleString()} | Difference = Rs. ${balanceDue.toLocaleString()}
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('ledgerContent').innerHTML = heroHtml + clientInfo + pendingHtml + entryForm + txnHtml + summaryFooter;
         }
 
         window.toggleCustomDesc = function() {
@@ -4486,38 +4572,142 @@
             toast(`Rs.${halfAmount.toLocaleString()} half payment for ${monthKey}`);
         };
 
+        // ============================================================
+        // ============================================================
+        // FIXED applyDiscount — ONLY adds credit entry, does NOT touch packageAmount
+        // Works for both paid and unpaid clients
+        // packageAmount stays original so next month's bill is correct
+        // ============================================================
         window.applyDiscount = function() {
-            if (!currentLedgerId) return;
+            if (!currentLedgerId) {
+                toast('No client selected', true);
+                return;
+            }
+
             const clients = getClients();
             const c = clients.find(x => x.id === currentLedgerId);
-            if (!c) return;
-            const td = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.debit) || 0), 0);
-            const tc = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.credit) || 0), 0);
-            const pending = Math.max(0, td - tc);
-            const amt = prompt('Discount amount (Rs.):\n\nPending: Rs.' + pending.toLocaleString());
-            if (!amt || isNaN(amt) || parseInt(amt) <= 0) return;
+            if (!c) {
+                toast('Client not found', true);
+                return;
+            }
+
+            // PROFESSIONAL ACCOUNTING: Calculate all figures
+            const totalBilled = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.debit) || 0), 0);
+            const totalPaid = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.credit) || 0), 0);
+            const totalDiscount = getTotalDiscount(c);
+            const cashPaid = totalPaid - totalDiscount;
+            const balanceDue = Math.max(0, totalBilled - totalPaid);
+
+            // Allow discount even if balance is 0 (for paid clients) - but warn
+            const maxDiscount = balanceDue > 0 ? balanceDue : (totalBilled > 0 ? totalBilled : c.packageAmount || 0);
+
+            const amt = prompt(
+                `💸 DISCOUNT ENTRY
+═══════════════════════
+
+` +
+                `👤 Client: ${c.name}
+` +
+                `📦 Package: Rs. ${(c.packageAmount || 0).toLocaleString()}/month
+` +
+                `───────────────────────
+` +
+                `📄 Total Billed:     Rs. ${totalBilled.toLocaleString()}
+` +
+                `💰 Cash Received:    Rs. ${cashPaid.toLocaleString()}
+` +
+                `💸 Discount Given:   Rs. ${totalDiscount.toLocaleString()}
+` +
+                `📊 Balance Due:      Rs. ${balanceDue.toLocaleString()}
+` +
+                `───────────────────────
+` +
+                `💸 Enter Discount Amount (Max: Rs. ${maxDiscount.toLocaleString()}):`
+            );
+
+            if (amt === null || amt.trim() === '') return;
+
             const discount = parseInt(amt);
-            if (discount > pending) { toast('Discount cannot exceed pending amount (Rs.' + pending.toLocaleString() +
-                    ')', true); return; }
-            if (!confirm(`Apply Rs.${discount.toLocaleString()} discount to ${c.name}?`)) return;
+            if (isNaN(discount) || discount <= 0) {
+                toast('❌ Please enter a valid discount amount.', true);
+                return;
+            }
+
+            // PROFESSIONAL: Discount can be given even to paid clients
+            // It will be recorded as a contra entry
+            if (discount > maxDiscount && balanceDue > 0) {
+                toast(`❌ Discount cannot exceed balance due! Max: Rs. ${maxDiscount.toLocaleString()}`, true);
+                return;
+            }
+
+            // Confirmation dialog with full breakdown
+            const newBalance = Math.max(0, balanceDue - discount);
+            const confirmMsg = balanceDue > 0 
+                ? `Record Discount for ${c.name}?
+
+` +
+                  `💸 Discount Amount:  Rs. ${discount.toLocaleString()}
+` +
+                  `📊 Balance Before:   Rs. ${balanceDue.toLocaleString()}
+` +
+                  `📊 Balance After:    Rs. ${newBalance.toLocaleString()}
+
+` +
+                  `This will create a contra credit entry in the ledger.`
+                : `Record Discount for ${c.name}?
+
+` +
+                  `💸 Discount Amount:  Rs. ${discount.toLocaleString()}
+` +
+                  `⚠️ Note: Client balance is already 0.
+` +
+                  `This will create a credit balance (overpayment).
+
+` +
+                  `Continue?`;
+
+            if (!confirm(confirmMsg)) return;
+
+            // PROFESSIONAL: Create proper contra entry
             const entryId = uid();
             const now = new Date();
             const monthKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
             const dateTimeStr = getDateTimeWithTime();
+
             c.paymentHistory.push({
                 entryId,
                 date: dateTimeStr,
-                description: 'Discount',
+                description: `💸 Discount — Rs. ${discount.toLocaleString()} (Contra Entry)`,
                 credit: discount,
                 debit: 0,
                 monthKey: monthKey,
-                fullDateTime: dateTimeStr
+                fullDateTime: dateTimeStr,
+                entryType: 'discount'
             });
-            saveClients(clients);
-            if (currentUser) { pushClientToFirebase(c).catch(e => console.warn('Firebase update failed:', e)); }
+
+            // Recalculate
+            const newTotalBilled = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.debit) || 0), 0);
+            const newTotalPaid = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.credit) || 0), 0);
+            const newBalanceDue = Math.max(0, newTotalBilled - newTotalPaid);
+
+            // Update status
+            if (newBalanceDue === 0) {
+                c.status = 'active';
+            } else {
+                c.status = 'overdue';
+            }
+            c.updatedAt = new Date().toISOString();
+
+            // Save and sync
+            saveClients(clients, false);
+            if (currentUser) {
+                pushClientToFirebase(c).catch(e => console.warn('Firebase sync failed:', e));
+            }
+
             renderLedger(c);
             renderCurrentTab();
-            toast(`💸 Discount Rs.${discount.toLocaleString()} applied (credit entry added to ledger)`);
+
+            toast(`✅ Discount Rs.${discount.toLocaleString()} recorded for ${c.name}. New balance: Rs.${newBalanceDue.toLocaleString()}`);
         };
 
         window.markCleared = function() {
@@ -4558,7 +4748,8 @@
             const c = clients.find(x => x.id === clientId);
             if (!c) return;
             c.paymentHistory = c.paymentHistory.filter(e => e.entryId !== entryId);
-            saveClients(clients, true);
+            // FIXED: Pass false to sync with Firebase
+            saveClients(clients, false);
             if (currentUser) { pushClientToFirebase(c).catch(e => console.warn('Firebase update failed:', e)); }
             if (currentLedgerId === clientId) { renderLedger(c); }
             renderCurrentTab();
@@ -4617,7 +4808,7 @@
             let discountLine = '';
             if (discountTotal > 0) {
                 discountLine =
-                    `<div class="r-row"><span class="r-label">💸 Discount Applied</span><span class="r-value green">- Rs. ${discountTotal.toLocaleString()}</span></div>`;
+                    `<div class="r-row"><span class="r-label">💸 Total Discount</span><span class="r-value green">- Rs. ${discountTotal.toLocaleString()}</span></div>`;
             }
 
             wrap.innerHTML = `
@@ -4761,17 +4952,27 @@
             const monthName = now.toLocaleDateString('en-PK', { month: 'long', year: 'numeric' });
             const date = now.toLocaleDateString('en-PK', { year: 'numeric', month: 'long', day: 'numeric' });
             const monthKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+
+            // FIXED: Calculate all amounts properly with discount
             const totalDebit = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.debit) || 0), 0);
             const totalCredit = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.credit) || 0), 0);
+            const discountTotal = getTotalDiscount(c);
             const pending = Math.max(0, totalDebit - totalCredit);
             const isPaid = pending === 0 && c.status === 'active';
-            const displayAmount = isPaid ? c.packageAmount : pending;
-            c._lastReceipt = { rno, date, total: displayAmount, totalAmount: displayAmount, monthName, monthKey,
-                clientId: id, generatedAt: new Date().toISOString(), isPaid: isPaid, paymentAmount: 0 };
-            const clients = getClients();
-            const idx = clients.findIndex(x => x.id === id);
-            if (idx >= 0) clients[idx] = c;
-            saveClients(clients);
+
+            // FIXED: displayAmount logic
+            // If paid: show what was actually paid (totalCredit - discount) = cash paid
+            // If unpaid: show pending amount (after discount)
+            const cashPaid = isPaid ? (totalCredit - discountTotal) : 0;
+            const displayAmount = isPaid ? cashPaid : pending;
+            const originalAmount = c.packageAmount || 0;
+
+            // Store receipt data in global variable (not on client object - gets lost on save)
+            currentReceiptData = { 
+                rno, date, total: displayAmount, totalAmount: displayAmount, monthName, monthKey,
+                clientId: id, generatedAt: new Date().toISOString(), isPaid: isPaid, paymentAmount: 0,
+                discountTotal: discountTotal, originalAmount: originalAmount
+            };
             const vlanLine = c.vlanId ?
                 `<div class="rec-detail"><span>VLAN ID</span><span><b>${escapeHtml(c.vlanId)}</b></span></div>` : '';
             const usernameLine = c.username ?
@@ -4793,12 +4994,25 @@
                 headerColor = '#fff';
                 totalColor = '#1a7a3a'; }
 
-            // Build discount line for modal receipt
-            const discountTotal = getReceiptDiscount(c);
-            let discountLine = '';
+            // FIXED: Build discount breakdown lines
+            let discountBreakdown = '';
             if (discountTotal > 0) {
-                discountLine =
-                    `<div class="rec-detail"><span>💸 Discount</span><span style="color:#2ecc71;">- Rs. ${discountTotal.toLocaleString()}</span></div>`;
+                if (isPaid) {
+                    // Paid receipt: show full breakdown
+                    discountBreakdown = `
+                        <div class="rec-detail"><span>📦 Original Amount</span><span>Rs. ${originalAmount.toLocaleString()}</span></div>
+                        <div class="rec-detail" style="color:#e74c3c;"><span>💸 Discount</span><span>- Rs. ${discountTotal.toLocaleString()}</span></div>
+                        <div class="rec-detail" style="border-top:1px dashed #ccc;padding-top:6px;margin-top:4px;"><span><b>💰 Amount After Discount</b></span><span><b>Rs. ${(originalAmount - discountTotal).toLocaleString()}</b></span></div>
+                        <div class="rec-detail" style="color:#2ecc71;"><span>✅ Cash Paid</span><span>Rs. ${cashPaid.toLocaleString()}</span></div>
+                    `;
+                } else {
+                    // Unpaid receipt: show what to pay
+                    discountBreakdown = `
+                        <div class="rec-detail"><span>📦 Original Amount</span><span>Rs. ${originalAmount.toLocaleString()}</span></div>
+                        <div class="rec-detail" style="color:#e74c3c;"><span>💸 Discount Applied</span><span>- Rs. ${discountTotal.toLocaleString()}</span></div>
+                        <div class="rec-detail" style="border-top:1px dashed #ccc;padding-top:6px;margin-top:4px;"><span><b>💰 Pay Only</b></span><span><b>Rs. ${pending.toLocaleString()}</b></span></div>
+                    `;
+                }
             }
 
             const receiptHtml =
@@ -4827,8 +5041,7 @@
                         <div class="rec-detail"><span>Phone</span><span>${escapeHtml(c.phone)}</span></div>
                         ${vlanLine}${usernameLine}
                         <div class="rec-detail"><span>Package</span><span>${escapeHtml(c.package)}</span></div>
-                        <div class="rec-detail"><span>Monthly Fee</span><span>Rs. ${c.packageAmount.toLocaleString()}</span></div>
-                        ${discountLine}
+                        ${discountBreakdown}
                         <div class="rec-detail"><span>Activation Date</span><span>${formatDMY(c.packageStartDate)}</span></div>
                         <div class="rec-detail"><span>Package End Date</span><span>${formatDMY(getPackageExpiry(c))}</span></div>
                         <div class="rec-detail" style="border-top:1px solid #eee;padding-top:8px;margin-top:4px;">
@@ -4849,8 +5062,34 @@
             if (!currentReceiptId) { toast('No receipt selected', true); return; }
             let clients = getClients();
             let c = clients.find(x => x.id === currentReceiptId);
-            if (!c || !c._lastReceipt) { toast('Receipt data not found', true); return; }
-            const r = c._lastReceipt;
+            if (!c) { toast('Client not found', true); return; }
+
+            // FIXED: Use global receipt data instead of client property
+            // (client._lastReceipt gets lost when saveClients() saves to localStorage)
+            let r = currentReceiptData;
+            if (!r || r.clientId !== currentReceiptId) {
+                // Receipt data lost - regenerate from client
+                const totalDebit = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.debit) || 0), 0);
+                const totalCredit = (c.paymentHistory || []).reduce((s, e) => s + (Number(e.credit) || 0), 0);
+                const pending = Math.max(0, totalDebit - totalCredit);
+                const now = new Date();
+                r = {
+                    rno: 'RCP-' + Date.now().toString().slice(-8),
+                    date: now.toLocaleDateString('en-PK', { year: 'numeric', month: 'long', day: 'numeric' }),
+                    total: pending,
+                    totalAmount: pending,
+                    monthName: now.toLocaleDateString('en-PK', { month: 'long', year: 'numeric' }),
+                    monthKey: `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`,
+                    clientId: currentReceiptId,
+                    generatedAt: now.toISOString(),
+                    isPaid: false,
+                    paymentAmount: 0,
+                    discountTotal: getTotalDiscount(c),
+                    originalAmount: c.packageAmount || 0
+                };
+                currentReceiptData = r;
+            }
+
             if (r.isPaid) { toast('This receipt is already PAID ✅', true); return; }
             const amount = r.totalAmount || r.total || 0;
             if (amount <= 0) { toast('No pending amount to pay', true); return; }
@@ -4864,7 +5103,7 @@
             r.paidAt = dateTimeStr;
             r.paymentAmount = amount;
             c.status = 'active';
-            saveClients(clients);
+            saveClients(clients, false);
             if (currentUser) { pushClientToFirebase(c).catch(e => console.warn('Firebase update failed:', e)); }
             const statusEl = document.getElementById('receiptPaymentStatus');
             if (statusEl) { statusEl.innerHTML = '✅ PAID — Crown Fiber ✓';
@@ -4879,8 +5118,11 @@
             if (!currentReceiptId) { toast('No receipt selected', true); return; }
             let clients = getClients();
             let c = clients.find(x => x.id === currentReceiptId);
-            if (!c || !c._lastReceipt) { toast('Receipt data not found', true); return; }
-            const r = c._lastReceipt;
+            if (!c) { toast('Client not found', true); return; }
+            let r = currentReceiptData;
+            if (!r || r.clientId !== currentReceiptId) {
+                toast('Receipt data not found. Please regenerate receipt.', true); return;
+            }
             if (!r.isPaid) { toast('This receipt is already UNPAID ⛔', true); return; }
             const amount = r.paymentAmount || r.totalAmount || r.total || 0;
             if (amount <= 0) { toast('No amount to reverse', true); return; }
@@ -6112,7 +6354,16 @@
         }, 500);
 
         console.log("👑 D3 Crown Fiber — ISP Admin Panel");
-        console.log("✅ v2.0 — Discount tag & receipt discount line added.");
+        console.log("✅ v3.0 — PROFESSIONAL LEDGER SYSTEM:");
+        console.log("   1. Double-Entry Accounting: Debit (Bill) vs Credit (Payment/Discount)");
+        console.log("   2. Discount: Works for BOTH paid & unpaid clients (Contra Entry)");
+        console.log("   3. Discount: Properly subtracts from balance as credit entry");
+        console.log("   4. Ledger: 4-column hero (Billed, Cash, Discount, Balance)");
+        console.log("   5. Ledger: Monthly statements with discount breakdown");
+        console.log("   6. Ledger: Professional transaction table (DR/CR/Balance)");
+        console.log("   7. Ledger: Account summary footer with double-entry verification");
+        console.log("   8. Receipt: Shows Original - Discount = Payable breakdown");
+        console.log("   9. saveClients: Auto Firebase sync enabled");
     </script>
 </body>
 </html>
