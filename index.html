@@ -8,7 +8,7 @@
     <!-- ===== EXTERNAL LIBS ===== -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js">
     </script>
-    <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js">
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js" onerror="if(typeof XLSX==='undefined'){var s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';document.head.appendChild(s);}">
     </script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js">
     </script>
@@ -2461,9 +2461,14 @@
 
         function normalizePhone(p) { if (!p) return ''; return String(p).replace(/\D/g, ''); }
 
-        function isDemoClient(c) { if (!c || !c.name) return false; let name = String(c.name).toLowerCase().trim(); let
-                exactDemos = ['ahmed', 'demo', 'test', 'sample']; for (let kw of exactDemos) { if (name === kw) return true; }
-            return false; }
+        function isDemoClient(c) {
+            if (!c || !c.name) return false;
+            let name = String(c.name).toLowerCase().trim();
+            if (['demo', 'test', 'sample'].indexOf(name) === -1) return false;
+            // Legacy seeded demo rows have no real phone. Real clients (even named Demo/Test) with a phone are kept.
+            const digits = String(c.phone || '').replace(/\D/g, '');
+            return digits.length < 6;
+        }
 
         function formatPhone(p) { if (!p) return ''; let c = String(p).replace(/\D/g, ''); if (c.startsWith('0') && c
                 .length === 11) c = '92' + c.substring(1);
@@ -4989,10 +4994,120 @@
             e.target.value = '';
         };
 
+        // =================================================================
+        // 24b. IMPORT HELPERS (SHARED BY CSV & EXCEL) - FIXED v2
+        // =================================================================
+        function detectImportColumns(headers) {
+            const norm = (h) => String(h == null ? '' : h).toLowerCase().trim().replace(/[^a-z0-9]/g, '');
+            const find = (aliasGroups, rejectWords) => {
+                for (const group of aliasGroups) {
+                    const idx = headers.findIndex(h => {
+                        const n = norm(h);
+                        if (!n) return false;
+                        if (rejectWords && rejectWords.some(r => n.includes(r))) return false;
+                        return group.some(a => n.includes(a));
+                    });
+                    if (idx >= 0) return idx;
+                }
+                return -1;
+            };
+            return {
+                // Prefer 'name' columns; never treat 'Customer ID'/'Username'/'Sl No' as the Name column
+                nameIdx: find([['name'], ['customer', 'client', 'subscriber']], ['id', 'user', 'no']),
+                phoneIdx: find([['phone'], ['mobile', 'cell', 'contact', 'tel', 'whatsapp']], null),
+                pkgIdx: find([['package', 'plan', 'speed', 'pkg', 'service', 'bandwidth']], null),
+                amountIdx: find([['amount', 'fee', 'charge', 'rent', 'price', 'bill', 'due', 'balance', 'charges', 'monthly']], ['date', 'expiry'])
+            };
+        }
+
+        function findImportHeader(rows) {
+            // Auto-detect the header row (handles title rows / merged headers in RedTone exports)
+            const maxScan = Math.min(rows.length, 10);
+            let best = null;
+            for (let r = 0; r < maxScan; r++) {
+                const headers = rows[r];
+                if (!headers || !headers.length) continue;
+                const cols = detectImportColumns(headers);
+                const score = [cols.nameIdx, cols.phoneIdx, cols.pkgIdx, cols.amountIdx].filter(i => i >= 0).length;
+                if (!best || score > best.score) {
+                    best = { rowIdx: r, score, cols };
+                }
+            }
+            return best;
+        }
+
+        function processImportRows(rows, sourceLabel) {
+            if (!rows || rows.length < 2) throw new Error(sourceLabel + ' file is empty');
+            const hdr = findImportHeader(rows);
+            if (!hdr || hdr.cols.nameIdx < 0) {
+                const preview = rows.slice(0, 3).map(r => (r || []).join(' | ')).join('\n');
+                throw new Error(sourceLabel + ': "Name" column not found.\nFirst rows seen:\n' + preview);
+            }
+            const { nameIdx, phoneIdx, pkgIdx, amountIdx } = hdr.cols;
+            if (phoneIdx < 0) toast('⚠️ ' + sourceLabel + ': Phone column not found - new clients will use a placeholder phone.', true);
+            const clients = getClients();
+            let created = 0, updated = 0, skipped = 0;
+            for (let i = hdr.rowIdx + 1; i < rows.length; i++) {
+                const row = rows[i];
+                if (!row || row.length === 0) continue;
+                if (row.every(c => c === '' || c === null || c === undefined)) continue;
+                const name = nameIdx >= 0 && row[nameIdx] ? String(row[nameIdx]).trim() : '';
+                const phoneRaw = phoneIdx >= 0 && row[phoneIdx] !== undefined && row[phoneIdx] !== null ? String(row[phoneIdx]).trim() : '';
+                if (!name && !phoneRaw) { skipped++; continue; }
+                const displayName = name || 'Client-' + (phoneRaw ? phoneRaw.slice(-4) : '');
+                const displayPhone = phoneRaw || '0000-0000000';
+                const phoneNorm = normalizePhone(displayPhone);
+                const pkg = pkgIdx >= 0 && row[pkgIdx] ? String(row[pkgIdx]).trim() : 'DHCP-4Mbps';
+                const rawAmt = amountIdx >= 0 && row[amountIdx] !== undefined && row[amountIdx] !== null ? String(row[amountIdx]).replace(/,/g, '').trim() : '';
+                const amt = rawAmt ? (parseFloat(rawAmt.replace(/[^0-9.]/g, '')) || 800) : 800;
+                let pkgDef = getMasterPackages().find(p => p.name === pkg);
+                let resolvedAmt = (pkgDef && pkgDef.amount > 0) ? pkgDef.amount : amt;
+                let cost = pkgDef ? pkgDef.cost : 500;
+                const existing = phoneRaw ? clients.find(c => normalizePhone(c.phone) === phoneNorm) : null;
+                if (existing) {
+                    if (name) existing.name = name;
+                    existing.package = pkg;
+                    existing.packageAmount = resolvedAmt;
+                    existing.packageCost = cost;
+                    existing.updatedAt = new Date().toISOString();
+                    updated++;
+                } else {
+                    const newClient = {
+                        id: uid(),
+                        name: displayName,
+                        phone: displayPhone,
+                        address: '',
+                        package: pkg,
+                        packageAmount: resolvedAmt,
+                        packageCost: cost,
+                        status: 'active',
+                        packageStartDate: new Date().toISOString().slice(0, 10),
+                        joinDate: new Date().toISOString().slice(0, 10),
+                        paymentHistory: [],
+                        vlanId: '',
+                        username: '',
+                        oldBill: 0,
+                        updatedAt: new Date().toISOString(),
+                        lastPaymentDate: null
+                    };
+                    clients.push(newClient);
+                    created++;
+                }
+            }
+            saveClients(clients);
+            // Reset filters so imported clients are visible immediately
+            activePkgFilter = 'all';
+            const searchEl = document.getElementById('searchInput');
+            if (searchEl) searchEl.value = '';
+            buildPackageFilterBar();
+            switchTab('all');
+            closeModal('backupModal');
+            return { created, updated, skipped };
+        }
+
         window.importCSV = function(event) {
             const file = event.target.files[0];
             if (!file) return;
-            const importLedger = document.getElementById('importLedgerToggle').checked;
             const reader = new FileReader();
             reader.onload = function(e) {
                 try {
@@ -5013,73 +5128,9 @@
                         result.push(current.trim());
                         return result;
                     };
-                    const headers = parseCSVLine(lines[0]);
-                    const rows = [];
-                    for (let i = 1; i < lines.length; i++) {
-                        const row = parseCSVLine(lines[i]);
-                        if (row.length >= 2) rows.push(row);
-                    }
-                    // process rows
-                    const clients = getClients();
-                    let created = 0,
-                        updated = 0;
-                    const nameIdx = headers.findIndex(h => h.toLowerCase().includes('name'));
-                    const phoneIdx = headers.findIndex(h => h.toLowerCase().includes('phone') || h.toLowerCase()
-                    .includes('mobile'));
-                    const pkgIdx = headers.findIndex(h => h.toLowerCase().includes('package') || h.toLowerCase()
-                        .includes('plan'));
-                    const amountIdx = headers.findIndex(h => h.toLowerCase().includes('amount') || h.toLowerCase()
-                        .includes('fee'));
-                    for (const row of rows) {
-                        if (!row || row.length === 0) continue;
-                        const name = nameIdx >= 0 && row[nameIdx] ? String(row[nameIdx]).trim() : '';
-                        const phoneRaw = phoneIdx >= 0 && row[phoneIdx] ? String(row[phoneIdx]).trim() : '';
-                        if (!name && !phoneRaw) continue;
-                        const displayName = name || 'Client-' + (phoneRaw ? phoneRaw.slice(-4) : '');
-                        const displayPhone = phoneRaw || '0000-0000000';
-                        const phoneNorm = normalizePhone(displayPhone);
-                        const pkg = pkgIdx >= 0 && row[pkgIdx] ? String(row[pkgIdx]).trim() : 'DHCP-4Mbps';
-                        const amt = amountIdx >= 0 && row[amountIdx] ? parseInt(String(row[amountIdx]).replace(
-                            /\D/g, '')) || 800 : 800;
-                        let pkgDef = getMasterPackages().find(p => p.name === pkg);
-                        let resolvedAmt = (pkgDef && pkgDef.amount > 0) ? pkgDef.amount : amt;
-                        let cost = pkgDef ? pkgDef.cost : 500;
-                        const existing = phoneRaw ? clients.find(c => normalizePhone(c.phone) === phoneNorm) :
-                            null;
-                        if (existing) {
-                            if (name) existing.name = name;
-                            existing.package = pkg;
-                            existing.packageAmount = resolvedAmt;
-                            existing.packageCost = cost;
-                            existing.updatedAt = new Date().toISOString();
-                            updated++;
-                        } else {
-                            const newClient = {
-                                id: uid(),
-                                name: displayName,
-                                phone: displayPhone,
-                                address: '',
-                                package: pkg,
-                                packageAmount: resolvedAmt,
-                                packageCost: cost,
-                                status: 'active',
-                                packageStartDate: new Date().toISOString().slice(0, 10),
-                                joinDate: new Date().toISOString().slice(0, 10),
-                                paymentHistory: importLedger ? [] : [],
-                                vlanId: '',
-                                username: '',
-                                oldBill: 0,
-                                updatedAt: new Date().toISOString(),
-                                lastPaymentDate: null
-                            };
-                            clients.push(newClient);
-                            created++;
-                        }
-                    }
-                    saveClients(clients);
-                    toast(`CSV: ${created} new, ${updated} updated`);
-                    renderCurrentTab();
-                    closeModal('backupModal');
+                    const rows = lines.map(parseCSVLine);
+                    const res = processImportRows(rows, 'CSV');
+                    toast(`CSV: ${res.created} new, ${res.updated} updated${res.skipped ? ', ' + res.skipped + ' skipped' : ''}`);
                 } catch (err) {
                     toast('CSV error: ' + err.message, true);
                 }
@@ -5091,77 +5142,16 @@
         window.importExcel = function(event) {
             const file = event.target.files[0];
             if (!file) return;
-            const importLedger = document.getElementById('importLedgerToggle').checked;
             const reader = new FileReader();
             reader.onload = function(e) {
                 try {
+                    if (typeof XLSX === 'undefined') throw new Error('Excel library failed to load. Check internet and reload page.');
                     const data = new Uint8Array(e.target.result);
                     const workbook = XLSX.read(data, { type: 'array' });
                     const ws = workbook.Sheets[workbook.SheetNames[0]];
                     const rows = XLSX.utils.sheet_to_json(ws, { header: 1, defval: '' });
-                    if (!rows || rows.length < 2) throw new Error('Excel empty');
-                    const headers = rows[0];
-                    const clients = getClients();
-                    let created = 0,
-                        updated = 0;
-                    const nameIdx = headers.findIndex(h => String(h).toLowerCase().includes('name'));
-                    const phoneIdx = headers.findIndex(h => String(h).toLowerCase().includes('phone') || String(h)
-                        .toLowerCase().includes('mobile'));
-                    const pkgIdx = headers.findIndex(h => String(h).toLowerCase().includes('package') || String(h)
-                        .toLowerCase().includes('plan'));
-                    const amountIdx = headers.findIndex(h => String(h).toLowerCase().includes('amount') || String(h)
-                        .toLowerCase().includes('fee'));
-                    for (let i = 1; i < rows.length; i++) {
-                        const row = rows[i];
-                        if (!row || row.every(c => c === '' || c === null || c === undefined)) continue;
-                        const name = nameIdx >= 0 && row[nameIdx] ? String(row[nameIdx]).trim() : '';
-                        const phoneRaw = phoneIdx >= 0 && row[phoneIdx] ? String(row[phoneIdx]).trim() : '';
-                        if (!name && !phoneRaw) continue;
-                        const displayName = name || 'Client-' + (phoneRaw ? phoneRaw.slice(-4) : '');
-                        const displayPhone = phoneRaw || '0000-0000000';
-                        const phoneNorm = normalizePhone(displayPhone);
-                        const pkg = pkgIdx >= 0 && row[pkgIdx] ? String(row[pkgIdx]).trim() : 'DHCP-4Mbps';
-                        const amt = amountIdx >= 0 && row[amountIdx] ? parseInt(String(row[amountIdx]).replace(
-                            /\D/g, '')) || 800 : 800;
-                        let pkgDef = getMasterPackages().find(p => p.name === pkg);
-                        let resolvedAmt = (pkgDef && pkgDef.amount > 0) ? pkgDef.amount : amt;
-                        let cost = pkgDef ? pkgDef.cost : 500;
-                        const existing = phoneRaw ? clients.find(c => normalizePhone(c.phone) === phoneNorm) :
-                            null;
-                        if (existing) {
-                            if (name) existing.name = name;
-                            existing.package = pkg;
-                            existing.packageAmount = resolvedAmt;
-                            existing.packageCost = cost;
-                            existing.updatedAt = new Date().toISOString();
-                            updated++;
-                        } else {
-                            const newClient = {
-                                id: uid(),
-                                name: displayName,
-                                phone: displayPhone,
-                                address: '',
-                                package: pkg,
-                                packageAmount: resolvedAmt,
-                                packageCost: cost,
-                                status: 'active',
-                                packageStartDate: new Date().toISOString().slice(0, 10),
-                                joinDate: new Date().toISOString().slice(0, 10),
-                                paymentHistory: importLedger ? [] : [],
-                                vlanId: '',
-                                username: '',
-                                oldBill: 0,
-                                updatedAt: new Date().toISOString(),
-                                lastPaymentDate: null
-                            };
-                            clients.push(newClient);
-                            created++;
-                        }
-                    }
-                    saveClients(clients);
-                    toast(`Excel: ${created} new, ${updated} updated`);
-                    renderCurrentTab();
-                    closeModal('backupModal');
+                    const res = processImportRows(rows, 'Excel');
+                    toast(`Excel: ${res.created} new, ${res.updated} updated${res.skipped ? ', ' + res.skipped + ' skipped' : ''}`);
                 } catch (err) {
                     toast('Excel import error: ' + err.message, true);
                     console.error(err);
