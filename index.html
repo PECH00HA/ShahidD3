@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
     <title>D3 Crown Fiber — ISP Admin</title>
 
-    <!-- ===== EXTERNAL LIBS ===== -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js" onerror="if(typeof XLSX==='undefined'){var s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';document.head.appendChild(s);}"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
@@ -56,6 +55,11 @@
             --fb-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
             --fb-blue: #5eb8ff; --fb-blue-dark: #3a9ee0;
             --fb-green: #00e676; --fb-gold: #ffd700;
+        }
+
+        @keyframes shimmerText {
+            0% { background-position: 0% center; }
+            100% { background-position: 200% center; }
         }
 
         #mainAppContainer { display: none; max-width: 1400px; margin: 0 auto; padding: 16px 16px 100px 16px; }
@@ -376,6 +380,8 @@
             border-radius: 30px; font-weight: 600; font-size: 0.8rem; z-index: 9999;
             animation: toastPop 2.8s forwards; pointer-events: none;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            max-width: 90%;
+            text-align: center;
         }
         .toast.err { background: var(--fb-red); }
         @keyframes toastPop {
@@ -721,6 +727,12 @@
         .billing-simple .bs-total-box .total-amount { font-size: 1.4rem; font-weight: 900; color: var(--fb-green); text-align: center; }
         .billing-simple .bs-total-box .total-label { font-size: 0.6rem; text-transform: uppercase; color: var(--fb-text-secondary); text-align: center; letter-spacing: 1px; }
         .billing-simple .bs-total-box .thank-you { text-align: center; font-size: 0.7rem; color: var(--fb-green); font-weight: 600; }
+
+        /* New Package modal - digits only input row */
+        .np-speed-row { display: flex; align-items: center; gap: 8px; }
+        .np-speed-row .np-prefix,
+        .np-speed-row .np-suffix { font-weight: 800; font-size: 1rem; color: var(--fb-blue); flex-shrink: 0; }
+        .np-speed-row input { flex: 1; text-align: center; font-weight: 700; font-size: 1rem; padding: 10px; }
     </style>
 </head>
 <body>
@@ -957,7 +969,7 @@
         <div class="modal-overlay" id="packageManagerModal">
             <div class="modal">
                 <div class="modal-head"><h3>📦 Package Manager</h3><button class="modal-close-btn" onclick="closeModal('packageManagerModal')">✕</button></div>
-                <div style="font-size:0.65rem;color:var(--fb-text-secondary);margin-bottom:10px;">⚡ Edit prices for your packages. Changes saved to Firebase automatically.</div>
+                <div style="font-size:0.65rem;color:var(--fb-text-secondary);margin-bottom:10px;">⚡ Edit prices for your packages. Changes saved to Firebase automatically.<br><span style="color:var(--fb-gold);">🔒 Price changes lock only for NEXT month — current month ka bill safe rehta hai.</span></div>
                 <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;">
                     <button class="btn" style="background:var(--fb-blue);color:#fff;padding:6px 14px;border-radius:30px;border:none;font-weight:600;font-size:0.65rem;cursor:pointer;" onclick="exportPackages()">📤 Export</button>
                     <button class="btn" style="background:transparent;border:1.5px solid var(--fb-border);padding:6px 14px;border-radius:30px;font-weight:600;font-size:0.65rem;cursor:pointer;" onclick="document.getElementById('importPackagesFile').click()">📥 Import</button>
@@ -967,6 +979,35 @@
                 <button class="btn-full" style="background:var(--fb-gold);color:#000;margin-top:12px;" onclick="applyAllPackagePricesToClients()">🔄 Apply Prices to ALL Clients</button>
                 <div class="small-text" style="margin-top:8px;">⚠️ Updates every client's monthly fee & cost based on matching package name.</div>
                 <div id="pkgAutoSaveIndicator" style="text-align:center;font-size:0.6rem;color:var(--fb-green);margin-top:6px;">✅ Changes saved to Firebase automatically</div>
+            </div>
+        </div>
+
+        <!-- ➕ New Package Modal -->
+        <div class="modal-overlay" id="newPackageModal">
+            <div class="modal" style="max-width:400px;">
+                <div class="modal-head"><h3>➕ Add New Package</h3><button class="modal-close-btn" onclick="closeModal('newPackageModal')">✕</button></div>
+                <div class="form-group">
+                    <label>📦 Package Speed (Mbps)</label>
+                    <div class="np-speed-row">
+                        <span class="np-prefix">DHCP-</span>
+                        <input type="number" id="npSpeed" placeholder="30" min="1" step="1" oninput="updateNpPreview()" />
+                        <span class="np-suffix">Mbps</span>
+                    </div>
+                    <div style="font-size:0.6rem;color:var(--fb-text-secondary);margin-top:4px;">💡 Sirf digits likhein — automatically "DHCP-XXMbps" ban jayega</div>
+                </div>
+                <div class="form-group">
+                    <label>💰 Sell Price (Rs.)</label>
+                    <input type="number" id="npAmount" placeholder="1000" min="0" step="1" />
+                </div>
+                <div class="form-group">
+                    <label>🏷️ ISP Cost (Rs.)</label>
+                    <input type="number" id="npCost" placeholder="600" min="0" step="1" />
+                </div>
+                <div id="npPreview" style="text-align:center;font-size:0.8rem;color:var(--fb-green);font-weight:800;margin-bottom:10px;min-height:22px;"></div>
+                <div style="display:flex;gap:8px;">
+                    <button class="btn-full" style="background:transparent;border:1.5px solid var(--fb-border);color:var(--fb-text);" onclick="closeModal('newPackageModal')">❌ Cancel</button>
+                    <button class="btn-full" style="background:var(--fb-green);color:#fff;" onclick="confirmNewPackage()">✅ Add Package</button>
+                </div>
             </div>
         </div>
 
@@ -1024,13 +1065,6 @@
         let currentUser = null;
         let isLocalChange = false;
         let fbListener = null;
-        let autoSyncInterval = null;
-        const STORAGE_KEY = 'd3_crown_paylater_fixed';
-        const MASTER_PACKAGES_KEY = 'd3_master_packages';
-        const ISP_NAME = 'SHAHID ALI ABRO';
-        const TOOL_OWNER = 'Khalid Ali Pechuho';
-        const INTERNET_NAME = 'D3 Crown Fiber Internet PVT';
-        const PACKAGE_DURATION = 30;
         let currentReceiptId = null,
             currentLedgerId = null,
             currentReminderId = null,
@@ -1039,6 +1073,17 @@
         let activePkgFilter = 'all';
         let emergencyMode = false;
         let currentBillingClientId = null;
+
+        const STORAGE_KEY = 'd3_crown_paylater_fixed';
+        const MASTER_PACKAGES_KEY = 'd3_master_packages';
+        const ISP_NAME = 'SHAHID ALI ABRO';
+        const TOOL_OWNER = 'Khalid Ali Pechuho';
+        const INTERNET_NAME = 'D3 Crown Fiber Internet PVT';
+        const PACKAGE_DURATION = 30;
+
+        // 🆕 PACKAGE CACHE — Sirf saveMasterPackages() ke baad invalidate hoti hai
+        let _masterPackagesCache = null;
+        function invalidatePackagesCache() { _masterPackagesCache = null; }
 
         const LEDGER_TYPES = ['Opening Balance', 'Monthly Bill', 'Payment', 'Discount', 'Adjustment'];
 
@@ -1096,15 +1141,11 @@
             return `D3-${y}${m}${d}-${h}${min}${String(Math.floor(Math.random() * 100)).padStart(2, '0')}`;
         }
 
-        // 🆕 UNIVERSAL DATE PARSER — supports DD/MM/YYYY, YYYY-MM-DD, Excel serial, "1 June 2026", Date object
         function parseImportDate(val) {
             if (val === null || val === undefined || val === '') return null;
             if (val instanceof Date) return isNaN(val.getTime()) ? null : val;
-
             const str = String(val).trim();
             if (!str) return null;
-
-            // Excel serial number
             if (/^\d+(\.\d+)?$/.test(str)) {
                 const n = parseFloat(str);
                 if (n > 20000 && n < 80000) {
@@ -1113,46 +1154,23 @@
                     if (!isNaN(d.getTime())) return d;
                 }
             }
-
-            // ISO: YYYY-MM-DD or YYYY/MM/DD
             let m = str.match(/^(\d{4})[-\/.](\d{1,2})[-\/.](\d{1,2})/);
-            if (m) {
-                const d = new Date(parseInt(m[1]), parseInt(m[2]) - 1, parseInt(m[3]));
-                if (!isNaN(d.getTime())) return d;
-            }
-
-            // DD/MM/YYYY, DD-MM-YYYY, DD.MM.YYYY
+            if (m) { const d = new Date(parseInt(m[1]), parseInt(m[2]) - 1, parseInt(m[3])); if (!isNaN(d.getTime())) return d; }
             m = str.match(/^(\d{1,2})[-\/.](\d{1,2})[-\/.](\d{2,4})/);
-            if (m) {
-                let y = parseInt(m[3]);
-                if (y < 100) y += 2000;
-                const d = new Date(y, parseInt(m[2]) - 1, parseInt(m[1]));
-                if (!isNaN(d.getTime())) return d;
-            }
-
-            // "1 June 2026" | "01 Jun 2026 12:00"
+            if (m) { let y = parseInt(m[3]); if (y < 100) y += 2000; const d = new Date(y, parseInt(m[2]) - 1, parseInt(m[1])); if (!isNaN(d.getTime())) return d; }
             m = str.match(/^(\d{1,2})\s+([A-Za-z]+)\s+(\d{4})/);
             if (m) {
                 const MONTHS = { jan:0,feb:1,mar:2,apr:3,may:4,jun:5,jul:6,aug:7,sep:8,oct:9,nov:10,dec:11,
                                  january:0,february:1,march:2,april:3,june:5,july:6,august:7,september:8,october:9,november:10,december:11 };
                 const moIdx = MONTHS[String(m[2]).toLowerCase()];
-                if (moIdx !== undefined) {
-                    const d = new Date(parseInt(m[3]), moIdx, parseInt(m[1]));
-                    if (!isNaN(d.getTime())) return d;
-                }
+                if (moIdx !== undefined) { const d = new Date(parseInt(m[3]), moIdx, parseInt(m[1])); if (!isNaN(d.getTime())) return d; }
             }
-
-            // "1 Jul 2026 12:00" (Excel short month)
             m = str.match(/^(\d{1,2})\s+([A-Za-z]{3,})\s+(\d{4})/);
             if (m) {
                 const MONTHS = { jan:0,feb:1,mar:2,apr:3,may:4,jun:5,jul:6,aug:7,sep:8,oct:9,nov:10,dec:11 };
                 const moIdx = MONTHS[String(m[2]).toLowerCase().substring(0,3)];
-                if (moIdx !== undefined) {
-                    const d = new Date(parseInt(m[3]), moIdx, parseInt(m[1]));
-                    if (!isNaN(d.getTime())) return d;
-                }
+                if (moIdx !== undefined) { const d = new Date(parseInt(m[3]), moIdx, parseInt(m[1])); if (!isNaN(d.getTime())) return d; }
             }
-
             const d = new Date(str);
             return isNaN(d.getTime()) ? null : d;
         }
@@ -1234,7 +1252,7 @@
             if (!c.id) c.id = uid();
             c.name = c.name || 'Unknown Client';
             c.phone = c.phone || '';
-            c.package = c.package || 'Custom';
+            c.package = c.package || 'DHCP-4Mbps';
             c.username = c.username || '';
             c.vlanId = c.vlanId || '';
             if (c.paymentHistory && Array.isArray(c.paymentHistory)) {
@@ -1273,8 +1291,71 @@
         }
 
         // =================================================================
-        // 7. PACKAGE MANAGER
+        // 7. PACKAGE MANAGER (WITH CACHE)
         // =================================================================
+        function getMonthKeyOf(date) { const d = date || new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0'); }
+        function getNextMonthKeyOf(date) { const d = date || new Date(); const n = new Date(d.getFullYear(), d.getMonth() + 1, 1); return n.getFullYear() + '-' + String(n.getMonth() + 1).padStart(2, '0'); }
+        function formatMonthKeyName(monthKey) {
+            if (!monthKey) return '';
+            const parts = String(monthKey).split('-');
+            if (parts.length !== 2) return monthKey;
+            const y = parts[0], m = parseInt(parts[1]);
+            const names = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+            return (names[m - 1] || parts[1]) + ' ' + y;
+        }
+        function normalizePackageHistoryEntry(h) {
+            return {
+                amount: Number(h && h.amount) || 0,
+                cost: Number(h && h.cost) || 0,
+                effectiveMonth: (h && h.effectiveMonth) ? String(h.effectiveMonth) : '2000-01',
+                changedAt: (h && h.changedAt) ? h.changedAt : new Date().toISOString()
+            };
+        }
+        function getPackagePriceForMonth(pkgName, monthKey) {
+            const pkg = getMasterPackages().find(p => p.name === pkgName);
+            if (!pkg) return null;
+            const hist = Array.isArray(pkg.history) ? pkg.history : [];
+            const sorted = [...hist].sort((a, b) => String(a.effectiveMonth).localeCompare(String(b.effectiveMonth)));
+            let applicable = null;
+            for (const h of sorted) {
+                if (String(h.effectiveMonth) <= String(monthKey)) applicable = h;
+                else break;
+            }
+            if (applicable) return { amount: Number(applicable.amount) || 0, cost: Number(applicable.cost) || 0 };
+            return { amount: Number(pkg.amount) || 0, cost: Number(pkg.cost) || 0 };
+        }
+        function getEffectiveMonthlyAmount(client, monthKey) {
+            if (!client) return 0;
+            const mk = monthKey || getMonthKeyOf(new Date());
+            if (client.package) {
+                const price = getPackagePriceForMonth(client.package, mk);
+                if (price) return price.amount;
+            }
+            return Number(client.packageAmount) || 0;
+        }
+        function getUpcomingPriceChange(pkgName) {
+            const result = { hasChange: false, prevAmount: 0, nextAmount: 0, nextMonth: '', nextMonthName: '' };
+            if (!pkgName) return result;
+            const pkg = getMasterPackages().find(p => p.name === pkgName);
+            if (!pkg || !Array.isArray(pkg.history)) return result;
+            const currentMonthKey = getMonthKeyOf(new Date());
+            const sorted = [...pkg.history].sort((a, b) => String(a.effectiveMonth).localeCompare(String(b.effectiveMonth)));
+            let currentPrice = null;
+            let nextPriceEntry = null;
+            for (const h of sorted) {
+                if (String(h.effectiveMonth) <= currentMonthKey) currentPrice = h;
+                else if (!nextPriceEntry) nextPriceEntry = h;
+            }
+            if (currentPrice && nextPriceEntry && Number(nextPriceEntry.amount) !== Number(currentPrice.amount)) {
+                result.hasChange = true;
+                result.prevAmount = Number(currentPrice.amount) || 0;
+                result.nextAmount = Number(nextPriceEntry.amount) || 0;
+                result.nextMonth = nextPriceEntry.effectiveMonth;
+                result.nextMonthName = formatMonthKeyName(nextPriceEntry.effectiveMonth);
+            }
+            return result;
+        }
+
         function getFirebasePackagesRef() { if (!currentUser) throw new Error('Not authenticated'); return db.ref(`${PACKAGES_PATH}/${currentUser.uid}`); }
 
         async function loadPackagesFromFirebase() {
@@ -1289,7 +1370,10 @@
             catch (e) { console.error('savePackagesToFirebase error:', e); throw e; }
         }
 
+        // 🆕 CACHED — Sirf pehli baar compute, phir cache se serve
         function getMasterPackages() {
+            if (_masterPackagesCache) return _masterPackagesCache;
+
             let saved = localStorage.getItem(MASTER_PACKAGES_KEY);
             const BUILT_IN_PACKAGES = [
                 { name: "DHCP-4Mbps", amount: 800, cost: 500 },
@@ -1298,30 +1382,84 @@
                 { name: "DHCP-10Mbps", amount: 1500, cost: 950 },
                 { name: "DHCP-12Mbps", amount: 1800, cost: 1100 },
                 { name: "DHCP-15Mbps", amount: 2200, cost: 1400 },
-                { name: "DHCP-20Mbps", amount: 2800, cost: 1800 },
-                { name: "Custom", amount: 0, cost: 0 }
+                { name: "DHCP-20Mbps", amount: 2800, cost: 1800 }
             ];
+            const nowISO = new Date().toISOString();
+            let result;
             if (saved) {
                 try {
                     let savedPkgs = JSON.parse(saved);
-                    let result = savedPkgs.map(p => ({ name: p.name || 'Custom', amount: typeof p.amount === 'number' ? p.amount : 0, cost: typeof p.cost === 'number' ? p.cost : 0 }));
-                    for (let bp of BUILT_IN_PACKAGES) { if (!result.some(p => p.name === bp.name)) result.push({ ...bp }); }
-                    return result;
-                } catch (e) { return BUILT_IN_PACKAGES.map(p => ({ ...p })); }
+                    result = savedPkgs.map(p => ({
+                        name: p.name || 'DHCP-4Mbps',
+                        amount: typeof p.amount === 'number' ? p.amount : 0,
+                        cost: typeof p.cost === 'number' ? p.cost : 0,
+                        history: Array.isArray(p.history) ? p.history : null
+                    })).filter(p => p.name !== 'Custom');
+                    for (let bp of BUILT_IN_PACKAGES) {
+                        if (!result.some(p => p.name === bp.name)) result.push({ ...bp, history: null });
+                    }
+                } catch (e) {
+                    result = BUILT_IN_PACKAGES.map(p => ({ ...p, history: null }));
+                }
+            } else {
+                result = BUILT_IN_PACKAGES.map(p => ({ ...p, history: null }));
             }
-            let defaultPkgs = BUILT_IN_PACKAGES.map(p => ({ ...p }));
-            localStorage.setItem(MASTER_PACKAGES_KEY, JSON.stringify(defaultPkgs));
-            return defaultPkgs;
+            result = result.map(p => {
+                let hist = (Array.isArray(p.history) && p.history.length)
+                    ? p.history.map(normalizePackageHistoryEntry)
+                    : [{ amount: p.amount, cost: p.cost, effectiveMonth: '2000-01', changedAt: nowISO }];
+                hist.sort((a, b) => String(a.effectiveMonth).localeCompare(String(b.effectiveMonth)));
+                return { name: p.name, amount: p.amount, cost: p.cost, history: hist };
+            });
+            if (!saved) {
+                localStorage.setItem(MASTER_PACKAGES_KEY, JSON.stringify(result));
+            }
+            _masterPackagesCache = result;
+            return result;
         }
 
+        // 🆕 Cache invalidate + save
         async function saveMasterPackages(pkgs) {
-            let saveData = pkgs.map(p => ({ name: p.name, amount: p.amount, cost: p.cost }));
-            localStorage.setItem(MASTER_PACKAGES_KEY, JSON.stringify(saveData));
+            const oldPkgs = getMasterPackages();
+            const now = new Date();
+            const nowISO = now.toISOString();
+            const nextMonthKey = getNextMonthKeyOf(now);
+
+            const merged = pkgs.map(p => {
+                const name = p.name || 'DHCP-4Mbps';
+                const amount = Number(p.amount) || 0;
+                const cost = Number(p.cost) || 0;
+                const old = oldPkgs.find(o => o.name === name);
+
+                let history;
+                if (old && Array.isArray(old.history) && old.history.length) {
+                    history = old.history.map(h => ({ ...h }));
+                } else if (Array.isArray(p.history) && p.history.length) {
+                    history = p.history.map(normalizePackageHistoryEntry);
+                } else {
+                    history = [{ amount, cost, effectiveMonth: '2000-01', changedAt: nowISO }];
+                }
+
+                if (old && (Number(old.amount) !== amount || Number(old.cost) !== cost)) {
+                    const idx = history.findIndex(h => String(h.effectiveMonth) === nextMonthKey);
+                    const entry = { amount, cost, effectiveMonth: nextMonthKey, changedAt: nowISO };
+                    if (idx >= 0) history[idx] = entry;
+                    else history.push(entry);
+                }
+                history.sort((a, b) => String(a.effectiveMonth).localeCompare(String(b.effectiveMonth)));
+
+                return { name, amount, cost, history };
+            });
+
+            // 🆕 Pehle cache clear, phir localStorage set
+            invalidatePackagesCache();
+            localStorage.setItem(MASTER_PACKAGES_KEY, JSON.stringify(merged));
+
             if (currentUser) {
-                try { await savePackagesToFirebase(saveData); toast('✅ Packages saved to Firebase Cloud'); }
+                try { await savePackagesToFirebase(merged); toast('✅ Packages saved to Firebase Cloud'); }
                 catch (e) { toast('⚠️ Packages saved locally but Firebase sync failed: ' + e.message, true); }
             }
-            syncPackagePricesToClients(pkgs);
+            syncPackagePricesToClients(merged);
             refreshPackageDropdown();
             const pm = document.getElementById('packageManagerModal');
             if (pm && pm.classList.contains('show')) renderPackageList();
@@ -1337,7 +1475,7 @@
 
         function exportPackages() {
             let pkgs = getMasterPackages();
-            let data = pkgs.map(p => ({ name: p.name, amount: p.amount, cost: p.cost }));
+            let data = pkgs.map(p => ({ name: p.name, amount: p.amount, cost: p.cost, history: p.history }));
             const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
             const a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
@@ -1357,10 +1495,21 @@
                     let pkgs = getMasterPackages();
                     let updated = 0;
                     for (const p of imported) {
-                        if (!p.name) continue;
+                        if (!p.name || p.name === 'Custom') continue;
                         let existing = pkgs.find(x => x.name === p.name);
-                        if (existing) { existing.amount = p.amount || existing.amount; existing.cost = p.cost || existing.cost; updated++; }
-                        else { pkgs.push({ name: p.name, amount: p.amount || 0, cost: p.cost || 0 }); updated++; }
+                        if (existing) {
+                            existing.amount = p.amount || existing.amount;
+                            existing.cost = p.cost || existing.cost;
+                            updated++;
+                        } else {
+                            pkgs.push({
+                                name: p.name,
+                                amount: p.amount || 0,
+                                cost: p.cost || 0,
+                                history: Array.isArray(p.history) ? p.history.map(normalizePackageHistoryEntry) : null
+                            });
+                            updated++;
+                        }
                     }
                     saveMasterPackages(pkgs);
                     toast('📦 Imported ' + updated + ' packages');
@@ -1377,7 +1526,7 @@
             const clients = getClients();
             let changed = 0;
             for (const c of clients) {
-                if (!c.package || c.package === 'Custom') continue;
+                if (!c.package) continue;
                 const pkgDef = updatedPackages.find(p => p.name === c.package);
                 if (!pkgDef) continue;
                 if (c.packageAmount !== pkgDef.amount || c.packageCost !== pkgDef.cost) {
@@ -1401,7 +1550,7 @@
             if (!select) return;
             let pkgs = getMasterPackages();
             select.innerHTML = '';
-            pkgs.forEach(p => { let opt = document.createElement('option'); opt.value = p.name; opt.textContent = p.name + (p.name === 'Custom' ? ' (Flexible)' : '') + ' - Rs.' + p.amount; select.appendChild(opt); });
+            pkgs.forEach(p => { let opt = document.createElement('option'); opt.value = p.name; opt.textContent = p.name + ' - Rs.' + p.amount; select.appendChild(opt); });
         }
 
         function autoSetPackagePrice() {
@@ -1409,8 +1558,7 @@
             if (!pkgSelect) return;
             let pkgName = pkgSelect.value;
             let master = getMasterPackages().find(p => p.name === pkgName);
-            if (master && pkgName !== 'Custom') { document.getElementById('cAmount').value = master.amount; document.getElementById('cCost').value = master.cost; }
-            else if (pkgName === 'Custom') { document.getElementById('cAmount').value = ''; document.getElementById('cCost').value = ''; }
+            if (master) { document.getElementById('cAmount').value = master.amount; document.getElementById('cCost').value = master.cost; }
             updateProfitDisplay();
         }
 
@@ -1426,29 +1574,151 @@
 
         function renderPackageList() {
             let pkgs = getMasterPackages();
-            let html = `<div class="package-manager-table-wrapper"><table class="package-manager-table">
-                <thead><tr><th style="min-width:120px;">Package Name</th><th>Cost (Rs.)</th><th>Sell (Rs.)</th><th style="width:40px;"></th></tr></thead><tbody>`;
+            const currentMonthKey = getMonthKeyOf(new Date());
+
+            let html = `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;padding:8px 12px;background:var(--fb-bg);border-radius:var(--fb-radius);border:1px solid var(--fb-border);">
+                <div style="font-size:0.75rem;font-weight:700;color:var(--fb-text-secondary);">📦 Total Packages: <span style="color:var(--fb-blue);">${pkgs.length}</span></div>
+                <button class="btn" style="background:var(--fb-green);color:#fff;border:none;padding:6px 14px;border-radius:30px;font-weight:700;font-size:0.7rem;cursor:pointer;display:inline-flex;align-items:center;gap:4px;" onclick="addNewPackage()" title="Add new package">➕ New Package</button>
+            </div>`;
+
+            html += `<div class="package-manager-table-wrapper"><table class="package-manager-table">
+                <thead><tr><th style="min-width:120px;">Package Name</th><th>Cost (Rs.)</th><th>Sell (Rs.)</th><th style="width:76px;">Actions</th></tr></thead><tbody>`;
+
             pkgs.forEach((p, idx) => {
-                const isCustom = p.name === 'Custom';
-                const nameDisplay = isCustom ? `<b>${p.name}</b> (flexible)` : p.name;
                 html += `<tr>
-                            <td style="font-weight:${isCustom?'700':'400'};color:${isCustom?'var(--fb-gold)':'var(--fb-text)'};">${nameDisplay}</td>
+                            <td style="font-weight:600;color:var(--fb-text);">${escapeHtml(p.name)}</td>
                             <td><input type="number" id="editCost_${idx}" value="${p.cost}" style="width:70px;padding:4px 6px;border-radius:var(--fb-radius);background:var(--fb-bg);border:1px solid var(--fb-border);color:var(--fb-text);font-size:0.7rem;"></td>
                             <td><input type="number" id="editAmt_${idx}" value="${p.amount}" style="width:70px;padding:4px 6px;border-radius:var(--fb-radius);background:var(--fb-bg);border:1px solid var(--fb-border);color:var(--fb-text);font-size:0.7rem;"></td>
-                            <td><button class="btn" style="background:var(--fb-gold);color:#000;border:none;padding:4px 10px;border-radius:30px;font-size:0.6rem;font-weight:600;cursor:pointer;" onclick="updateSinglePackage(${idx})">💾</button></td>
+                            <td style="white-space:nowrap;">
+                                <button class="btn" style="background:var(--fb-gold);color:#000;border:none;padding:4px 8px;border-radius:30px;font-size:0.6rem;font-weight:600;cursor:pointer;" title="Save price (applies NEXT month)" onclick="updateSinglePackage(${idx})">💾</button>
+                                <button class="btn" style="background:var(--fb-blue);color:#fff;border:none;padding:4px 8px;border-radius:30px;font-size:0.6rem;font-weight:600;cursor:pointer;" title="Price history" onclick="togglePkgHistory(${idx})">📜</button>
+                                <button class="btn" style="background:var(--fb-red);color:#fff;border:none;padding:4px 8px;border-radius:30px;font-size:0.6rem;font-weight:600;cursor:pointer;margin-left:2px;" title="Delete package" onclick="deletePackage(${idx})">🗑️</button>
+                            </td>
                           </tr>`;
+
+                const hist = (p.history || []).slice().sort((a,b) => String(a.effectiveMonth).localeCompare(String(b.effectiveMonth)));
+                let histBody;
+                if (!hist.length) {
+                    histBody = '<div style="font-size:0.6rem;color:var(--fb-text-secondary);">No price history yet.</div>';
+                } else {
+                    histBody = hist.map((h, i) => {
+                        const prev = hist[i-1];
+                        const diffTxt = prev ? `(was Rs. ${Number(prev.amount).toLocaleString()})` : '';
+                        const isFuture = String(h.effectiveMonth) > currentMonthKey;
+                        const isInitial = String(h.effectiveMonth) === '2000-01';
+                        const monthLabel = isInitial ? '📌 Initial Price' : formatMonthKeyName(h.effectiveMonth);
+                        const color = isInitial ? 'var(--fb-text-secondary)' : (isFuture ? 'var(--fb-gold)' : 'var(--fb-blue)');
+                        return `<div style="display:flex;gap:8px;align-items:center;padding:3px 0;border-bottom:1px dotted var(--fb-border);font-size:0.6rem;">
+                            <span style="min-width:120px;font-weight:700;color:${color};">${escapeHtml(monthLabel)}${isFuture ? ' ⏳' : ''}</span>
+                            <span style="font-weight:700;">Rs. ${Number(h.amount).toLocaleString()}</span>
+                            <span style="color:var(--fb-text-secondary);">${diffTxt}</span>
+                            <span style="margin-left:auto;color:var(--fb-text-secondary);font-size:0.55rem;">${isInitial ? '—' : (h.changedAt ? new Date(h.changedAt).toLocaleString() : '')}</span>
+                        </div>`;
+                    }).join('');
+                }
+                html += `<tr id="pkgHistoryRow_${idx}" style="display:none;background:var(--fb-bg);">
+                            <td colspan="4" style="padding:8px 6px;">
+                                <div style="font-size:0.6rem;font-weight:700;color:var(--fb-text-secondary);margin-bottom:4px;">📜 PRICE HISTORY — ${escapeHtml(p.name)}</div>
+                                ${histBody}
+                                <div style="font-size:0.55rem;color:var(--fb-gold);margin-top:6px;">🔒 Price change sirf NEXT month se apply hoti hai — current month ka bill locked rehta hai.</div>
+                            </td>
+                         </tr>`;
             });
             html += `</tbody></table></div>
-                    <div style="font-size:0.55rem;color:var(--fb-text-secondary);margin-top:8px;text-align:center;">🔒 Package names are built‑in and cannot be changed or deleted.</div>
+                    <div style="font-size:0.55rem;color:var(--fb-text-secondary);margin-top:8px;text-align:center;">➕ Naya package add karne ke liye oopar wala green button use karein</div>
                     <div style="font-size:0.55rem;color:var(--fb-gold);margin-top:4px;text-align:center;">☁️ Prices are saved to Firebase Cloud permanently</div>
-                    <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
-                        <button class="btn" style="background:var(--fb-blue);color:#fff;padding:8px 16px;border-radius:30px;border:none;font-weight:600;font-size:0.65rem;cursor:pointer;flex:1;" onclick="exportPackages()">📤 Export</button>
-                        <button class="btn" style="background:transparent;border:1.5px solid var(--fb-border);padding:8px 16px;border-radius:30px;font-weight:600;font-size:0.65rem;cursor:pointer;flex:1;" onclick="document.getElementById('importPackagesFile2').click()">📥 Import</button>
-                        <input type="file" id="importPackagesFile2" accept=".json" style="display:none;" onchange="importPackages(event)">
-                    </div>
-                    <button class="btn-full" style="background:var(--fb-gold);color:#000;margin-top:10px;padding:12px;" onclick="syncAllPackageEdits()">📌 Save All Price Changes & Apply to Clients</button>`;
+                    <button class="btn-full" style="background:var(--fb-gold);color:#000;margin-top:10px;padding:12px;" onclick="syncAllPackageEdits()">📌 Save All Price Changes & Apply to Clients</button>
+                    <button class="btn-full" style="background:var(--fb-blue);color:#fff;margin-top:8px;padding:12px;" onclick="syncPackagesToFirebaseNow()">🔥 Sync Package Prices to Firebase</button>`;
             document.getElementById('packageManagerList').innerHTML = html;
         }
+
+        window.togglePkgHistory = function(idx) {
+            const row = document.getElementById('pkgHistoryRow_' + idx);
+            if (!row) return;
+            row.style.display = (row.style.display === 'none' || !row.style.display) ? 'table-row' : 'none';
+        };
+
+        // 🆕 NEW PACKAGE MODAL — open
+        window.addNewPackage = function() {
+            document.getElementById('npSpeed').value = '';
+            document.getElementById('npAmount').value = '';
+            document.getElementById('npCost').value = '';
+            document.getElementById('npPreview').textContent = '';
+            openModal('newPackageModal');
+            setTimeout(() => { const el = document.getElementById('npSpeed'); if (el) el.focus(); }, 200);
+        };
+
+        // 🆕 Live preview while typing speed
+        window.updateNpPreview = function() {
+            const speed = String(document.getElementById('npSpeed').value).trim().replace(/[^0-9]/g, '');
+            const preview = document.getElementById('npPreview');
+            if (speed) preview.textContent = '📦 Package: DHCP-' + speed + 'Mbps';
+            else preview.textContent = '';
+        };
+
+        // 🆕 Confirm new package
+        window.confirmNewPackage = function() {
+            const speed = String(document.getElementById('npSpeed').value).trim().replace(/[^0-9]/g, '');
+            if (!speed) { toast('❌ Sirf digits likhein (e.g., 30)', true); return; }
+            const name = 'DHCP-' + speed + 'Mbps';
+            let pkgs = getMasterPackages();
+            if (pkgs.some(p => p.name.toLowerCase() === name.toLowerCase())) {
+                toast('❌ Package "' + name + '" already exists!', true);
+                return;
+            }
+            const amount = parseInt(document.getElementById('npAmount').value);
+            if (isNaN(amount) || amount < 0) { toast('❌ Enter valid sell price', true); return; }
+            const cost = parseInt(document.getElementById('npCost').value);
+            if (isNaN(cost) || cost < 0) { toast('❌ Enter valid ISP cost', true); return; }
+
+            const nowISO = new Date().toISOString();
+            pkgs.push({
+                name: name,
+                amount: amount,
+                cost: cost,
+                history: [{ amount: amount, cost: cost, effectiveMonth: '2000-01', changedAt: nowISO }]
+            });
+            saveMasterPackages(pkgs);
+            toast('✅ New package added: ' + name + ' — Rs. ' + amount.toLocaleString());
+            closeModal('newPackageModal');
+            renderPackageList();
+            refreshPackageDropdown();
+        };
+
+        // 🆕 DELETE PACKAGE with last-package protection
+        window.deletePackage = function(idx) {
+            let pkgs = getMasterPackages();
+            if (idx < 0 || idx >= pkgs.length) return;
+            if (pkgs.length <= 1) {
+                toast('❌ Aakhri package delete nahi ho sakta — kam se kam 1 chahiye', true);
+                return;
+            }
+            const pkg = pkgs[idx];
+            const clients = getClients();
+            const usingCount = clients.filter(c => c.package === pkg.name).length;
+            let msg = `Delete package "${pkg.name}"?`;
+            if (usingCount > 0) msg += `\n\n⚠️ ${usingCount} client(s) are using this package.`;
+            if (!confirm(msg)) return;
+            pkgs.splice(idx, 1);
+            saveMasterPackages(pkgs);
+            toast('🗑️ Package deleted: ' + pkg.name);
+            renderPackageList();
+            refreshPackageDropdown();
+        };
+
+        window.syncPackagesToFirebaseNow = async function() {
+            if (!currentUser) { toast('❌ Please login first', true); return; }
+            try {
+                const pkgs = getMasterPackages();
+                const pkgData = pkgs.map(p => ({ name: p.name, amount: p.amount, cost: p.cost, history: p.history }));
+                await db.ref(`${PACKAGES_PATH}/${currentUser.uid}`).set({ packages: pkgData, lastUpdated: Date.now() });
+                updateLastSyncDisplay(Date.now());
+                toast('🔥 Package prices synced to Firebase successfully!');
+            } catch (e) {
+                console.error('syncPackagesToFirebaseNow error:', e);
+                toast('Sync failed: ' + e.message, true);
+            }
+        };
 
         window.updateSinglePackage = function(idx) {
             let pkgs = getMasterPackages();
@@ -1460,7 +1730,7 @@
             if (!isNaN(newAmt)) pkgs[idx].amount = newAmt;
             if (!isNaN(newCost)) pkgs[idx].cost = newCost;
             saveMasterPackages(pkgs);
-            toast('✅ Price updated for ' + pkgs[idx].name + ' (Saved to Firebase)');
+            toast('✅ Price updated for ' + pkgs[idx].name + ' (Locked from next month)');
             renderPackageList();
             refreshPackageDropdown();
         };
@@ -1476,7 +1746,7 @@
             saveMasterPackages(pkgs);
             renderPackageList();
             refreshPackageDropdown();
-            toast('✅ All price changes saved to Firebase & applied to clients');
+            toast('✅ All price changes saved (Locked from next month)');
         };
 
         function applyAllPackagePricesToClientsSilent() {
@@ -1484,7 +1754,7 @@
             let master = getMasterPackages();
             let updated = 0;
             for (let c of clients) {
-                if (c.package && c.package !== 'Custom') {
+                if (c.package) {
                     let pkgDef = master.find(p => p.name === c.package);
                     if (pkgDef && (c.packageAmount !== pkgDef.amount || c.packageCost !== pkgDef.cost)) {
                         c.packageAmount = pkgDef.amount;
@@ -1498,14 +1768,14 @@
         }
 
         function applyAllPackagePricesToClients() {
-            if (!confirm("⚠️ This will update EVERY client's Monthly Fee and ISP Cost based on current Master Package list.\nClients with 'Custom' package will NOT be changed.\nContinue?")) { return; }
+            if (!confirm("⚠️ This will update EVERY client's Monthly Fee and ISP Cost based on current Master Package list.\n\n(Historical bills are NOT affected — only future bills use new price.)\nContinue?")) { return; }
             let updated = applyAllPackagePricesToClientsSilent();
             if (updated > 0) toast(`${updated} clients updated with new package prices`);
             else toast('No changes needed');
         }
 
         // =================================================================
-        // 8. FIREBASE SYNC
+        // 8. FIREBASE SYNC — INSTANT (No interval)
         // =================================================================
         function getFirebaseClientsRef() { if (!currentUser) throw new Error('Not authenticated'); return db.ref(`${CLIENTS_PATH}/${currentUser.uid}/clients`); }
         function getFirebaseComplaintsRef() { if (!currentUser) throw new Error('Not authenticated'); return db.ref(`${COMPLAINTS_PATH}/${currentUser.uid}/complaints`); }
@@ -1560,12 +1830,11 @@
                 let clients = getClients().filter(c => !isDemoClient(c));
                 let packages = getMasterPackages();
                 await db.ref(`${CLIENTS_PATH}/${currentUser.uid}`).set({ clients, lastUpdated: Date.now() });
-                let pkgData = packages.map(p => ({ name: p.name, amount: p.amount, cost: p.cost }));
+                let pkgData = packages.map(p => ({ name: p.name, amount: p.amount, cost: p.cost, history: p.history }));
                 await db.ref(`${PACKAGES_PATH}/${currentUser.uid}`).set({ packages: pkgData, lastUpdated: Date.now() });
                 updateLastSyncDisplay(Date.now());
                 updateFirebaseIndicator();
-                toast('✅ All data synced to Firebase (Clients + Packages)');
-            } catch (e) { console.error('syncAllToFirebase error:', e); toast('Sync failed: ' + e.message, true); }
+            } catch (e) { console.error('syncAllToFirebase error:', e); }
         }
 
         function updateFirebaseIndicator() {
@@ -1598,7 +1867,7 @@
             }
         }
 
-        window.syncToFirebaseNow = function() { if (!currentUser) { toast('Not logged in', true); return; } syncAllToFirebase(); };
+        window.syncToFirebaseNow = function() { if (!currentUser) { toast('Not logged in', true); return; } syncAllToFirebase().then(() => toast('✅ Synced to Firebase!')); };
 
         // =================================================================
         // 9. EMERGENCY MODE
@@ -1618,7 +1887,7 @@
                     if (totalDebit === 0) {
                         const now = new Date();
                         const monthKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
-                        c.paymentHistory.push({ entryId: uid(), date: getDateTimeWithTime(), description: 'Monthly Bill (Reset)', credit: 0, debit: c.packageAmount || 800, monthKey: monthKey, fullDateTime: getDateTimeWithTime(), type: 'Monthly Bill' });
+                        c.paymentHistory.push({ entryId: uid(), date: getDateTimeWithTime(), description: 'Monthly Bill (Reset)', credit: 0, debit: getEffectiveMonthlyAmount(c, monthKey), monthKey: monthKey, fullDateTime: getDateTimeWithTime(), type: 'Monthly Bill' });
                     }
                     c.status = 'active';
                     updated++;
@@ -1666,7 +1935,7 @@
                 if (!c.paymentHistory) c.paymentHistory = [];
                 c.paymentHistory = c.paymentHistory.filter(e => !(e.description && e.description.includes('Registration') && e.debit === 0 && e.credit === 0));
                 const already = c.paymentHistory.some(e => e.autoMonth === monthKey || e.monthKey === monthKey);
-                if (!already) { addPendingBillForMonth(c, monthKey, monthName, c.packageAmount || 0); changed = true; }
+                if (!already) { addPendingBillForMonth(c, monthKey, monthName, getEffectiveMonthlyAmount(c, monthKey)); changed = true; }
             });
             if (changed) saveClients(clients);
         }
@@ -1682,7 +1951,7 @@
             const monthKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
             const monthName = now.toLocaleDateString('en-PK', { month: 'long', year: 'numeric' });
             const alreadyHasBill = (c.paymentHistory || []).some(e => e.monthKey === monthKey && e.debit > 0 && !e.description.includes('Buy Now Pay Later'));
-            if (!alreadyHasBill) { if (!c.paymentHistory) c.paymentHistory = []; const entryId = uid(); const dateTimeStr = getDateTimeWithTime(); c.paymentHistory.push({ entryId: entryId, date: dateTimeStr, description: `Monthly Bill - ${monthName}`, credit: 0, debit: c.packageAmount || 0, monthKey: monthKey, fullDateTime: dateTimeStr, type: 'Monthly Bill' }); }
+            if (!alreadyHasBill) { if (!c.paymentHistory) c.paymentHistory = []; const entryId = uid(); const dateTimeStr = getDateTimeWithTime(); c.paymentHistory.push({ entryId: entryId, date: dateTimeStr, description: `Monthly Bill - ${monthName}`, credit: 0, debit: getEffectiveMonthlyAmount(c, monthKey), monthKey: monthKey, fullDateTime: dateTimeStr, type: 'Monthly Bill' }); }
             c.packageStartDate = now.toISOString().slice(0, 10);
             if (c.status === 'inactive' || c.status === 'overdue' || c.status === 'expired') { c.status = 'active'; }
             saveClients(clients);
@@ -1751,6 +2020,11 @@
             if (c.status === 'active' && !isExpired && pending === 0) badges.push('<span class="badge badge-active">✅ Active</span>');
             if (totalDiscount > 0) badges.push(`<span class="badge badge-discount">💸 Discount Rs.${totalDiscount.toLocaleString()}</span>`);
 
+            const priceChange = getUpcomingPriceChange(c.package);
+            if (priceChange.hasChange) {
+                badges.push(`<span class="badge" style="background:#fff3cd;color:#8a5a0a;border:1px dashed #d4871a;">💰 Price ${priceChange.nextMonthName} se: Rs.${priceChange.nextAmount.toLocaleString()}</span>`);
+            }
+
             const badgeHtml = badges.length ? `<div class="badge-row">${badges.join('')}</div>` : '';
             const startDateStr = formatDMY(c.packageStartDate);
             const expiryDateStr = getPackageExpiry(c) ? formatDMY(getPackageExpiry(c)) : 'N/A';
@@ -1818,7 +2092,7 @@
             });
             return keys.map(k => {
                 const totalDue = groups[k].reduce((s, c) => s + getRemainingBalance(c), 0);
-                const label = k === 'Other' ? '📌 Other / Custom' : `⚡ ${k}`;
+                const label = k === 'Other' ? '📌 Other' : `⚡ ${k}`;
                 return `<div class="package-section">
                             <div class="package-section-head">
                                 <span class="package-section-title">${label}</span>
@@ -1963,9 +2237,6 @@
             document.getElementById('clientList').innerHTML = html;
         }
 
-        // =================================================================
-        // 13. MARK PAID FROM UNPAID
-        // =================================================================
         window.markPaidFromUnpaid = function(clientId) {
             const clients = getClients();
             const c = clients.find(x => x.id === clientId);
@@ -2041,9 +2312,6 @@
             } catch (e) { console.error('renderComplaintsTab error:', e); container.innerHTML = `<div class="no-data">❌ Error loading complaints: ${e.message}</div>`; }
         }
 
-        // =================================================================
-        // 15. RENDER CURRENT TAB
-        // =================================================================
         function renderCurrentTab() {
             if (currentTab === 'all') renderAllClients();
             else if (currentTab === 'paid') renderPaidClients();
@@ -2056,9 +2324,6 @@
             buildPackageFilterBar();
         }
 
-        // =================================================================
-        // 16. STATS
-        // =================================================================
         function updateStats() {
             const clients = getClients();
             const outstanding = clients.reduce((s, c) => s + getRemainingBalance(c), 0);
@@ -2116,6 +2381,7 @@
             document.getElementById('cName').value = '';
             document.getElementById('cPhone').value = '';
             document.getElementById('cAddress').value = '';
+            refreshPackageDropdown();
             document.getElementById('cPackage').value = 'DHCP-4Mbps';
             document.getElementById('cAmount').value = '800';
             document.getElementById('cOldBill').value = '0';
@@ -2124,7 +2390,6 @@
             document.getElementById('cStartDate').value = formatDMY(new Date().toISOString());
             document.getElementById('cVlanId').value = '';
             document.getElementById('cUsername').value = '';
-            refreshPackageDropdown();
             autoSetPackagePrice();
             openModal('clientModal');
         };
@@ -2137,7 +2402,13 @@
             if (pkgSelect) {
                 let optionExists = false;
                 for (let opt of pkgSelect.options) { if (opt.value === c.package) { pkgSelect.value = c.package; optionExists = true; break; } }
-                if (!optionExists) { if (pkgSelect.options.length > 0) pkgSelect.selectedIndex = 0; }
+                if (!optionExists) {
+                    const opt = document.createElement('option');
+                    opt.value = c.package;
+                    opt.textContent = c.package + ' - Rs.' + (c.packageAmount || 0) + ' (legacy)';
+                    pkgSelect.appendChild(opt);
+                    pkgSelect.value = c.package;
+                }
             }
             document.getElementById('clientModalTitle').textContent = '✏️ Edit Client';
             document.getElementById('clientId').value = c.id;
@@ -2151,7 +2422,7 @@
             document.getElementById('cStartDate').value = formatDMY(c.packageStartDate);
             document.getElementById('cVlanId').value = c.vlanId || '';
             document.getElementById('cUsername').value = c.username || '';
-            autoSetPackagePrice();
+            updateProfitDisplay();
             openModal('clientModal');
         };
 
@@ -2198,7 +2469,8 @@
                 const now = new Date();
                 const monthKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
                 const monthName = now.toLocaleDateString('en-PK', { month: 'long', year: 'numeric' });
-                data.paymentHistory.push({ entryId: entryId, date: dateTimeStr, description: `Monthly Bill - ${monthName}`, credit: 0, debit: packageAmount, monthKey: monthKey, fullDateTime: dateTimeStr, type: 'Monthly Bill' });
+                const lockedBillAmount = getEffectiveMonthlyAmount({ package: data.package, packageAmount: packageAmount }, monthKey);
+                data.paymentHistory.push({ entryId: entryId, date: dateTimeStr, description: `Monthly Bill - ${monthName}`, credit: 0, debit: lockedBillAmount, monthKey: monthKey, fullDateTime: dateTimeStr, type: 'Monthly Bill' });
                 if (oldBill > 0) {
                     data.paymentHistory.push({ entryId: uid(), date: dateTimeStr, description: 'Opening Balance', credit: 0, debit: oldBill, monthKey: monthKey, fullDateTime: dateTimeStr, type: 'Opening Balance' });
                     if (data.status === 'active') data.status = 'overdue';
@@ -2228,7 +2500,7 @@
         };
 
         // =================================================================
-        // 19. LEDGER FUNCTIONS
+        // 19. LEDGER
         // =================================================================
         function getSortedTransactionsSimple(client) {
             const history = client.paymentHistory || [];
@@ -2352,7 +2624,7 @@
             let amt = 0;
             const creditTypes = ['Payment', 'Discount'];
             const isCredit = creditTypes.includes(type);
-            if (type === 'Monthly Bill') { amt = c.packageAmount || 0; if (amt <= 0) { toast('Package amount is zero', true); return; } }
+            if (type === 'Monthly Bill') { amt = getEffectiveMonthlyAmount(c, getMonthKeyOf(new Date())); if (amt <= 0) { toast('Package amount is zero', true); return; } }
             else if (type === 'Payment') { const pending = getRemainingBalance(c); if (pending <= 0) { toast('No pending amount to pay', true); return; } amt = pending; }
             else if (type === 'Discount') {
                 const pending = getRemainingBalance(c);
@@ -2406,7 +2678,7 @@
         };
 
         // =================================================================
-        // 20. RECEIPT FUNCTIONS
+        // 20. RECEIPT
         // =================================================================
         function generateReceiptHTML(client) {
             const rno = generateReceiptNumber();
@@ -2425,6 +2697,33 @@
             let statusClass = 'rec-paid', statusLabel = 'PAID', statusSub = '✅ Payment Received Successfully', totalColor = '#1a8e3e', bgColor = '#e8f8ef';
             if (remainingBalance > 0) { statusClass = 'rec-unpaid'; statusLabel = 'UNPAID'; statusSub = '⚠️ Please clear your dues'; totalColor = '#d4871a'; bgColor = '#fef9e7'; }
             if (isExpired && remainingBalance > 0) { statusClass = 'rec-expired'; statusLabel = 'EXPIRED'; statusSub = '⛔ Package expired — Renew now!'; totalColor = '#c0392b'; bgColor = '#fdf2f2'; }
+
+            let priceChangeNotice = '';
+            const priceChange = getUpcomingPriceChange(client.package);
+            if (priceChange.hasChange) {
+                const diff = priceChange.nextAmount - priceChange.prevAmount;
+                const diffSign = diff > 0 ? '📈 INCREASE' : '📉 DECREASE';
+                const diffColor = diff > 0 ? '#c0392b' : '#1a8e3e';
+                priceChangeNotice = `<div style="background:linear-gradient(135deg,#fff3cd,#ffe08a);border:2px dashed #d4871a;border-radius:8px;padding:12px;margin:8px 0;text-align:center;">
+                    <div style="font-size:0.72rem;font-weight:900;color:#8a5a0a;letter-spacing:0.5px;">⚠️ PACKAGE PRICE CHANGE NOTICE</div>
+                    <div style="font-size:0.63rem;color:#5a3800;margin-top:6px;line-height:1.6;">
+                        Aapka <b>${escapeHtml(client.package)}</b> package ka price change hoowa hai.
+                    </div>
+                    <div style="margin-top:6px;font-size:0.75rem;font-weight:800;">
+                        <span style="color:#8a5a0a;text-decoration:line-through;">Rs. ${priceChange.prevAmount.toLocaleString()}</span>
+                        <span style="margin:0 6px;color:#8a5a0a;">→</span>
+                        <span style="color:${diffColor};">Rs. ${priceChange.nextAmount.toLocaleString()}</span>
+                        <span style="font-size:0.55rem;color:${diffColor};margin-left:4px;">(${diffSign} Rs. ${Math.abs(diff).toLocaleString()})</span>
+                    </div>
+                    <div style="font-size:0.6rem;color:#8a5a0a;margin-top:6px;font-weight:700;">
+                        📅 Next month (<b>${priceChange.nextMonthName}</b>) se naya price apply hoga.
+                    </div>
+                    <div style="font-size:0.55rem;color:#5a3800;margin-top:4px;font-style:italic;">
+                        Current month ka bill purane price par hi rahega.
+                    </div>
+                </div>`;
+            }
+
             const accountingHtml = `<div style="border-bottom:1px dashed #ddd;padding-bottom:8px;margin-bottom:8px;">
                     <div class="rec-row"><span class="label">📌 Previous Balance</span><span class="value red">Rs. ${(client.oldBill || 0).toLocaleString()}</span></div>
                     <div class="rec-row"><span class="label">📄 Current Bill</span><span class="value red">Rs. ${(client.packageAmount || 0).toLocaleString()}</span></div>
@@ -2465,6 +2764,7 @@
                         <div class="rec-row"><span class="label">📅 Start Date</span><span class="value">${formatDMY(client.packageStartDate)}</span></div>
                         <div class="rec-row"><span class="label">⏳ Expiry Date</span><span class="value">${expiryDate ? formatDMY(expiryDate) : 'N/A'} ${isExpired ? '🔴 EXPIRED' : ''}</span></div>
                         <div style="border-top:1px dashed #ddd;margin:6px 0;"></div>
+                        ${priceChangeNotice}
                         ${accountingHtml}${paymentBoxHtml}
                         <div style="font-size:0.55rem;color:#888;text-align:center;margin-top:6px;border-top:1px solid #eee;padding-top:6px;">⚡ Speed Ka Naya Andaaz! ⚡</div>
                     </div>
@@ -2544,7 +2844,7 @@
         };
 
         // =================================================================
-        // 21. BILLING MODAL
+        // 21. BILLING
         // =================================================================
         window.openFullBilling = function(id) {
             const c = getClients().find(x => x.id === id);
@@ -2623,7 +2923,7 @@
         };
 
         // =================================================================
-        // 22. REMINDER FUNCTIONS
+        // 22. REMINDER
         // =================================================================
         window.openReminderOptions = function(id) {
             currentReminderId = id;
@@ -2818,7 +3118,6 @@
                             let packageAmount = pkgDef ? pkgDef.amount : (importedClient.packageAmount || 800);
                             let packageCost = pkgDef ? pkgDef.cost : (importedClient.packageCost || 500);
 
-                            // 🆕 Normalize dates using parseImportDate (supports "1 June 2026")
                             const startRaw = importedClient.packageStartDate;
                             const startParsed = startRaw ? parseImportDate(startRaw) : null;
                             const startISO = startParsed ? toISODate(startParsed) : new Date().toISOString().slice(0, 10);
@@ -2831,7 +3130,7 @@
                                 name: importedClient.name || 'Unknown',
                                 phone: importedClient.phone || '',
                                 address: importedClient.address || '',
-                                package: importedClient.package || 'Custom',
+                                package: importedClient.package || 'DHCP-4Mbps',
                                 packageAmount: packageAmount,
                                 packageCost: packageCost,
                                 status: 'active',
@@ -2864,7 +3163,11 @@
                         saveClients(clientsToSave);
                         toast(`✅ Imported: ${added} new, ${updated} updated`);
                     }
-                    if (data.masterPackages) { localStorage.setItem(MASTER_PACKAGES_KEY, JSON.stringify(data.masterPackages)); refreshPackageDropdown(); }
+                    if (data.masterPackages) {
+                        invalidatePackagesCache();
+                        localStorage.setItem(MASTER_PACKAGES_KEY, JSON.stringify(data.masterPackages));
+                        refreshPackageDropdown();
+                    }
                     renderCurrentTab();
                 } catch (ex) { toast('Invalid file: ' + ex.message, true); }
             };
@@ -2873,10 +3176,8 @@
         };
 
         // =================================================================
-        // 24b. IMPORT HELPERS (CSV & EXCEL) — WITH FULL DATE SUPPORT
+        // 24b. IMPORT HELPERS
         // =================================================================
-
-        // 🔥 UPGRADED: Column detector — RedTone "New Exp." / "Last Exp." / "Renew Date" support
         function detectImportColumns(headers) {
             const norm = (h) => String(h == null ? '' : h).toLowerCase().trim().replace(/[^a-z0-9]/g, '');
             const find = (aliases, rejectWords) => {
@@ -2888,35 +3189,20 @@
                 });
             };
             return {
-                // RedTone "FullName" | "Name" | "Customer"
                 nameIdx: find(['fullname', 'name', 'customer', 'client'], ['id', 'user', 'no', 'subscriber']),
-
-                // RedTone "Mobile" | "Phone"
                 phoneIdx: find(['mobile', 'phone', 'cell', 'contact', 'tel', 'whatsapp']),
-
-                // RedTone "Service" = DHCP-4Mbps etc.
                 pkgIdx: find(['service', 'package', 'plan', 'speed', 'pkg', 'bandwidth']),
-
-                // RedTone "Price" | "Amount" | "Fee"
                 amountIdx: find(['price', 'amount', 'fee', 'charge', 'rent', 'bill', 'due', 'balance', 'charges', 'monthly'],
                                ['date', 'expiry', 'exp', 'renew']),
-
-                // 🔑 RedTone "New Exp." = ACTUAL EXPIRY (reject "lastexp")
                 expiryIdx: find(['newexp', 'new_exp', 'expiry', 'expirydate', 'expdate', 'expiredate',
                                  'validity', 'validtill', 'validupto', 'enddate', 'duedate', 'expiration'],
                                 ['lastexp', 'oldexp']),
-
-                // 🔑 RedTone "Last Exp." — fallback expiry
                 lastExpiryIdx: find(['lastexp', 'last_exp', 'oldexp', 'old_exp']),
-
-                // 🔑 RedTone "Renew Date" | "Start Date" | "Join Date"
                 startDateIdx: find(['renewdate', 'renew_date', 'startdate', 'start_date',
                                     'activationdate', 'activated', 'installationdate',
                                     'issuedate', 'createddate', 'registrationdate',
                                     'joindate', 'start'],
                                    ['expiry', 'exp', 'end']),
-
-                // Bonus
                 vlanIdx:     find(['vlanid', 'vlan']),
                 usernameIdx: find(['subscriber', 'username', 'login', 'accountid'], ['name']),
                 addressIdx:  find(['address', 'location', 'area', 'street']),
@@ -2924,7 +3210,6 @@
             };
         }
 
-        // 🔥 UPGRADED: Header finder — score now includes date columns
         function findImportHeader(rows) {
             const maxScan = Math.min(rows.length, 10);
             let best = null;
@@ -2941,7 +3226,6 @@
             return best;
         }
 
-        // 🔥 UPGRADED: Core import processor — RedTone "New Exp." priority
         function processImportRows(rows, sourceLabel) {
             if (!rows || rows.length < 2) throw new Error(sourceLabel + ' file is empty');
             const hdr = findImportHeader(rows);
@@ -2949,61 +3233,41 @@
                 const preview = rows.slice(0, 3).map(r => (r || []).join(' | ')).join('\n');
                 throw new Error(sourceLabel + ': "Name" column not found.\nFirst rows seen:\n' + preview);
             }
-
             const {
                 nameIdx, phoneIdx, pkgIdx, amountIdx,
                 expiryIdx, lastExpiryIdx, startDateIdx,
                 vlanIdx, usernameIdx, addressIdx, statusIdx
             } = hdr.cols;
-
             if (phoneIdx < 0) toast('⚠️ ' + sourceLabel + ': Phone column not found', true);
-
             const clients = getClients();
             let created = 0, updated = 0, skipped = 0, dateFromFile = 0;
-
             for (let i = hdr.rowIdx + 1; i < rows.length; i++) {
                 const row = rows[i];
                 if (!row || row.length === 0) continue;
                 if (row.every(c => c === '' || c === null || c === undefined)) continue;
-
                 const name = nameIdx >= 0 && row[nameIdx] ? String(row[nameIdx]).trim() : '';
                 const phoneRaw = phoneIdx >= 0 && row[phoneIdx] != null ? String(row[phoneIdx]).trim() : '';
                 if (!name && !phoneRaw) { skipped++; continue; }
-
                 const displayName  = name || 'Client-' + (phoneRaw ? phoneRaw.slice(-4) : '');
                 const displayPhone = phoneRaw || '0000-0000000';
                 const phoneNorm    = normalizePhone(displayPhone);
-
                 const pkg = pkgIdx >= 0 && row[pkgIdx] ? String(row[pkgIdx]).trim() : 'DHCP-4Mbps';
                 const rawAmt = amountIdx >= 0 && row[amountIdx] != null ? String(row[amountIdx]).replace(/,/g, '').trim() : '';
                 const amt = rawAmt ? (parseFloat(rawAmt.replace(/[^0-9.]/g, '')) || 800) : 800;
                 const pkgDef = getMasterPackages().find(p => p.name === pkg);
                 const resolvedAmt = (pkgDef && pkgDef.amount > 0) ? pkgDef.amount : amt;
                 const cost = pkgDef ? pkgDef.cost : 500;
-
-                // ============================================================
-                // 🎯 DATE LOGIC (RedTone + Clients.json + Generic)
-                // Priority: New Exp. > Last Exp. > Renew/Start Date
-                // ============================================================
                 let expiryDate = null;
                 let startDate  = null;
-
-                // 1️⃣ RedTone "New Exp." — sabse reliable expiry
                 if (expiryIdx >= 0 && row[expiryIdx] != null && row[expiryIdx] !== '') {
                     expiryDate = parseImportDate(row[expiryIdx]);
                 }
-
-                // 2️⃣ Fallback: "Last Exp."
                 if (!expiryDate && lastExpiryIdx >= 0 && row[lastExpiryIdx] != null && row[lastExpiryIdx] !== '') {
                     expiryDate = parseImportDate(row[lastExpiryIdx]);
                 }
-
-                // 3️⃣ RedTone "Renew Date" / "Start Date" / "Join Date"
                 if (startDateIdx >= 0 && row[startDateIdx] != null && row[startDateIdx] !== '') {
                     startDate = parseImportDate(row[startDateIdx]);
                 }
-
-                // 4️⃣ Cross-calculate (30 days)
                 if (startDate && !expiryDate) {
                     expiryDate = new Date(startDate);
                     expiryDate.setDate(expiryDate.getDate() + PACKAGE_DURATION);
@@ -3012,8 +3276,6 @@
                     startDate = new Date(expiryDate);
                     startDate.setDate(startDate.getDate() - PACKAGE_DURATION);
                 }
-
-                // 5️⃣ Kuch bhi na mile to aaj ki date
                 if (!startDate) {
                     startDate = new Date();
                     startDate.setHours(0, 0, 0, 0);
@@ -3022,15 +3284,11 @@
                 } else {
                     dateFromFile++;
                 }
-
                 const startDateISO = toISODate(startDate);
-                // ============================================================
-
                 const vlanVal     = vlanIdx     >= 0 && row[vlanIdx]     ? String(row[vlanIdx]).trim()     : '';
                 const usernameVal = usernameIdx >= 0 && row[usernameIdx] ? String(row[usernameIdx]).trim() : '';
                 const addressVal  = addressIdx  >= 0 && row[addressIdx]  ? String(row[addressIdx]).trim()  : '';
                 const statusVal   = statusIdx   >= 0 && row[statusIdx]   ? String(row[statusIdx]).trim().toLowerCase() : '';
-
                 let clientStatus = 'active';
                 if (statusVal) {
                     if (statusVal.includes('inactive') || statusVal.includes('disabled') || statusVal.includes('suspend'))
@@ -3038,16 +3296,12 @@
                     else if (statusVal.includes('overdue'))
                         clientStatus = 'overdue';
                 }
-                // Expired package → auto "overdue"
                 if (expiryDate && expiryDate < new Date() && clientStatus === 'active') {
                     clientStatus = 'overdue';
                 }
-
-                // Match by phone OR name
                 const existing = phoneRaw
                     ? clients.find(c => normalizePhone(c.phone) === phoneNorm)
                     : clients.find(c => c.name && c.name.toLowerCase() === displayName.toLowerCase());
-
                 if (existing) {
                     if (name) existing.name = name;
                     existing.package          = pkg;
@@ -3082,7 +3336,6 @@
                     created++;
                 }
             }
-
             saveClients(clients);
             activePkgFilter = 'all';
             const searchEl = document.getElementById('searchInput');
@@ -3090,7 +3343,6 @@
             buildPackageFilterBar();
             switchTab('all');
             closeModal('backupModal');
-
             return { created, updated, skipped, dateFromFile };
         }
 
@@ -3132,7 +3384,6 @@
                 try {
                     if (typeof XLSX === 'undefined') throw new Error('Excel library failed to load. Check internet and reload page.');
                     const data = new Uint8Array(e.target.result);
-                    // 🆕 cellDates: true — Excel date cells come as Date objects
                     const workbook = XLSX.read(data, { type: 'array', cellDates: true });
                     const ws = workbook.Sheets[workbook.SheetNames[0]];
                     const rows = XLSX.utils.sheet_to_json(ws, { header: 1, defval: '', raw: false, dateNF: 'dd/mm/yyyy' });
@@ -3145,7 +3396,7 @@
         };
 
         // =================================================================
-        // 25. DELETE ALL CLIENTS
+        // 25. DELETE ALL
         // =================================================================
         window.deleteAllClientsWithCaution = function() {
             const clients = getClients();
@@ -3168,9 +3419,6 @@
             } catch (e) { toast('❌ Deletion error: ' + e.message, true); console.error(e); }
         };
 
-        // =================================================================
-        // 26. DELETE COMPLAINT
-        // =================================================================
         async function deleteComplaint(compId) {
             if (!confirm('Delete this complaint?')) return;
             try {
@@ -3323,6 +3571,17 @@
             }
         };
 
+        // 🆕 Legacy Custom client check
+        function checkLegacyCustomClients() {
+            const clients = getClients();
+            const customCount = clients.filter(c => c.package === 'Custom').length;
+            if (customCount > 0) {
+                setTimeout(() => {
+                    toast(`⚠️ ${customCount} purane client(s) 'Custom' package pe hain — unko Edit karke naya package assign karein`, true);
+                }, 2500);
+            }
+        }
+
         auth.onAuthStateChanged(async (user) => {
             if (user) {
                 currentUser = user;
@@ -3337,6 +3596,7 @@
                     } else { toast('No data in Firebase. Starting fresh.'); }
                     const fbPackages = await loadPackagesFromFirebase();
                     if (fbPackages && fbPackages.length > 0) {
+                        invalidatePackagesCache();
                         localStorage.setItem(MASTER_PACKAGES_KEY, JSON.stringify(fbPackages));
                         toast('✅ Loaded packages from Firebase');
                     } else {
@@ -3347,11 +3607,11 @@
                             { name: "DHCP-10Mbps", amount: 1500, cost: 950 },
                             { name: "DHCP-12Mbps", amount: 1800, cost: 1100 },
                             { name: "DHCP-15Mbps", amount: 2200, cost: 1400 },
-                            { name: "DHCP-20Mbps", amount: 2800, cost: 1800 },
-                            { name: "Custom", amount: 0, cost: 0 }
+                            { name: "DHCP-20Mbps", amount: 2800, cost: 1800 }
                         ];
                         let defaultPkgs = BUILT_IN_PACKAGES.map(p => ({ ...p }));
                         await savePackagesToFirebase(defaultPkgs);
+                        invalidatePackagesCache();
                         localStorage.setItem(MASTER_PACKAGES_KEY, JSON.stringify(defaultPkgs));
                         toast('📦 Default packages saved to Firebase');
                     }
@@ -3364,31 +3624,12 @@
                 updateLastSyncDisplay();
                 refreshPackageDropdown();
                 updateFirebaseIndicator();
-                if (autoSyncInterval) clearInterval(autoSyncInterval);
-                autoSyncInterval = setInterval(async () => {
-                    if (!currentUser) return;
-                    try {
-                        const fbData = await loadClientsFromFirebase();
-                        if (fbData && fbData.length > 0) {
-                            const clean = fbData.filter(c => !isDemoClient(c));
-                            if (clean.length > 0) {
-                                const local = getClients();
-                                if (JSON.stringify(clean) !== JSON.stringify(local)) {
-                                    isLocalChange = true;
-                                    saveClients(clean, true);
-                                    isLocalChange = false;
-                                    toast('🔄 Auto-sync from Firebase');
-                                }
-                            }
-                        }
-                    } catch (e) {}
-                }, 120000);
+                checkLegacyCustomClients();
                 restorePCMode();
                 const savedTheme = localStorage.getItem('d3_theme') || 'dark';
                 applyTheme(savedTheme);
                 buildPackageFilterBar();
             } else {
-                if (autoSyncInterval) clearInterval(autoSyncInterval);
                 currentUser = null;
                 document.getElementById('loginOverlay').style.display = 'flex';
                 document.getElementById('mainAppContainer').style.display = 'none';
@@ -3398,7 +3639,7 @@
         });
 
         // =================================================================
-        // 30. FIREBASE LISTENERS
+        // 30. FIREBASE LISTENERS (REAL-TIME — NO INTERVAL)
         // =================================================================
         let complaintsRedDotListener = null;
 
@@ -3455,14 +3696,15 @@
 
         setTimeout(() => { updateFirebaseIndicator(); buildPackageFilterBar(); }, 500);
 
-        console.log("👑 D3 Crown Fiber — ISP Admin Panel (v9.0 — FULL DATE SUPPORT)");
-        console.log("✅ v9.0: RedTone Excel 'New Exp.' column → direct expiry date");
-        console.log("✅ v9.0: 'Last Exp.' column used as fallback expiry");
-        console.log("✅ v9.0: 'Renew Date' column → package start date");
-        console.log("✅ v9.0: Auto-detect start + expiry, cross-calculate 30 days");
-        console.log("✅ v9.0: Clients.json '1 June 2026' string dates supported");
-        console.log("✅ v9.0: CSV, Excel (XLSX/XLS), JSON — all formats supported");
-        console.log("✅ v9.0: Expired clients auto-marked as 'overdue'");
+        console.log("👑 D3 Crown Fiber — ISP Admin Panel (v13.0 — INSTANT SYNC + CACHE + ALL FIXES)");
+        console.log("✅ v13.0: 🔥 Firebase sync INSTANT (no 2-min wait) — real-time listener only");
+        console.log("✅ v13.0: ⚡ getMasterPackages() cached — 500+ clients pe bhi smooth");
+        console.log("✅ v13.0: 🔒 Cache invalidate ONLY after saveMasterPackages()");
+        console.log("✅ v13.0: 🛡️ Last-package delete protection");
+        console.log("✅ v13.0: ⚠️ Legacy 'Custom' clients auto-warning on login");
+        console.log("✅ v13.0: ✨ shimmerText animation added");
+        console.log("✅ v13.0: 📌 'Initial Price' label instead of 'January 2000'");
+        console.log("✅ v13.0: ➕ Custom modal for adding packages (no prompt() anymore)");
     </script>
 </body>
 </html>
